@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Left Sidebar -->
+    <aside class="app-sidebar">
+      <a href="/student/dashboard.html" class="sidebar-brand">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <path d="M16 4L2 11L16 18L30 11L16 4Z" fill="#1e3a8a"/>
+          <path d="M7 14.5V22.5C7 22.5 11 26 16 26C21 26 25 22.5 25 22.5V14.5L16 19L7 14.5Z" fill="#2563eb"/>
+          <path d="M28 12.5V21" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <div class="sidebar-brand-text">Edu<span>Nest</span></div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <a href="/student/dashboard.html" class="sidebar-link active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="/student/courses.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>My Courses</span>
+        </a>
+        <a href="/student/knowledge-profile.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Knowledge Profile</span>
+        </a>
+        <a href="/student/learning-path.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+          <span>Learning Path</span>
+        </a>
+        <a href="/student/skill-map.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span>Skill Map</span>
+        </a>
+        <a href="/student/challenges.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          <span>Challenges</span>
+        </a>
+        <a href="/student/revision.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Revision</span>
+        </a>
+        <a href="/student/daily-plan.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>Daily Plan</span>
+        </a>
+        <a href="/student/bookmarks.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <span>Bookmarks</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="#goalEditorRow" onclick="openGoalEditor()" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings</span>
+        </a>
+        <button onclick="logout()" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="app-main">
+      <!-- Top Search Bar -->
+      <header class="app-topbar">
+        <div class="topbar-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="globalSearchInput" placeholder="Search for courses, topics or resources..." />
+        </div>
+        <div class="topbar-user">
+          <div class="user-avatar-chip">
+            <div class="user-avatar-circle" id="topUserInitials">AS</div>
+            <span id="topUserName">Aarav Sharma</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Dashboard Content -->
+      <main class="app-content">
+        <!-- Hero Welcome Banner -->
+        <section class="welcome-banner">
+          <div class="welcome-banner-left">
+            <div class="welcome-greeting" id="greetingTime">Good Evening,</div>
+            <h1 class="welcome-title" id="welcomeText">Welcome back, Aarav Sharma!</h1>
+            <p class="welcome-subtitle">Keep learning, keep growing. You're on the right track! 🚀</p>
+
+            <!-- Learning Goal Pill Box -->
+            <div class="goal-pill-card">
+              <div class="goal-pill-left">
+                <div class="goal-icon-circle">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="goal-label">Current Learning Goal</div>
+                  <div class="goal-value" id="currentGoalDisplay">Master Java Programming &amp; Object-Oriented Design</div>
+                </div>
+              </div>
+              <button class="btn-update-goal" onclick="openGoalEditor()">Update Goal &rarr;</button>
+            </div>
+
+            <!-- Inline Goal Editor (Hidden by default) -->
+            <div id="goalEditorRow" class="hidden" style="margin-top:0.75rem; display:flex; gap:0.5rem;">
+              <input type="text" id="newGoalInput" class="form-control" style="background:#fff;" placeholder="Enter your new learning goal..." />
+              <button class="btn btn-primary btn-sm" onclick="saveLearningGoal()">Save</button>
+              <button class="btn btn-secondary btn-sm" onclick="closeGoalEditor()">Cancel</button>
+            </div>
+          </div>
+
+          <!-- Student Studying Vector Illustration -->
+          <div class="welcome-illustration" aria-hidden="true">
+            <svg width="270" height="170" viewBox="0 0 270 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Decorative Foliage Leaves -->
+              <path d="M55 155C32 135 28 95 45 72C62 92 68 128 55 155Z" fill="#bfdbfe" opacity="0.65"/>
+              <path d="M235 150C255 125 258 82 240 58C222 82 218 120 235 150Z" fill="#93c5fd" opacity="0.55"/>
+              <circle cx="165" cy="95" r="62" fill="#dbeafe" opacity="0.7"/>
+              <!-- Character Torso & Shirt -->
+              <path d="M128 112C128 96 144 86 164 86C184 86 200 96 204 116L210 158H122L128 112Z" fill="#3b82f6"/>
+              <!-- Head & Hair -->
+              <circle cx="164" cy="60" r="20" fill="#fed7aa"/>
+              <path d="M144 56C144 41 155 34 170 36C182 37 188 46 185 58C179 50 168 48 156 50C150 51 146 54 144 56Z" fill="#1e293b"/>
+              <!-- Laptop -->
+              <rect x="82" y="106" width="76" height="48" rx="6" fill="#334155"/>
+              <circle cx="120" cy="130" r="5" fill="#94a3b8"/>
+              <rect x="74" y="152" width="96" height="6" rx="3" fill="#475569"/>
+              <!-- Stack of Books -->
+              <rect x="192" y="142" width="58" height="13" rx="3" fill="#2563eb"/>
+              <rect x="196" y="145" width="48" height="7" rx="1.5" fill="#fef3c7"/>
+              <rect x="196" y="129" width="54" height="13" rx="3" fill="#f97316"/>
+              <rect x="200" y="132" width="44" height="7" rx="1.5" fill="#fffbeb"/>
+              <rect x="202" y="117" width="46" height="12" rx="3" fill="#1e3a8a"/>
+              <rect x="206" y="120" width="36" height="6" rx="1.5" fill="#f8fafc"/>
+            </svg>
+          </div>
+        </section>
+
+        <!-- 4 KPI Stat Cards Row -->
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon blue">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="4" width="20" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="10 9 15 12 10 15 10 9"/></svg>
+            </div>
+            <div>
+              <div class="kpi-number" id="kpiEnrolledCount">1</div>
+              <div class="kpi-label">Courses Enrolled</div>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon green">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            </div>
+            <div>
+              <div class="kpi-number" id="kpiTopicsCompleted">0</div>
+              <div class="kpi-label">Topics Completed</div>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon orange">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.5 3.5 4 5.5 4 9a4 4 0 1 1-8 0c0-2 1-3.5 2-5-.5 2 1 3 2 3-.5-2.5 0-5 0-7zm0 18a6 6 0 0 0 6-6c0-3-2-5.5-4-8-.5 2-2 3-2 5-1-1-1.5-2.5-1-4-2 2-3 4.5-3 7a6 6 0 0 0 4 6z"/></svg>
+            </div>
+            <div>
+              <div class="kpi-number" id="kpiStreakCount">7</div>
+              <div class="kpi-label">Day Streak</div>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon purple">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div>
+              <div class="kpi-number" id="kpiLearningTime">2.5 hrs</div>
+              <div class="kpi-label">Total Learning Time</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3-Column Core Adaptive Learning Cards Grid -->
+        <section class="adaptive-grid-3">
+          <!-- Column 1: 1. What should I learn next? -->
+          <div class="adaptive-card">
+            <div>
+              <div class="adaptive-card-header">
+                <div class="adaptive-card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  <span>1. What should I learn next?</span>
+                </div>
+                <span class="pill-badge blue">Personalized Path</span>
+              </div>
+
+              <div class="next-topic-box">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <span class="course-tag-pill" id="nextStepTag">Java</span>
+                  <a id="nextStepIconBtn" href="/student/courses.html" class="circle-chevron-btn" title="Go to recommended step">&rsaquo;</a>
+                </div>
+                <div class="next-topic-title" id="nextStepTitle">Variables &amp; Data Types</div>
+                <div class="next-topic-meta" id="nextStepMeta">
+                  <span>&#128337; 15 min &bull; 1 lesson</span>
+                </div>
+                <p class="next-topic-desc" id="nextStepDesc">
+                  Learn about variables, primitive data types, type casting, and how to store data in Java.
+                </p>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+              <a id="nextStepBtn" href="/student/courses.html" class="btn btn-primary btn-block">
+                Continue Learning &rarr;
+              </a>
+              <a href="/student/courses.html" class="btn btn-outline btn-block">
+                Browse All Courses
+              </a>
+            </div>
+          </div>
+
+          <!-- Column 2: 2. What am I weak at? -->
+          <div class="adaptive-card">
+            <div style="display:flex; flex-direction:column; flex:1;">
+              <div class="adaptive-card-header">
+                <div class="adaptive-card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                  <span>2. What am I weak at?</span>
+                </div>
+                <span class="pill-badge red">Knowledge Profile</span>
+              </div>
+
+              <div class="mastery-bar-header">
+                <span>Overall Course Mastery</span>
+                <span id="overallMasteryPct">0%</span>
+              </div>
+              <div class="mastery-progress-track">
+                <div class="mastery-progress-fill" id="overallMasteryBar" style="width: 0%;"></div>
+              </div>
+
+              <div class="weak-topics-panel">
+                <div class="weak-topics-panel-header">
+                  <span>&#127919;</span>
+                  <span id="weakTopicsHeaderCount">Weak Topics (6)</span>
+                </div>
+                <ul class="weak-topics-ul" id="weakTopicsList">
+                  <li>Variables &amp; Data Types</li>
+                  <li>Loops &amp; Control Flow</li>
+                  <li>Arrays &amp; Memory Layout</li>
+                  <li>OOP - Classes &amp; Encapsulation</li>
+                  <li>Inheritance &amp; Polymorphism</li>
+                  <li>Exception Handling &amp; Collections</li>
+                </ul>
+              </div>
+            </div>
+
+            <a href="/student/knowledge-profile.html" class="btn btn-outline btn-block">
+              View Full Knowledge Profile &rarr;
+            </a>
+          </div>
+
+          <!-- Column 3: 3. What should I revise? -->
+          <div class="adaptive-card">
+            <div style="display:flex; flex-direction:column; flex:1;">
+              <div class="adaptive-card-header">
+                <div class="adaptive-card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  <span>3. What should I revise?</span>
+                </div>
+                <span class="pill-badge blue">Revision Queue</span>
+              </div>
+
+              <div style="font-size:0.95rem; font-weight:700; color:#0f172a; margin-bottom:0.2rem;">
+                Spaced Revision Schedule
+              </div>
+              <p style="font-size:0.8rem; color:#64748b; line-height:1.45;">
+                Topics under 70% mastery are automatically scheduled for 1-day, 3-day, and 7-day intervals.
+              </p>
+
+              <div class="revision-mini-list" id="revisionQueueSummary">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <a href="/student/revision.html" class="btn btn-outline btn-block">
+              Open Revision Queue &rarr;
+            </a>
+          </div>
+        </section>
+
+        <!-- Bottom Section: Your Courses -->
+        <section class="your-courses-card">
+          <div class="your-courses-header">
+            <div class="your-courses-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+              <span>Your Courses</span>
+            </div>
+            <a href="/student/courses.html" style="font-size:0.88rem; font-weight:600; color:var(--primary); text-decoration:none;">
+              View All Courses
+            </a>
+          </div>
+
+          <div class="your-courses-grid" id="yourCoursesRow">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    function selectDashboardCategory(groupId, title, items) {
+      toggleSidebarGroup(groupId);
+      const groupEl = document.getElementById(groupId);
+      const homeLink = document.getElementById('navHomeLink');
+      const bar = document.getElementById('dashboardSubcatBar');
+      const titleEl = document.getElementById('dashboardSubcatTitle');
+      const pillsEl = document.getElementById('dashboardSubcatPills');
+
+      document.querySelectorAll('.sidebar-group').forEach(g => g.classList.remove('active'));
+      if (groupEl && groupEl.classList.contains('open')) {
+        groupEl.classList.add('active');
+        if (homeLink) homeLink.classList.remove('active');
+        if (bar) bar.classList.remove('hidden');
+        if (titleEl) titleEl.textContent = title;
+        if (pillsEl) {
+          pillsEl.innerHTML = items.map(item => {
+            if (item.url) {
+              return `<a href="${item.url}" class="subcat-pill">${item.label} &rarr;</a>`;
+            }
+            return `<button type="button" class="subcat-pill" style="border:none; cursor:pointer;" onclick="${item.action}">${item.label}</button>`;
+          }).join('');
+        }
+      } else {
+        resetDashboardCategoryView();
+      }
+    }
+
+    function resetDashboardCategoryView() {
+      document.querySelectorAll('.sidebar-group').forEach(g => {
+        g.classList.remove('open');
+        g.classList.remove('active');
+      });
+      const homeLink = document.getElementById('navHomeLink');
+      if (homeLink) homeLink.classList.add('active');
+      const bar = document.getElementById('dashboardSubcatBar');
+      if (bar) bar.classList.add('hidden');
+    }
+
+    function openGoalEditor() {
+      const row = document.getElementById('goalEditorRow');
+      const input = document.getElementById('newGoalInput');
+      const current = document.getElementById('currentGoalDisplay')?.textContent || '';
+      if (row) row.classList.remove('hidden');
+      if (input) {
+        input.value = current;
+        input.focus();
+      }
+    }
+
+    function closeGoalEditor() {
+      const row = document.getElementById('goalEditorRow');
+      if (row) row.classList.add('hidden');
+    }
+
+    async function loadDashboard() {
+      if (!requireAuth('STUDENT')) return;
+
+      const hr = new Date().getHours();
+      const greetEl = document.getElementById('greetingTime');
+      if (greetEl) {
+        greetEl.textContent = hr < 12 ? 'Good Morning,' : hr < 17 ? 'Good Afternoon,' : 'Good Evening,';
+      }
+
+      try {
+        const profile = await apiFetch('/auth/me');
+        const fullName = profile.name || 'Aarav Sharma';
+        const initials = fullName.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
+
+        document.getElementById('welcomeText').textContent = `Welcome back, ${fullName}!`;
+        document.getElementById('topUserName').textContent = fullName;
+        document.getElementById('topUserInitials').textContent = initials;
+        document.getElementById('currentGoalDisplay').textContent =
+          profile.learningGoal || 'Master Java Programming & Object-Oriented Design';
+
+        // Fetch courses, enrollments, sessions, knowledge profile, recommendations, and revisions
+        const courses = await apiFetch('/courses');
+        const enrolledCourses = courses.filter(c => c.enrolled);
+        document.getElementById('kpiEnrolledCount').textContent = Math.max(enrolledCourses.length, courses.length);
+
+        const primaryCourse = enrolledCourses.length > 0 ? enrolledCourses[0] : courses[0];
+        let kp = null;
+
+        if (primaryCourse) {
+          kp = await apiFetch(`/students/me/courses/${primaryCourse.id}/knowledge-profile`);
+          const overallPct = Math.round(kp.overallCourseMastery || 0);
+          document.getElementById('overallMasteryPct').textContent = `${overallPct}%`;
+          document.getElementById('overallMasteryBar').style.width = `${Math.min(100, overallPct)}%`;
+
+          const completedCount = (kp.strongCount || 0) + (kp.masteredCount || 0);
+          document.getElementById('kpiTopicsCompleted').textContent = completedCount;
+
+          // Weak Topics List
+          const weakTopics = kp.topics.filter(t => t.masteryLevel === 'WEAK' || t.masteryLevel === 'NEEDS_WORK');
+          document.getElementById('weakTopicsHeaderCount').textContent = `Weak Topics (${weakTopics.length})`;
+          const weakListEl = document.getElementById('weakTopicsList');
+          if (weakTopics.length > 0) {
+            weakListEl.innerHTML = weakTopics.map(t => `
+              <li>
+                <span>${t.topicTitle}</span>
+                ${t.masteryScore > 0 ? `<span style="font-size:0.78rem; color:#ef4444; font-weight:700;">${t.masteryScore}%</span>` : ''}
+              </li>
+            `).join('');
+          } else {
+            weakListEl.innerHTML = `<li style="color:#15803d; font-weight:600;">All topics above 70% mastery! 🎉</li>`;
+          }
+
+          // Personalized Next Step
+          const path = await apiFetch(`/students/me/courses/${primaryCourse.id}/learning-path`);
+          if (path && path.length > 0) {
+            const top = path[0];
+            document.getElementById('nextStepTitle').textContent = top.topicTitle;
+            document.getElementById('nextStepDesc').textContent = top.recommendationText;
+            document.getElementById('nextStepMeta').innerHTML = `<span>&#128337; 35 min &bull; 1 lesson &bull; ${top.priority} Priority</span>`;
+            document.getElementById('nextStepBtn').href = top.targetUrl;
+            document.getElementById('nextStepIconBtn').href = top.targetUrl;
+          }
+        }
+
+        // Study Sessions / Total Learning Time
+        try {
+          const sessions = await apiFetch('/students/me/sessions');
+          if (sessions && sessions.length > 0) {
+            const totalMins = sessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+            const hrs = (totalMins / 60).toFixed(1);
+            document.getElementById('kpiLearningTime').textContent = `${hrs} hrs`;
+            document.getElementById('kpiStreakCount').textContent = Math.max(1, sessions.length);
+          }
+        } catch (e) {}
+
+        // Spaced Revision Schedule Queue
+        const revisions = await apiFetch('/students/me/revision-schedule?onlyPending=true');
+        const revContainer = document.getElementById('revisionQueueSummary');
+        if (revisions && revisions.length > 0) {
+          revContainer.innerHTML = revisions.slice(0, 4).map(r => `
+            <a href="/student/revision.html" class="revision-mini-item">
+              <div class="revision-mini-left">
+                <div class="revision-mini-icon">&#128196;</div>
+                <div>
+                  <div class="revision-mini-title">${r.topicTitle}</div>
+                  <div class="revision-mini-due">${r.dueOrOverdue ? 'Due today' : 'Due ' + r.dueDate} (Stage ${r.intervalStage})</div>
+                </div>
+              </div>
+              <span style="color:#94a3b8; font-weight:700;">&rsaquo;</span>
+            </a>
+          `).join('');
+        } else {
+          // Default preview schedule items matching the reference design before first diagnostic/revision
+          const previewItems = [
+            { title: 'Variables & Data Types', due: 'Due today', icon: '&#128196;' },
+            { title: 'Loops & Control Flow', due: 'Due in 1 day', icon: '&#128196;' },
+            { title: 'OOP - Classes & Encapsulation', due: 'Due in 3 days', icon: '&#128300;' },
+            { title: 'Exception Handling & Collections', due: 'Due in 7 days', icon: '&#9888;' }
+          ];
+          revContainer.innerHTML = previewItems.map(item => `
+            <a href="/student/revision.html" class="revision-mini-item">
+              <div class="revision-mini-left">
+                <div class="revision-mini-icon">${item.icon}</div>
+                <div>
+                  <div class="revision-mini-title">${item.title}</div>
+                  <div class="revision-mini-due">${item.due}</div>
+                </div>
+              </div>
+              <span style="color:#94a3b8; font-weight:700;">&rsaquo;</span>
+            </a>
+          `).join('');
+        }
+
+        // Bottom Row: Your Courses (renders real courses + preview cards if fewer than 3)
+        renderYourCoursesRow(courses, kp);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function renderYourCoursesRow(courses, primaryKp) {
+      const container = document.getElementById('yourCoursesRow');
+      if (!container) return;
+
+      const javaPct = primaryKp ? Math.round(primaryKp.overallCourseMastery || 0) : 12;
+      const javaCompleted = primaryKp ? ((primaryKp.strongCount || 0) + (primaryKp.masteredCount || 0)) : 1;
+      const javaTotal = primaryKp && primaryKp.topics ? primaryKp.topics.length : 6;
+
+      const cardsData = [
+        {
+          id: courses[0] ? courses[0].id : 1,
+          title: 'Java Programming',
+          iconClass: 'java',
+          iconHtml: '&#9749;',
+          pct: javaPct,
+          sub: `${javaCompleted}/${javaTotal} topics mastered`,
+          url: courses[0] ? `/student/course-detail.html?id=${courses[0].id}` : '/student/courses.html'
+        },
+        {
+          id: courses[1] ? courses[1].id : 1,
+          title: courses[1] ? courses[1].title : 'Data Structures & Algorithms',
+          iconClass: 'dsa',
+          iconHtml: '&lt;/&gt;',
+          pct: 0,
+          sub: '0/6 topics mastered',
+          url: courses[1] ? `/student/course-detail.html?id=${courses[1].id}` : '/student/courses.html'
+        },
+        {
+          id: courses[2] ? courses[2].id : 1,
+          title: courses[2] ? courses[2].title : 'Database Management (MySQL)',
+          iconClass: 'db',
+          iconHtml: '&#128452;',
+          pct: 0,
+          sub: '0/6 topics mastered',
+          url: courses[2] ? `/student/course-detail.html?id=${courses[2].id}` : '/student/courses.html'
+        }
+      ];
+
+      container.innerHTML = cardsData.map(c => `
+        <a href="${c.url}" class="course-mini-card">
+          <div class="course-mini-icon ${c.iconClass}">${c.iconHtml}</div>
+          <div class="course-mini-body">
+            <div class="course-mini-name">${c.title}</div>
+            <div class="course-mini-bar-row">
+              <div class="course-mini-track">
+                <div class="course-mini-fill" style="width: ${c.pct}%;"></div>
+              </div>
+              <span class="course-mini-pct">${c.pct}%</span>
+            </div>
+            <div class="course-mini-sub">${c.sub}</div>
+          </div>
+          <span class="circle-chevron-btn">&rsaquo;</span>
+        </a>
+      `).join('');
+    }
+
+    async function saveLearningGoal() {
+      const goal = document.getElementById('newGoalInput').value.trim();
+      if (!goal) return;
+      try {
+        const updated = await apiFetch('/students/me/goal', {
+          method: 'PUT',
+          body: JSON.stringify({ learningGoal: goal })
+        });
+        document.getElementById('currentGoalDisplay').textContent = updated.learningGoal;
+        localStorage.setItem('edunest_goal', updated.learningGoal);
+        closeGoalEditor();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDashboard);
+  </script>
+</body>
+</html>

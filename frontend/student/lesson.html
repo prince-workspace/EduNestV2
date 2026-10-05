@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson Viewer — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .lesson-content pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 1.15rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .lesson-content h3, .lesson-content h4 {
+      margin: 1.25rem 0 0.5rem;
+    }
+    .lesson-content p {
+      margin-bottom: 0.85rem;
+    }
+    .key-points-box {
+      background: #eff6ff;
+      border-left: 4px solid var(--primary);
+      padding: 1.25rem 1.5rem;
+      border-radius: 8px;
+      margin-top: 1.75rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/student/dashboard.html" class="brand">🎓 <span>EduNest</span></a>
+    <div class="nav-links">
+      <a href="/student/dashboard.html">Dashboard</a>
+      <a href="/student/courses.html" class="active">Courses</a>
+      <a href="/student/skill-map.html">Skill Map</a>
+      <a href="/student/bookmarks.html">Bookmarks &amp; Notes</a>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container" style="max-width: 900px;">
+    <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+      <a id="breadcrumbCourse" href="/student/courses.html"
+         style="color: var(--primary); text-decoration: none; font-weight: 600;">
+        ← Back to Course Syllabus
+      </a>
+      <div style="display:flex; gap:0.5rem; align-items:center;">
+        <span id="topicBadge" class="badge badge-student">Topic</span>
+        <button id="bookmarkLessonBtn" class="btn btn-secondary btn-sm">☆ Bookmark Lesson</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+        <h2 id="lessonTitle">Loading Lesson...</h2>
+        <span id="lessonTime" style="font-size: 0.88rem; color: var(--text-muted); font-weight: 600;"></span>
+      </div>
+
+      <div id="lessonBody" class="lesson-content"></div>
+
+      <div class="key-points-box">
+        <h4 style="color: var(--primary); margin-bottom: 0.6rem;">📌 Key Takeaways</h4>
+        <ul id="keyPointsList" style="padding-left: 1.25rem;"></ul>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border);">
+        <a id="prevLessonBtn" href="#" class="btn btn-outline hidden">← Previous Lesson</a>
+        <div style="flex: 1;"></div>
+        <a id="nextLessonBtn" href="#" class="btn btn-primary hidden">Next Lesson →</a>
+      </div>
+    </div>
+
+    <!-- Personal Study Notes Panel -->
+    <div class="card" style="margin-top: 1.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+        <h3>📝 Personal Study Notes for This Lesson</h3>
+        <a href="/student/bookmarks.html" style="font-size:0.85rem; color:var(--primary); font-weight:600; text-decoration:none;">View All Saved Notes →</a>
+      </div>
+      <textarea id="lessonNoteContent" rows="5" class="form-control" style="width:100%; margin-bottom:0.75rem;" placeholder="Write down key formulas, Java syntax examples, or questions to review later..."></textarea>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span id="noteSaveStatus" style="font-size:0.85rem; font-weight:600;"></span>
+        <button id="saveNoteBtn" class="btn btn-primary btn-sm">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/courses.js"></script>
+  <script src="/js/notes-bookmarks.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!requireAuth('STUDENT')) return;
+      loadLessonReader();
+      const lessonId = new URLSearchParams(window.location.search).get('id');
+      initLessonNotesAndBookmark(lessonId);
+    });
+  </script>
+</body>
+</html>

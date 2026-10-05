@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/index.html" class="brand">🎓 <span>EduNest</span></a>
+    <div class="nav-links">
+      <a href="/login.html" class="btn btn-outline btn-sm">Sign In</a>
+    </div>
+  </nav>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <h2>Create Your Account</h2>
+      <p class="subtitle">Start with your learning goal and discover your knowledge profile</p>
+
+      <div id="errorMsg" class="alert alert-error hidden"></div>
+
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" class="form-control" placeholder="Aarav Sharma" required />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="aarav@example.com" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password (min. 6 characters)</label>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" minlength="6" required />
+        </div>
+
+        <div class="form-group">
+          <label for="role">Account Role</label>
+          <select id="role" class="form-control" required>
+            <option value="STUDENT">Student — Learn, Practice &amp; Build Skills</option>
+            <option value="INSTRUCTOR">Instructor — Create Courses &amp; Track Mastery</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="learningGoal">Your Primary Learning Goal</label>
+          <input type="text" id="learningGoal" class="form-control"
+                 placeholder="e.g. Master Core Java &amp; Object-Oriented Programming" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+          Create Account
+        </button>
+      </form>
+
+      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+        Already have an account? <a href="/login.html" style="color: var(--primary); font-weight: 600;">Sign in</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

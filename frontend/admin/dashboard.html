@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/admin/dashboard.html" class="brand">🎓 <span>EduNest Admin</span></a>
+    <div class="nav-links">
+      <a href="/admin/dashboard.html" class="active">Dashboard</a>
+      <span class="badge badge-admin">ADMIN</span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <h2 id="welcomeText">Platform Administration</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Monitor platform-wide users, courses, enrollments, assessments, and challenge submissions.
+        </p>
+      </div>
+    </div>
+
+    <div id="adminStatsGrid" class="stats-grid" style="margin-top: 1.5rem;"></div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!requireAuth('ADMIN')) return;
+      const profile = await apiFetch('/auth/me');
+      document.getElementById('welcomeText').textContent = `Admin Console — ${profile.name}`;
+
+      const stats = await apiFetch('/admin/overview');
+      const grid = document.getElementById('adminStatsGrid');
+      if (grid && stats) {
+        grid.innerHTML = `
+          <div class="stat-card"><div class="stat-value">${stats.totalUsers}</div><div class="stat-label">Registered Users</div></div>
+          <div class="stat-card"><div class="stat-value">${stats.totalCourses}</div><div class="stat-label">Published Courses</div></div>
+          <div class="stat-card"><div class="stat-value">${stats.totalEnrollments}</div><div class="stat-label">Course Enrollments</div></div>
+          <div class="stat-card"><div class="stat-value">${stats.totalQuizAttempts}</div><div class="stat-label">Quiz Attempts</div></div>
+          <div class="stat-card"><div class="stat-value">${stats.totalChallengeSubmissions}</div><div class="stat-label">Challenge Submissions</div></div>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

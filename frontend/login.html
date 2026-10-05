@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/index.html" class="brand">🎓 <span>EduNest</span></a>
+    <div class="nav-links">
+      <a href="/register.html" class="btn btn-outline btn-sm">Create Account</a>
+    </div>
+  </nav>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <h2>Welcome Back</h2>
+      <p class="subtitle">Sign in to continue your personalized learning path</p>
+
+      <div id="errorMsg" class="alert alert-error hidden"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="you@example.com" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+          Sign In
+        </button>
+      </form>
+
+      <div class="demo-box">
+        <p>Quick Demo Accounts (Click to Autofill)</p>
+        <div class="demo-btns">
+          <button type="button" class="btn btn-outline btn-sm"
+                  onclick="fillDemo('student@edunest.com', 'password123')">
+            Student
+          </button>
+          <button type="button" class="btn btn-outline btn-sm"
+                  onclick="fillDemo('instructor@edunest.com', 'password123')">
+            Instructor
+          </button>
+          <button type="button" class="btn btn-outline btn-sm"
+                  onclick="fillDemo('admin@edunest.com', 'password123')">
+            Admin
+          </button>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+        New to EduNest? <a href="/register.html" style="color: var(--primary); font-weight: 600;">Register here</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

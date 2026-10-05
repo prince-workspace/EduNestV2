@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spaced Revision System — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/student/dashboard.html" class="brand">🎓 <span>EduNest</span></a>
+    <div class="nav-links">
+      <a href="/student/dashboard.html">Dashboard</a>
+      <a href="/student/courses.html">Courses</a>
+      <a href="/student/knowledge-profile.html">Knowledge Profile</a>
+      <a href="/student/learning-path.html">Learning Path</a>
+      <a href="/student/revision.html" class="active">Revision</a>
+      <a href="/student/daily-plan.html">Daily Plan</a>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <span class="card-question">Spaced Repetition (1-Day → 3-Day → 7-Day Intervals)</span>
+        <h2 style="margin-top: 0.25rem;">Targeted Revision Queue</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 0.25rem;">
+          Weak and Needs-Practice topics are automatically scheduled for spaced reviews (20% weight in Topic Mastery).
+        </p>
+      </div>
+      <div style="display:flex; gap:1.5rem; text-align:center;">
+        <div>
+          <span style="font-size:0.78rem; color:var(--text-muted); font-weight:700;">PENDING</span>
+          <h2 id="pendingRevCount" style="color:#f59e0b;">0</h2>
+        </div>
+        <div>
+          <span style="font-size:0.78rem; color:var(--text-muted); font-weight:700;">COMPLETED</span>
+          <h2 id="completedRevCount" style="color:#10b981;">0</h2>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: 1rem;">Upcoming &amp; Due Revision Tasks</h3>
+    <div id="pendingRevisionsList" style="margin-bottom: 2.5rem;"></div>
+
+    <h3 style="margin-bottom: 1rem;">Completed Revision History</h3>
+    <div id="completedRevisionsList"></div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/revision.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!requireAuth('STUDENT')) return;
+      loadRevisionPage();
+    });
+  </script>
+</body>
+</html>

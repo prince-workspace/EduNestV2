@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instructor Dashboard — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/instructor/dashboard.html" class="brand">🎓 <span>EduNest Instructor</span></a>
+    <div class="nav-links">
+      <a href="/instructor/dashboard.html" class="active">Dashboard</a>
+      <a href="/instructor/create-course.html">Course Builder</a>
+      <a href="/instructor/analytics.html">Class Analytics</a>
+      <span class="badge badge-instructor">INSTRUCTOR</span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <h2 id="welcomeText">Instructor Portal</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Create structured courses, topics, lessons, diagnostic assessments, and monitor topic-level bottlenecks.
+        </p>
+      </div>
+      <a href="/instructor/create-course.html" class="btn btn-primary btn-sm">+ Create / Edit Course</a>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-question">Course Builder</div>
+        <h3 style="margin: 0.4rem 0;">Manage Courses, Topics &amp; Lessons</h3>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">
+          Build structured syllabi with estimated study times and key concept summaries.
+        </p>
+        <a href="/instructor/create-course.html" class="btn btn-outline btn-sm">Open Course Builder →</a>
+      </div>
+      <div class="card">
+        <div class="card-question">Performance Analytics</div>
+        <h3 style="margin: 0.4rem 0;">Identify Difficult Topics</h3>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">
+          View average topic mastery across enrolled students and pinpoint bottleneck topics.
+        </p>
+        <a href="/instructor/analytics.html" class="btn btn-primary btn-sm">Open Class Analytics →</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!requireAuth('INSTRUCTOR')) return;
+      const profile = await apiFetch('/auth/me');
+      document.getElementById('welcomeText').textContent = `Welcome, ${profile.name}`;
+    });
+  </script>
+</body>
+</html>

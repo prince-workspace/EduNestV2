@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create &amp; Manage Courses — EduNest Instructor</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/instructor/dashboard.html" class="brand">🎓 <span>EduNest Instructor</span></a>
+    <div class="nav-links">
+      <a href="/instructor/dashboard.html">Dashboard</a>
+      <a href="/instructor/create-course.html" class="active">Course Builder</a>
+      <span class="badge badge-instructor">INSTRUCTOR</span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <h2>Course, Topic &amp; Lesson Builder</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Create structured courses, add ordered topics and lessons, and publish them to students.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 2rem;">
+      <!-- Step 1: Create Course -->
+      <div class="card">
+        <div class="card-question">Step 1 · New Course</div>
+        <h3 style="margin: 0.4rem 0 1rem;">Create Course</h3>
+        <form id="createCourseForm">
+          <div class="form-group">
+            <label>Course Title</label>
+            <input type="text" id="courseTitle" class="form-control" placeholder="e.g. Data Structures in Java" required />
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="courseDesc" class="form-control" rows="3" placeholder="What will students master?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Create Course</button>
+        </form>
+      </div>
+
+      <!-- Step 2: Add Topic to Selected Course -->
+      <div class="card">
+        <div class="card-question">Step 2 · Add Topic</div>
+        <h3 style="margin: 0.4rem 0 1rem;">Add Topic to Course</h3>
+        <form id="createTopicForm">
+          <div class="form-group">
+            <label>Select Course</label>
+            <select id="topicCourseSelect" class="form-control" onchange="loadTopicsForCourse(this.value)" required></select>
+          </div>
+          <div class="form-group">
+            <label>Topic Title</label>
+            <input type="text" id="topicTitle" class="form-control" placeholder="e.g. Recursion &amp; Backtracking" required />
+          </div>
+          <div class="form-group">
+            <label>Order Index</label>
+            <input type="number" id="topicOrder" class="form-control" value="1" min="1" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Add Topic</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Step 3: Add Lesson -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-question">Step 3 · Add Lesson</div>
+      <h3 style="margin: 0.4rem 0 1rem;">Add Structured Lesson to Topic</h3>
+      <form id="createLessonForm">
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Select Topic</label>
+            <select id="lessonTopicSelect" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label>Lesson Title</label>
+            <input type="text" id="lessonTitle" class="form-control" placeholder="e.g. Base Cases &amp; Call Stack" required />
+          </div>
+          <div class="form-group">
+            <label>Estimated Study Time (Minutes)</label>
+            <input type="number" id="lessonMinutes" class="form-control" value="15" min="5" required />
+          </div>
+          <div class="form-group">
+            <label>Order Index</label>
+            <input type="number" id="lessonOrder" class="form-control" value="1" min="1" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Key Takeaways (Semicolon-separated)</label>
+          <input type="text" id="lessonKeyPoints" class="form-control"
+                 placeholder="Every recursive function needs a base case;Stack overflow occurs when base case is unreachable" />
+        </div>
+        <div class="form-group">
+          <label>Lesson Content (HTML supported)</label>
+          <textarea id="lessonContent" class="form-control" rows="4"
+                    placeholder="<h3>Concept Overview</h3><p>Write explanations and <pre><code>examples</code></pre> here...</p>" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Lesson</button>
+      </form>
+    </div>
+
+    <!-- Instructor Courses List -->
+    <h3 style="margin-bottom: 1rem;">My Instructor Courses</h3>
+    <div id="instructorCoursesGrid" class="grid-2"></div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!requireAuth('INSTRUCTOR')) return;
+      await refreshInstructorCourses();
+
+      document.getElementById('createCourseForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await apiFetch('/instructor/courses', {
+          method: 'POST',
+          body: JSON.stringify({
+            title: document.getElementById('courseTitle').value,
+            description: document.getElementById('courseDesc').value
+          })
+        });
+        document.getElementById('createCourseForm').reset();
+        await refreshInstructorCourses();
+      });
+
+      document.getElementById('createTopicForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const courseId = document.getElementById('topicCourseSelect').value;
+        await apiFetch(`/instructor/courses/${courseId}/topics`, {
+          method: 'POST',
+          body: JSON.stringify({
+            title: document.getElementById('topicTitle').value,
+            orderIndex: parseInt(document.getElementById('topicOrder').value, 10)
+          })
+        });
+        document.getElementById('topicTitle').value = '';
+        await loadTopicsForCourse(courseId);
+        await refreshInstructorCourses();
+      });
+
+      document.getElementById('createLessonForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const topicId = document.getElementById('lessonTopicSelect').value;
+        await apiFetch(`/instructor/topics/${topicId}/lessons`, {
+          method: 'POST',
+          body: JSON.stringify({
+            title: document.getElementById('lessonTitle').value,
+            content: document.getElementById('lessonContent').value,
+            keyPoints: document.getElementById('lessonKeyPoints').value,
+            estimatedMinutes: parseInt(document.getElementById('lessonMinutes').value, 10),
+            orderIndex: parseInt(document.getElementById('lessonOrder').value, 10)
+          })
+        });
+        document.getElementById('createLessonForm').reset();
+        alert('Lesson added successfully!');
+      });
+    });
+
+    async function refreshInstructorCourses() {
+      const courses = await apiFetch('/instructor/courses');
+      const select = document.getElementById('topicCourseSelect');
+      select.innerHTML = courses.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+      if (courses.length > 0) {
+        await loadTopicsForCourse(courses[0].id);
+      }
+
+      const grid = document.getElementById('instructorCoursesGrid');
+      grid.innerHTML = courses.map(c => `
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <span class="badge ${c.published ? 'badge-student' : 'badge-instructor'}">
+              ${c.published ? 'PUBLISHED' : 'DRAFT'}
+            </span>
+            <span style="font-size:0.85rem; color:var(--text-muted);">${c.topicCount} Topics · ${c.enrollmentCount} Students</span>
+          </div>
+          <h3>${c.title}</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin:0.5rem 0 1rem;">${c.description || ''}</p>
+          ${!c.published ? `<button class="btn btn-primary btn-sm" onclick="publishCourse(${c.id})">Publish Course</button>` : ''}
+        </div>
+      `).join('');
+    }
+
+    async function loadTopicsForCourse(courseId) {
+      if (!courseId) return;
+      const detail = await apiFetch(`/courses/${courseId}`);
+      const topicSelect = document.getElementById('lessonTopicSelect');
+      topicSelect.innerHTML = detail.topics.map(t => `<option value="${t.id}">${t.orderIndex}. ${t.title}</option>`).join('');
+    }
+
+    async function publishCourse(courseId) {
+      await apiFetch(`/instructor/courses/${courseId}/publish`, { method: 'PUT' });
+      await refreshInstructorCourses();
+    }
+  </script>
+</body>
+</html>

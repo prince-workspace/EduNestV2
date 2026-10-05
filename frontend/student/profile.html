@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar"></nav>
+
+  <div class="container">
+    <!-- Profile Hero Banner -->
+    <div class="welcome-banner" style="margin-bottom: 1.5rem;">
+      <div class="welcome-banner-left" style="display:flex; align-items:center; gap:1.35rem;">
+        <div class="user-avatar-circle" id="profileBigInitials" style="width:72px; height:72px; font-size:1.75rem; flex-shrink:0;">AS</div>
+        <div>
+          <span class="pill-badge blue" id="profileRoleBadge" style="margin-bottom:0.35rem; display:inline-block;">STUDENT</span>
+          <h1 class="welcome-title" id="profileNameTitle" style="font-size:1.75rem; margin-bottom:0.15rem;">Aarav Sharma</h1>
+          <p class="welcome-subtitle" id="profileEmailText" style="margin-bottom:0;">student@edunest.com</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 1.5rem;">
+      <!-- Learning Goal Card -->
+      <div class="card">
+        <h3 style="margin-bottom: 0.5rem;">🎯 Personal Learning Goal</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Your learning goal guides your daily study focus and progress milestones.
+        </p>
+        <div id="goalSavedMsg" class="alert alert-success hidden">Learning goal updated successfully!</div>
+        <div class="form-group">
+          <label for="profileGoalInput">Current Learning Goal</label>
+          <input type="text" id="profileGoalInput" class="form-control" placeholder="e.g., Master Java Programming & Object-Oriented Design" />
+        </div>
+        <button type="button" class="btn btn-primary" onclick="updateProfileGoal()">Save Learning Goal</button>
+      </div>
+
+      <!-- Account Summary & Actions Card -->
+      <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <h3 style="margin-bottom: 0.5rem;">⚙️ Account Overview</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Quick summary of your learning activity and session controls.
+          </p>
+          <div style="display:flex; flex-direction:column; gap:0.65rem; margin-bottom:1.25rem;">
+            <div style="display:flex; justify-content:space-between; padding:0.6rem 0.85rem; background:#f8fafc; border-radius:10px;">
+              <span style="color:#64748b; font-weight:500;">Study Sessions Logged</span>
+              <strong id="profileSessionsCount">0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:0.6rem 0.85rem; background:#f8fafc; border-radius:10px;">
+              <span style="color:#64748b; font-weight:500;">Total Study Minutes</span>
+              <strong id="profileTotalMinutes">0 mins</strong>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline" style="color:#ef4444; border-color:#fecaca;" onclick="logout()">
+          Sign Out of EduNest
+        </button>
+      </div>
+    </div>
+
+    <!-- Recent Study Sessions Card -->
+    <div class="card">
+      <h3 style="margin-bottom: 1rem;">⏱️ Recent Study Sessions</h3>
+      <div id="profileSessionsList">
+        <p style="color:#64748b;">Loading study sessions...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    async function loadProfileDashboard() {
+      if (!requireAuth('STUDENT')) return;
+      try {
+        const me = await apiFetch('/auth/me');
+        const name = me.name || 'Aarav Sharma';
+        const initials = name.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
+
+        document.getElementById('profileBigInitials').textContent = initials;
+        document.getElementById('profileNameTitle').textContent = name;
+        document.getElementById('profileEmailText').textContent = me.email || '';
+        document.getElementById('profileRoleBadge').textContent = me.role || 'STUDENT';
+        document.getElementById('profileGoalInput').value = me.learningGoal || 'Master Java Programming & Object-Oriented Design';
+
+        const sessions = await apiFetch('/students/me/sessions');
+        const listEl = document.getElementById('profileSessionsList');
+        if (sessions && sessions.length > 0) {
+          const totalMins = sessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+          document.getElementById('profileSessionsCount').textContent = sessions.length;
+          document.getElementById('profileTotalMinutes').textContent = `${totalMins} mins`;
+          listEl.innerHTML = sessions.map(s => `
+            <div style="padding:0.75rem 0; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>${s.courseTitle}</strong>
+                <div style="font-size:0.84rem; color:#64748b;">${s.activityType} &bull; ${s.sessionDate || ''}</div>
+              </div>
+              <span class="pill-badge blue">${s.durationMinutes} mins</span>
+            </div>
+          `).join('');
+        } else {
+          listEl.innerHTML = `<p style="color:#64748b;">No study sessions logged yet. Log a study session from your Daily Plan!</p>`;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function updateProfileGoal() {
+      const val = document.getElementById('profileGoalInput').value.trim();
+      if (!val) return;
+      try {
+        const res = await apiFetch('/students/me/goal', {
+          method: 'PUT',
+          body: JSON.stringify({ learningGoal: val })
+        });
+        localStorage.setItem('edunest_goal', res.learningGoal);
+        const msg = document.getElementById('goalSavedMsg');
+        msg.classList.remove('hidden');
+        setTimeout(() => msg.classList.add('hidden'), 3000);
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadProfileDashboard);
+  </script>
+</body>
+</html>

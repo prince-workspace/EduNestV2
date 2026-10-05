@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookmarks &amp; Study Notes - EduNest</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/student/dashboard.html" class="navbar-brand">EduNest</a>
+        <div class="nav-links">
+            <a href="/student/dashboard.html">Dashboard</a>
+            <a href="/student/courses.html">Courses</a>
+            <a href="/student/knowledge-profile.html">Knowledge Profile</a>
+            <a href="/student/learning-path.html">Learning Path</a>
+            <a href="/student/skill-map.html">Skill Map</a>
+            <a href="/student/challenges.html">Challenges</a>
+            <a href="/student/bookmarks.html" class="active">Bookmarks &amp; Notes</a>
+            <button onclick="logout()" class="btn btn-secondary">Logout</button>
+        </div>
+    </nav>
+
+    <main class="container" style="margin-top: 2rem;">
+        <div style="margin-bottom:2rem;">
+            <h1>Saved Bookmarks &amp; Study Notes</h1>
+            <p style="color:#64748b;">Quickly jump back to bookmarked lessons and review your personal study notes across topics.</p>
+        </div>
+
+        <section style="margin-bottom:2.5rem;">
+            <h2 style="margin-bottom:1rem;">★ Bookmarked Lessons</h2>
+            <div id="bookmarksContainer" style="display:flex; flex-direction:column; gap:1rem;">
+                <p>Loading bookmarks...</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 style="margin-bottom:1rem;">📝 My Lesson Notes</h2>
+            <div id="notesContainer" style="display:flex; flex-direction:column; gap:1rem;">
+                <p>Loading notes...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/notes-bookmarks.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            requireAuth('STUDENT');
+            loadBookmarksAndNotesHub();
+        });
+    </script>
+</body>
+</html>

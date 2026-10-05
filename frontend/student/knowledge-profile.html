@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knowledge Profile — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar"></nav>
+
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <span class="card-question">Topic-Level Mastery Breakdown</span>
+        <h2 id="profileCourseTitle" style="margin-top: 0.25rem;">Knowledge Profile</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 0.25rem;">
+          Formula: <strong>Diagnostic (20%) + Practice (20%) + Quiz (40%) + Revision (20%)</strong>
+        </p>
+      </div>
+      <div style="text-align: right;">
+        <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">OVERALL MASTERY</span>
+        <div id="overallMasteryPct" style="font-size: 2rem; font-weight: 800; color: var(--primary);">0%</div>
+      </div>
+    </div>
+
+    <!-- Summary Counters -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:1rem; margin-bottom:2rem;">
+      <div class="card" style="border-top: 4px solid #ef4444;">
+        <span style="font-size:0.82rem; color:var(--text-muted); font-weight:700;">WEAK (&lt;40%)</span>
+        <h2 id="weakCountVal" style="color:#ef4444; margin-top:0.25rem;">0</h2>
+      </div>
+      <div class="card" style="border-top: 4px solid #f59e0b;">
+        <span style="font-size:0.82rem; color:var(--text-muted); font-weight:700;">NEEDS PRACTICE (40–69%)</span>
+        <h2 id="needsWorkCountVal" style="color:#f59e0b; margin-top:0.25rem;">0</h2>
+      </div>
+      <div class="card" style="border-top: 4px solid #10b981;">
+        <span style="font-size:0.82rem; color:var(--text-muted); font-weight:700;">STRONG (70–89%)</span>
+        <h2 id="strongCountVal" style="color:#10b981; margin-top:0.25rem;">0</h2>
+      </div>
+      <div class="card" style="border-top: 4px solid #8b5cf6;">
+        <span style="font-size:0.82rem; color:var(--text-muted); font-weight:700;">MASTERED (90%+)</span>
+        <h2 id="masteredCountVal" style="color:#8b5cf6; margin-top:0.25rem;">0</h2>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+      <h3>Topic-by-Topic Mastery</h3>
+      <a href="/student/learning-path.html" class="btn btn-primary btn-sm">View Personalized Learning Path →</a>
+    </div>
+
+    <div id="topicMasteryList"></div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/mastery.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!requireAuth('STUDENT')) return;
+      loadKnowledgeProfilePage();
+    });
+  </script>
+</body>
+</html>

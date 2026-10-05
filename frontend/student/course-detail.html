@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Syllabus — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/student/dashboard.html" class="brand">🎓 <span>EduNest</span></a>
+    <div class="nav-links">
+      <a href="/student/dashboard.html">Dashboard</a>
+      <a href="/student/courses.html" class="active">Courses</a>
+      <span class="badge badge-student">STUDENT</span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div style="margin-bottom: 1rem;">
+      <a href="/student/courses.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+        ← Back to Course Catalog
+      </a>
+    </div>
+
+    <div class="dashboard-header">
+      <div style="max-width: 680px;">
+        <h2 id="courseTitle">Loading Course...</h2>
+        <p id="courseMeta" style="color: var(--primary); font-weight: 600; font-size: 0.9rem; margin: 0.3rem 0;"></p>
+        <p id="courseDesc" style="color: var(--text-muted); font-size: 0.95rem;"></p>
+      </div>
+      <div id="enrollmentActionArea"></div>
+    </div>
+
+    <h3 style="margin-bottom: 1rem;">Course Topics &amp; Lessons</h3>
+    <div id="topicsAccordion"></div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/courses.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!requireAuth('STUDENT')) return;
+      loadCourseDetail();
+    });
+  </script>
+</body>
+</html>

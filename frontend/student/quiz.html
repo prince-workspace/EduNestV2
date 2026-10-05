@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topic Assessment Quiz — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/student/dashboard.html" class="brand">🎓 <span>EduNest</span></a>
+    <div class="nav-links">
+      <a href="/student/dashboard.html">Dashboard</a>
+      <a href="/student/courses.html">Courses</a>
+      <span id="quizTimer" class="badge hidden" style="background:#fee2e2; color:#b91c1c; font-size:0.9rem;">⏱ 10:00</span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container" style="max-width: 860px;">
+    <div class="dashboard-header">
+      <div>
+        <span class="card-question">Graded Topic Assessment (40% Mastery Weight)</span>
+        <h2 id="quizTitle" style="margin-top: 0.25rem;">Loading Topic Quiz...</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 0.25rem;">
+          Complete this quiz to update your Topic Mastery score and personalized learning recommendations.
+        </p>
+      </div>
+      <span id="questionCountBadge" class="badge badge-student">0 Questions</span>
+    </div>
+
+    <div id="questionsContainer"></div>
+
+    <div style="display:flex; justify-content:flex-end; margin-top: 1.5rem;">
+      <button class="btn btn-primary" onclick="submitCurrentQuiz()">
+        Submit Quiz &amp; View Performance Analysis →
+      </button>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/quiz.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!requireAuth('STUDENT')) return;
+      initQuizPage('CHAPTER_QUIZ');
+    });
+  </script>
+</body>
+</html>
