@@ -116,25 +116,30 @@ public class QuizService {
         Topic topic = topicRepository.findById(topicId)
                 .orElseThrow(() -> new RuntimeException("Topic not found"));
 
+        List<Question> practiceQuestions =
+                questionRepository.findByTopicIdAndQuestionType(topicId, QuestionType.PRACTICE);
+        if (practiceQuestions.isEmpty()) {
+            practiceQuestions = questionRepository.findByTopicId(topicId);
+        }
+
         Quiz quiz = quizRepository.findByTopicIdAndQuizType(topicId, QuizType.PRACTICE)
                 .orElseGet(() -> {
-                    List<Question> practiceQuestions =
-                            questionRepository.findByTopicIdAndQuestionType(topicId, QuestionType.PRACTICE);
-                    if (practiceQuestions.isEmpty()) {
-                        practiceQuestions = questionRepository.findByTopicId(topicId);
-                    }
                     Quiz newQuiz = new Quiz();
                     newQuiz.setCourse(topic.getCourse());
                     newQuiz.setTopic(topic);
                     newQuiz.setTitle(topic.getTitle() + " - Concept Practice");
                     newQuiz.setQuizType(QuizType.PRACTICE);
                     newQuiz.setTimeLimitMinutes(null);
-                    newQuiz.setQuestions(new ArrayList<>(practiceQuestions));
-                    return quizRepository.save(newQuiz);
+                    return newQuiz;
                 });
 
+        quiz.setQuestions(new ArrayList<>(practiceQuestions));
+        quiz = quizRepository.save(quiz);
+
         // Practice mode includes correctOption + explanation so student gets instant feedback
-        List<QuestionDto> questions = quiz.getQuestions().stream()
+        List<Question> practiceList = new ArrayList<>(quiz.getQuestions());
+        Collections.shuffle(practiceList);
+        List<QuestionDto> questions = practiceList.stream()
                 .map(q -> toQuestionDto(q, true))
                 .toList();
 
@@ -154,24 +159,29 @@ public class QuizService {
         Topic topic = topicRepository.findById(topicId)
                 .orElseThrow(() -> new RuntimeException("Topic not found"));
 
+        List<Question> quizQuestions =
+                questionRepository.findByTopicIdAndQuestionType(topicId, QuestionType.QUIZ);
+        if (quizQuestions.isEmpty()) {
+            quizQuestions = questionRepository.findByTopicId(topicId);
+        }
+
         Quiz quiz = quizRepository.findByTopicIdAndQuizType(topicId, QuizType.CHAPTER_QUIZ)
                 .orElseGet(() -> {
-                    List<Question> quizQuestions =
-                            questionRepository.findByTopicIdAndQuestionType(topicId, QuestionType.QUIZ);
-                    if (quizQuestions.isEmpty()) {
-                        quizQuestions = questionRepository.findByTopicId(topicId);
-                    }
                     Quiz newQuiz = new Quiz();
                     newQuiz.setCourse(topic.getCourse());
                     newQuiz.setTopic(topic);
                     newQuiz.setTitle(topic.getTitle() + " - Topic Assessment Quiz");
                     newQuiz.setQuizType(QuizType.CHAPTER_QUIZ);
                     newQuiz.setTimeLimitMinutes(10);
-                    newQuiz.setQuestions(new ArrayList<>(quizQuestions));
-                    return quizRepository.save(newQuiz);
+                    return newQuiz;
                 });
 
-        List<QuestionDto> questions = quiz.getQuestions().stream()
+        quiz.setQuestions(new ArrayList<>(quizQuestions));
+        quiz = quizRepository.save(quiz);
+
+        List<Question> chapterList = new ArrayList<>(quiz.getQuestions());
+        Collections.shuffle(chapterList);
+        List<QuestionDto> questions = chapterList.stream()
                 .map(q -> toQuestionDto(q, false))
                 .toList();
 

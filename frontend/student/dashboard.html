@@ -32,14 +32,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           <span>Knowledge Profile</span>
         </a>
-        <a href="/student/learning-path.html" class="sidebar-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-          <span>Learning Path</span>
-        </a>
-        <a href="/student/skill-map.html" class="sidebar-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          <span>Skill Map</span>
-        </a>
         <a href="/student/challenges.html" class="sidebar-link">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
           <span>Challenges</span>
@@ -47,10 +39,6 @@
         <a href="/student/revision.html" class="sidebar-link">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
           <span>Revision</span>
-        </a>
-        <a href="/student/daily-plan.html" class="sidebar-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          <span>Daily Plan</span>
         </a>
         <a href="/student/bookmarks.html" class="sidebar-link">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
@@ -76,9 +64,13 @@
       <header class="app-topbar">
         <div class="topbar-search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="globalSearchInput" placeholder="Search for courses, topics or resources..." />
+          <input type="text" id="globalSearchInput" placeholder="Search courses or topics..." />
         </div>
         <div class="topbar-user">
+          <div class="topbar-status">
+            <span class="topbar-status-dot"></span>
+            <span>Online</span>
+          </div>
           <div class="user-avatar-chip">
             <div class="user-avatar-circle" id="topUserInitials">AS</div>
             <span id="topUserName">Aarav Sharma</span>
@@ -91,208 +83,185 @@
         <!-- Hero Welcome Banner -->
         <section class="welcome-banner">
           <div class="welcome-banner-left">
-            <div class="welcome-greeting" id="greetingTime">Good Evening,</div>
-            <h1 class="welcome-title" id="welcomeText">Welcome back, Aarav Sharma!</h1>
-            <p class="welcome-subtitle">Keep learning, keep growing. You're on the right track! 🚀</p>
+            <div class="welcome-greeting-tag" id="greetingTime">GOOD AFTERNOON 👋</div>
+            <h1 class="welcome-title" id="welcomeText">Welcome back, Aarav!</h1>
+            <p class="welcome-subtitle">Keep learning, keep growing. You're doing amazing this week!</p>
 
             <!-- Learning Goal Pill Box -->
             <div class="goal-pill-card">
               <div class="goal-pill-left">
-                <div class="goal-icon-circle">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                    <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+                <div class="goal-icon-square">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="currentColor"/>
                   </svg>
                 </div>
                 <div>
-                  <div class="goal-label">Current Learning Goal</div>
-                  <div class="goal-value" id="currentGoalDisplay">Master Java Programming &amp; Object-Oriented Design</div>
+                  <div class="goal-label">TARGET GOAL</div>
+                  <div class="goal-value" id="currentGoalDisplay">Master Java &amp; Object-Oriented Design</div>
                 </div>
               </div>
               <button class="btn-update-goal" onclick="openGoalEditor()">Update Goal &rarr;</button>
             </div>
 
             <!-- Inline Goal Editor (Hidden by default) -->
-            <div id="goalEditorRow" class="hidden" style="margin-top:0.75rem; display:flex; gap:0.5rem;">
+            <div id="goalEditorRow" class="hidden" style="margin-top:0.75rem; display:flex; gap:0.5rem; max-width:530px;">
               <input type="text" id="newGoalInput" class="form-control" style="background:#fff;" placeholder="Enter your new learning goal..." />
               <button class="btn btn-primary btn-sm" onclick="saveLearningGoal()">Save</button>
               <button class="btn btn-secondary btn-sm" onclick="closeGoalEditor()">Cancel</button>
             </div>
           </div>
 
-          <!-- Student Studying Vector Illustration -->
+          <!-- Student Studying Vector Illustration matching reference design -->
           <div class="welcome-illustration" aria-hidden="true">
-            <svg width="270" height="170" viewBox="0 0 270 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Decorative Foliage Leaves -->
-              <path d="M55 155C32 135 28 95 45 72C62 92 68 128 55 155Z" fill="#bfdbfe" opacity="0.65"/>
-              <path d="M235 150C255 125 258 82 240 58C222 82 218 120 235 150Z" fill="#93c5fd" opacity="0.55"/>
-              <circle cx="165" cy="95" r="62" fill="#dbeafe" opacity="0.7"/>
-              <!-- Character Torso & Shirt -->
-              <path d="M128 112C128 96 144 86 164 86C184 86 200 96 204 116L210 158H122L128 112Z" fill="#3b82f6"/>
-              <!-- Head & Hair -->
-              <circle cx="164" cy="60" r="20" fill="#fed7aa"/>
-              <path d="M144 56C144 41 155 34 170 36C182 37 188 46 185 58C179 50 168 48 156 50C150 51 146 54 144 56Z" fill="#1e293b"/>
-              <!-- Laptop -->
-              <rect x="82" y="106" width="76" height="48" rx="6" fill="#334155"/>
-              <circle cx="120" cy="130" r="5" fill="#94a3b8"/>
-              <rect x="74" y="152" width="96" height="6" rx="3" fill="#475569"/>
-              <!-- Stack of Books -->
-              <rect x="192" y="142" width="58" height="13" rx="3" fill="#2563eb"/>
-              <rect x="196" y="145" width="48" height="7" rx="1.5" fill="#fef3c7"/>
-              <rect x="196" y="129" width="54" height="13" rx="3" fill="#f97316"/>
-              <rect x="200" y="132" width="44" height="7" rx="1.5" fill="#fffbeb"/>
-              <rect x="202" y="117" width="46" height="12" rx="3" fill="#1e3a8a"/>
-              <rect x="206" y="120" width="36" height="6" rx="1.5" fill="#f8fafc"/>
+            <svg width="220" height="150" viewBox="0 0 220 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Soft ellipse shadow underneath -->
+              <ellipse cx="110" cy="140" rx="90" ry="8" fill="#e2e8f0" opacity="0.6"/>
+              <!-- Student Torso / Hoodie -->
+              <path d="M80 120 C80 96 92 84 112 84 C132 84 144 96 144 120 L148 140 H76 Z" fill="#2563eb"/>
+              <!-- Student Head & Hair -->
+              <circle cx="112" cy="54" r="22" fill="#fed7aa"/>
+              <path d="M90 52 C90 34 100 26 112 26 C124 26 134 34 134 52 Z" fill="#1e293b"/>
+              <rect x="90" y="42" width="44" height="9" rx="4.5" fill="#facc15"/>
+              <!-- Laptop Screen & Base -->
+              <rect x="84" y="98" width="56" height="34" rx="4" fill="#0f172a"/>
+              <rect x="88" y="102" width="48" height="26" rx="2" fill="#3b82f6"/>
+              <path d="M78 132 L146 132 L142 138 L82 138 Z" fill="#64748b"/>
+              <!-- Stack of 3 Books on Right -->
+              <rect x="152" y="129" width="46" height="9" rx="2" fill="#2563eb"/>
+              <rect x="152" y="118" width="44" height="9" rx="2" fill="#10b981"/>
+              <rect x="152" y="107" width="42" height="9" rx="2" fill="#f97316"/>
             </svg>
           </div>
         </section>
 
-        <!-- 4 KPI Stat Cards Row -->
+        <!-- 3 KPI Metric Cards Row -->
         <section class="kpi-grid">
           <div class="kpi-card">
             <div class="kpi-icon blue">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="4" width="20" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="10 9 15 12 10 15 10 9"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="12" cy="12" r="10"/>
+                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+              </svg>
             </div>
             <div>
-              <div class="kpi-number" id="kpiEnrolledCount">1</div>
-              <div class="kpi-label">Courses Enrolled</div>
+              <div class="kpi-number"><span id="kpiEnrolledCount">1</span> Course</div>
+              <div class="kpi-label">Currently in progress</div>
             </div>
           </div>
 
           <div class="kpi-card">
-            <div class="kpi-icon green">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            <div class="kpi-icon yellow">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2">
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z" fill="#fef3c7"/>
+              </svg>
             </div>
             <div>
-              <div class="kpi-number" id="kpiTopicsCompleted">0</div>
-              <div class="kpi-label">Topics Completed</div>
-            </div>
-          </div>
-
-          <div class="kpi-card">
-            <div class="kpi-icon orange">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.5 3.5 4 5.5 4 9a4 4 0 1 1-8 0c0-2 1-3.5 2-5-.5 2 1 3 2 3-.5-2.5 0-5 0-7zm0 18a6 6 0 0 0 6-6c0-3-2-5.5-4-8-.5 2-2 3-2 5-1-1-1.5-2.5-1-4-2 2-3 4.5-3 7a6 6 0 0 0 4 6z"/></svg>
-            </div>
-            <div>
-              <div class="kpi-number" id="kpiStreakCount">7</div>
-              <div class="kpi-label">Day Streak</div>
+              <div class="kpi-number"><span id="kpiStreakCount">7</span> Days 🔥</div>
+              <div class="kpi-label">Daily study streak</div>
             </div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-icon purple">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
             </div>
             <div>
               <div class="kpi-number" id="kpiLearningTime">2.5 hrs</div>
-              <div class="kpi-label">Total Learning Time</div>
+              <div class="kpi-label">Logged this week</div>
             </div>
           </div>
         </section>
 
-        <!-- 3-Column Core Adaptive Learning Cards Grid -->
-        <section class="adaptive-grid-3">
-          <!-- Column 1: 1. What should I learn next? -->
-          <div class="adaptive-card">
+        <!-- Two-Column Layout: Up Next For You & Focus and Revision -->
+        <section class="dash-two-cols">
+          <!-- Left Column: Up Next For You -->
+          <div class="dash-main-card">
             <div>
-              <div class="adaptive-card-header">
-                <div class="adaptive-card-title">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                  <span>1. What should I learn next?</span>
+              <div class="dash-card-header">
+                <div class="dash-card-title">
+                  <span class="dot-indicator blue"></span>
+                  <span>Up Next For You</span>
                 </div>
-                <span class="pill-badge blue">Personalized Path</span>
+                <span class="dash-badge-pill blue">Personalized Path</span>
               </div>
 
-              <div class="next-topic-box">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                  <span class="course-tag-pill" id="nextStepTag">Java</span>
-                  <a id="nextStepIconBtn" href="/student/courses.html" class="circle-chevron-btn" title="Go to recommended step">&rsaquo;</a>
-                </div>
-                <div class="next-topic-title" id="nextStepTitle">Variables &amp; Data Types</div>
-                <div class="next-topic-meta" id="nextStepMeta">
-                  <span>&#128337; 15 min &bull; 1 lesson</span>
-                </div>
-                <p class="next-topic-desc" id="nextStepDesc">
-                  Learn about variables, primitive data types, type casting, and how to store data in Java.
+              <div class="up-next-box">
+                <span class="lesson-tag" id="nextStepTag">Java Foundations</span>
+                <div class="next-lesson-title" id="nextStepTitle">Variables &amp; Data Types</div>
+                <p class="next-lesson-desc" id="nextStepDesc">
+                  Learn primitive types, memory allocations, and best practices for writing clean Java syntax.
                 </p>
+                <div class="lesson-meta" id="nextStepMeta">
+                  <span class="meta-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span id="nextStepDuration">35 mins</span>
+                  </span>
+                  <span class="meta-dot">&bull;</span>
+                  <span class="meta-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+                    <span id="nextStepPractice">1 Practical Exercise</span>
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div style="display:flex; flex-direction:column; gap:0.6rem;">
-              <a id="nextStepBtn" href="/student/courses.html" class="btn btn-primary btn-block">
-                Continue Learning &rarr;
-              </a>
-              <a href="/student/courses.html" class="btn btn-outline btn-block">
-                Browse All Courses
-              </a>
-            </div>
+            <a id="nextStepBtn" href="/student/courses.html" class="btn-start-lesson">
+              Start Lesson &rarr;
+            </a>
           </div>
 
-          <!-- Column 2: 2. What am I weak at? -->
-          <div class="adaptive-card">
-            <div style="display:flex; flex-direction:column; flex:1;">
-              <div class="adaptive-card-header">
-                <div class="adaptive-card-title">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                  <span>2. What am I weak at?</span>
+          <!-- Right Column: Focus & Revision -->
+          <div class="dash-main-card">
+            <div>
+              <div class="dash-card-header">
+                <div class="dash-card-title">
+                  <span class="dot-indicator green"></span>
+                  <span>Focus &amp; Revision</span>
                 </div>
-                <span class="pill-badge red">Knowledge Profile</span>
+                <span class="dash-badge-pill green">Course Progress</span>
               </div>
 
-              <div class="mastery-bar-header">
+              <div class="mastery-summary-row">
                 <span>Overall Course Mastery</span>
-                <span id="overallMasteryPct">0%</span>
+                <span class="mastery-pct" id="overallMasteryPct">72%</span>
               </div>
-              <div class="mastery-progress-track">
-                <div class="mastery-progress-fill" id="overallMasteryBar" style="width: 0%;"></div>
+              <div class="mastery-bar-track">
+                <div class="mastery-bar-fill" id="overallMasteryBar" style="width: 72%;"></div>
               </div>
 
-              <div class="weak-topics-panel">
-                <div class="weak-topics-panel-header">
-                  <span>&#127919;</span>
-                  <span id="weakTopicsHeaderCount">Weak Topics (6)</span>
+              <div class="brushup-section-header">RECOMMENDED QUICK BRUSH-UPS</div>
+
+              <div class="brushup-list" id="revisionBrushupList">
+                <div class="brushup-item">
+                  <div class="brushup-item-left">
+                    <div class="brushup-num">01</div>
+                    <div>
+                      <div class="brushup-title">Control Flow &amp; Loops</div>
+                      <div class="brushup-sub">Reviewed 3 days ago</div>
+                    </div>
+                  </div>
+                  <a href="/student/revision.html" class="btn-brushup-review">Review</a>
                 </div>
-                <ul class="weak-topics-ul" id="weakTopicsList">
-                  <li>Variables &amp; Data Types</li>
-                  <li>Loops &amp; Control Flow</li>
-                  <li>Arrays &amp; Memory Layout</li>
-                  <li>OOP - Classes &amp; Encapsulation</li>
-                  <li>Inheritance &amp; Polymorphism</li>
-                  <li>Exception Handling &amp; Collections</li>
-                </ul>
+
+                <div class="brushup-item">
+                  <div class="brushup-item-left">
+                    <div class="brushup-num">02</div>
+                    <div>
+                      <div class="brushup-title">Methods &amp; Return Types</div>
+                      <div class="brushup-sub">Scheduled for today</div>
+                    </div>
+                  </div>
+                  <a href="/student/revision.html" class="btn-brushup-review">Review</a>
+                </div>
               </div>
             </div>
 
-            <a href="/student/knowledge-profile.html" class="btn btn-outline btn-block">
-              View Full Knowledge Profile &rarr;
-            </a>
-          </div>
-
-          <!-- Column 3: 3. What should I revise? -->
-          <div class="adaptive-card">
-            <div style="display:flex; flex-direction:column; flex:1;">
-              <div class="adaptive-card-header">
-                <div class="adaptive-card-title">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                  <span>3. What should I revise?</span>
-                </div>
-                <span class="pill-badge blue">Revision Queue</span>
-              </div>
-
-              <div style="font-size:0.95rem; font-weight:700; color:#0f172a; margin-bottom:0.2rem;">
-                Spaced Revision Schedule
-              </div>
-              <p style="font-size:0.8rem; color:#64748b; line-height:1.45;">
-                Topics under 70% mastery are automatically scheduled for 1-day, 3-day, and 7-day intervals.
-              </p>
-
-              <div class="revision-mini-list" id="revisionQueueSummary">
-                <!-- Populated dynamically -->
-              </div>
+            <div class="focus-revision-footer">
+              <span>Spaced repetition keeps knowledge fresh!</span>
+              <span class="status-on-track">On Track</span>
             </div>
-
-            <a href="/student/revision.html" class="btn btn-outline btn-block">
-              Open Revision Queue &rarr;
-            </a>
           </div>
         </section>
 
@@ -379,62 +348,93 @@
       const hr = new Date().getHours();
       const greetEl = document.getElementById('greetingTime');
       if (greetEl) {
-        greetEl.textContent = hr < 12 ? 'Good Morning,' : hr < 17 ? 'Good Afternoon,' : 'Good Evening,';
+        greetEl.textContent = hr < 12 ? 'GOOD MORNING 👋' : hr < 17 ? 'GOOD AFTERNOON 👋' : 'GOOD EVENING 👋';
       }
 
       try {
         const profile = await apiFetch('/auth/me');
         const fullName = profile.name || 'Aarav Sharma';
+        const firstName = fullName.split(' ')[0] || 'Aarav';
         const initials = fullName.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
 
-        document.getElementById('welcomeText').textContent = `Welcome back, ${fullName}!`;
-        document.getElementById('topUserName').textContent = fullName;
-        document.getElementById('topUserInitials').textContent = initials;
-        document.getElementById('currentGoalDisplay').textContent =
-          profile.learningGoal || 'Master Java Programming & Object-Oriented Design';
+        const welcomeEl = document.getElementById('welcomeText');
+        if (welcomeEl) welcomeEl.textContent = `Welcome back, ${firstName}!`;
+        const topUserEl = document.getElementById('topUserName');
+        if (topUserEl) topUserEl.textContent = fullName;
+        const topInitialsEl = document.getElementById('topUserInitials');
+        if (topInitialsEl) topInitialsEl.textContent = initials;
+        const goalEl = document.getElementById('currentGoalDisplay');
+        if (goalEl) {
+          goalEl.textContent = profile.learningGoal || 'Master Java & Object-Oriented Design';
+        }
 
         // Fetch courses, enrollments, sessions, knowledge profile, recommendations, and revisions
-        const courses = await apiFetch('/courses');
-        const enrolledCourses = courses.filter(c => c.enrolled);
-        document.getElementById('kpiEnrolledCount').textContent = Math.max(enrolledCourses.length, courses.length);
+        let courses = [];
+        let myCourses = [];
+        try {
+          [courses, myCourses] = await Promise.all([
+            apiFetch('/courses').catch(() => []),
+            apiFetch('/courses/my').catch(() => [])
+          ]);
+        } catch (e) {
+          courses = [];
+          myCourses = [];
+        }
+        
+        // Also check any locally saved enrolled courses
+        let localEnrolled = [];
+        try {
+          localEnrolled = JSON.parse(localStorage.getItem('edunest_enrolledCourses') || '[]');
+        } catch (e) { localEnrolled = []; }
 
-        const primaryCourse = enrolledCourses.length > 0 ? enrolledCourses[0] : courses[0];
+        const allEnrolledMap = new Map();
+        if (Array.isArray(myCourses)) {
+          myCourses.forEach(c => allEnrolledMap.set(c.id, c));
+        }
+        if (Array.isArray(courses)) {
+          courses.filter(c => c.enrolled).forEach(c => allEnrolledMap.set(c.id, c));
+        }
+        if (Array.isArray(localEnrolled)) {
+          localEnrolled.forEach(c => {
+            if (!allEnrolledMap.has(c.id)) allEnrolledMap.set(c.id, c);
+          });
+        }
+        
+        const enrolledCourses = Array.from(allEnrolledMap.values());
+        const enrolledCountEl = document.getElementById('kpiEnrolledCount');
+        if (enrolledCountEl) {
+          enrolledCountEl.textContent = Math.max(1, enrolledCourses.length);
+        }
+
+        const primaryCourse = enrolledCourses.length > 0 ? enrolledCourses[0] : (courses.length > 0 ? courses[0] : null);
         let kp = null;
 
         if (primaryCourse) {
-          kp = await apiFetch(`/students/me/courses/${primaryCourse.id}/knowledge-profile`);
-          const overallPct = Math.round(kp.overallCourseMastery || 0);
-          document.getElementById('overallMasteryPct').textContent = `${overallPct}%`;
-          document.getElementById('overallMasteryBar').style.width = `${Math.min(100, overallPct)}%`;
-
-          const completedCount = (kp.strongCount || 0) + (kp.masteredCount || 0);
-          document.getElementById('kpiTopicsCompleted').textContent = completedCount;
-
-          // Weak Topics List
-          const weakTopics = kp.topics.filter(t => t.masteryLevel === 'WEAK' || t.masteryLevel === 'NEEDS_WORK');
-          document.getElementById('weakTopicsHeaderCount').textContent = `Weak Topics (${weakTopics.length})`;
-          const weakListEl = document.getElementById('weakTopicsList');
-          if (weakTopics.length > 0) {
-            weakListEl.innerHTML = weakTopics.map(t => `
-              <li>
-                <span>${t.topicTitle}</span>
-                ${t.masteryScore > 0 ? `<span style="font-size:0.78rem; color:#ef4444; font-weight:700;">${t.masteryScore}%</span>` : ''}
-              </li>
-            `).join('');
-          } else {
-            weakListEl.innerHTML = `<li style="color:#15803d; font-weight:600;">All topics above 70% mastery! 🎉</li>`;
-          }
+          try {
+            kp = await apiFetch(`/students/me/courses/${primaryCourse.id}/knowledge-profile`);
+            const overallPct = kp && kp.overallCourseMastery != null ? Math.round(kp.overallCourseMastery) : 72;
+            const pctEl = document.getElementById('overallMasteryPct');
+            if (pctEl) pctEl.textContent = `${overallPct}%`;
+            const barEl = document.getElementById('overallMasteryBar');
+            if (barEl) barEl.style.width = `${Math.min(100, Math.max(10, overallPct))}%`;
+          } catch (e) {}
 
           // Personalized Next Step
-          const path = await apiFetch(`/students/me/courses/${primaryCourse.id}/learning-path`);
-          if (path && path.length > 0) {
-            const top = path[0];
-            document.getElementById('nextStepTitle').textContent = top.topicTitle;
-            document.getElementById('nextStepDesc').textContent = top.recommendationText;
-            document.getElementById('nextStepMeta').innerHTML = `<span>&#128337; 35 min &bull; 1 lesson &bull; ${top.priority} Priority</span>`;
-            document.getElementById('nextStepBtn').href = top.targetUrl;
-            document.getElementById('nextStepIconBtn').href = top.targetUrl;
-          }
+          try {
+            const path = await apiFetch(`/students/me/courses/${primaryCourse.id}/learning-path`);
+            if (path && path.length > 0) {
+              const top = path[0];
+              const titleEl = document.getElementById('nextStepTitle');
+              const descEl = document.getElementById('nextStepDesc');
+              const tagEl = document.getElementById('nextStepTag');
+              const btnEl = document.getElementById('nextStepBtn');
+
+              if (titleEl && top.topicTitle) titleEl.textContent = top.topicTitle;
+              if (descEl && top.recommendationText) descEl.textContent = top.recommendationText;
+              if (tagEl) tagEl.textContent = top.courseTitle || primaryCourse.title || 'Java Foundations';
+              if (btnEl && top.targetUrl) btnEl.href = top.targetUrl;
+            }
+          } catch (e) {}
         }
 
         // Study Sessions / Total Learning Time
@@ -443,57 +443,45 @@
           if (sessions && sessions.length > 0) {
             const totalMins = sessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
             const hrs = (totalMins / 60).toFixed(1);
-            document.getElementById('kpiLearningTime').textContent = `${hrs} hrs`;
-            document.getElementById('kpiStreakCount').textContent = Math.max(1, sessions.length);
+            const timeEl = document.getElementById('kpiLearningTime');
+            if (timeEl) timeEl.textContent = `${hrs} hrs`;
+            const streakEl = document.getElementById('kpiStreakCount');
+            if (streakEl) streakEl.textContent = Math.max(1, sessions.length);
           }
         } catch (e) {}
 
-        // Spaced Revision Schedule Queue
-        const revisions = await apiFetch('/students/me/revision-schedule?onlyPending=true');
-        const revContainer = document.getElementById('revisionQueueSummary');
-        if (revisions && revisions.length > 0) {
-          revContainer.innerHTML = revisions.slice(0, 4).map(r => `
-            <a href="/student/revision.html" class="revision-mini-item">
-              <div class="revision-mini-left">
-                <div class="revision-mini-icon">&#128196;</div>
-                <div>
-                  <div class="revision-mini-title">${r.topicTitle}</div>
-                  <div class="revision-mini-due">${r.dueOrOverdue ? 'Due today' : 'Due ' + r.dueDate} (Stage ${r.intervalStage})</div>
+        // Focus & Revision: Spaced Revision Brush-up items
+        try {
+          const revisions = await apiFetch('/students/me/revision-schedule?onlyPending=true');
+          const brushupListEl = document.getElementById('revisionBrushupList');
+          if (brushupListEl && revisions && revisions.length > 0) {
+            brushupListEl.innerHTML = revisions.slice(0, 2).map((r, idx) => {
+              const numStr = String(idx + 1).padStart(2, '0');
+              const dueText = r.dueOrOverdue ? 'Scheduled for today' : `Reviewed ${r.intervalStage || 3} days ago`;
+              return `
+                <div class="brushup-item">
+                  <div class="brushup-item-left">
+                    <div class="brushup-num">${numStr}</div>
+                    <div>
+                      <div class="brushup-title">${r.topicTitle}</div>
+                      <div class="brushup-sub">${dueText}</div>
+                    </div>
+                  </div>
+                  <a href="/student/revision.html" class="btn-brushup-review">Review</a>
                 </div>
-              </div>
-              <span style="color:#94a3b8; font-weight:700;">&rsaquo;</span>
-            </a>
-          `).join('');
-        } else {
-          // Default preview schedule items matching the reference design before first diagnostic/revision
-          const previewItems = [
-            { title: 'Variables & Data Types', due: 'Due today', icon: '&#128196;' },
-            { title: 'Loops & Control Flow', due: 'Due in 1 day', icon: '&#128196;' },
-            { title: 'OOP - Classes & Encapsulation', due: 'Due in 3 days', icon: '&#128300;' },
-            { title: 'Exception Handling & Collections', due: 'Due in 7 days', icon: '&#9888;' }
-          ];
-          revContainer.innerHTML = previewItems.map(item => `
-            <a href="/student/revision.html" class="revision-mini-item">
-              <div class="revision-mini-left">
-                <div class="revision-mini-icon">${item.icon}</div>
-                <div>
-                  <div class="revision-mini-title">${item.title}</div>
-                  <div class="revision-mini-due">${item.due}</div>
-                </div>
-              </div>
-              <span style="color:#94a3b8; font-weight:700;">&rsaquo;</span>
-            </a>
-          `).join('');
-        }
+              `;
+            }).join('');
+          }
+        } catch (e) {}
 
-        // Bottom Row: Your Courses (renders real courses + preview cards if fewer than 3)
-        renderYourCoursesRow(courses, kp);
+        // Bottom Row: Your Courses (renders actual courses student has enrolled in or available catalog)
+        renderYourCoursesRow(enrolledCourses, courses, kp);
       } catch (err) {
         console.error(err);
       }
     }
 
-    function renderYourCoursesRow(courses, primaryKp) {
+    function renderYourCoursesRow(enrolledCourses, allCourses, primaryKp) {
       const container = document.getElementById('yourCoursesRow');
       if (!container) return;
 
@@ -501,37 +489,71 @@
       const javaCompleted = primaryKp ? ((primaryKp.strongCount || 0) + (primaryKp.masteredCount || 0)) : 1;
       const javaTotal = primaryKp && primaryKp.topics ? primaryKp.topics.length : 6;
 
-      const cardsData = [
-        {
-          id: courses[0] ? courses[0].id : 1,
+      // Build cards list starting from enrolled courses, followed by available courses
+      const cards = [];
+      const seenIds = new Set();
+
+      const getIconConfig = (title = '') => {
+        const t = title.toLowerCase();
+        if (t.includes('python')) return { iconClass: 'python', iconHtml: '🐍' };
+        if (t.includes('web') || t.includes('javascript')) return { iconClass: 'web', iconHtml: '🌐' };
+        if (t.includes('database') || t.includes('sql')) return { iconClass: 'db', iconHtml: '🗄️' };
+        if (t.includes('data structure') || t.includes('algorithm')) return { iconClass: 'dsa', iconHtml: '&lt;/&gt;' };
+        return { iconClass: 'java', iconHtml: '☕' };
+      };
+
+      if (enrolledCourses && enrolledCourses.length > 0) {
+        enrolledCourses.forEach(c => {
+          if (!seenIds.has(c.id)) {
+            seenIds.add(c.id);
+            const isJava = c.title && c.title.toLowerCase().includes('java');
+            const icon = getIconConfig(c.title);
+            cards.push({
+              id: c.id,
+              title: c.title,
+              iconClass: icon.iconClass,
+              iconHtml: icon.iconHtml,
+              pct: isJava ? javaPct : 0,
+              sub: isJava ? `${javaCompleted}/${javaTotal} topics mastered` : `Enrolled · ${c.topicCount || 6} Topics`,
+              url: `/student/course-detail.html?id=${c.id}`
+            });
+          }
+        });
+      }
+
+      // If fewer than 3, add other available courses so dashboard shows active + available catalog
+      const otherCatalog = Array.isArray(allCourses) ? allCourses : [];
+      otherCatalog.forEach(c => {
+        if (!seenIds.has(c.id) && cards.length < 3) {
+          seenIds.add(c.id);
+          const icon = getIconConfig(c.title);
+          const count = c.topicCount || 1;
+          cards.push({
+            id: c.id,
+            title: c.title,
+            iconClass: icon.iconClass,
+            iconHtml: icon.iconHtml,
+            pct: 0,
+            sub: `${count} ${count === 1 ? 'Topic' : 'Topics'} Available`,
+            url: `/student/course-detail.html?id=${c.id}`
+          });
+        }
+      });
+
+      // Default fallback if still fewer than 3
+      if (cards.length === 0) {
+        cards.push({
+          id: 1,
           title: 'Java Programming',
           iconClass: 'java',
-          iconHtml: '&#9749;',
+          iconHtml: '☕',
           pct: javaPct,
           sub: `${javaCompleted}/${javaTotal} topics mastered`,
-          url: courses[0] ? `/student/course-detail.html?id=${courses[0].id}` : '/student/courses.html'
-        },
-        {
-          id: courses[1] ? courses[1].id : 1,
-          title: courses[1] ? courses[1].title : 'Data Structures & Algorithms',
-          iconClass: 'dsa',
-          iconHtml: '&lt;/&gt;',
-          pct: 0,
-          sub: '0/6 topics mastered',
-          url: courses[1] ? `/student/course-detail.html?id=${courses[1].id}` : '/student/courses.html'
-        },
-        {
-          id: courses[2] ? courses[2].id : 1,
-          title: courses[2] ? courses[2].title : 'Database Management (MySQL)',
-          iconClass: 'db',
-          iconHtml: '&#128452;',
-          pct: 0,
-          sub: '0/6 topics mastered',
-          url: courses[2] ? `/student/course-detail.html?id=${courses[2].id}` : '/student/courses.html'
-        }
-      ];
+          url: '/student/course-detail.html?id=1'
+        });
+      }
 
-      container.innerHTML = cardsData.map(c => `
+      container.innerHTML = cards.map(c => `
         <a href="${c.url}" class="course-mini-card">
           <div class="course-mini-icon ${c.iconClass}">${c.iconHtml}</div>
           <div class="course-mini-body">

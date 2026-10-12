@@ -82,6 +82,7 @@ public class DataSeeder implements CommandLineRunner {
         if (courseRepository.count() == 0) {
             seedJavaCourse(instructor);
         }
+        seedAdditionalCoursesAndQuestions(instructor);
     }
 
     private void seedJavaCourse(User instructor) {
@@ -326,6 +327,171 @@ mastery.put("Inheritance", 28);</code></pre>
                 "HashMap;put;try;catch", ChallengeType.MINI_PROJECT, "HARD", 100);
 
         System.out.println("[EduNest] Seeded flagship 'Java Programming' course with 6 topics, lessons, 18 questions, and 6 practical challenges.");
+    }
+
+    private void seedAdditionalCoursesAndQuestions(User instructor) {
+        // Expand question bank on Java topics if total questions < 50
+        if (questionRepository.count() < 50) {
+            List<Topic> javaTopics = topicRepository.findAll();
+            for (Topic t : javaTopics) {
+                if (t.getTitle().contains("Variables")) {
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Which Java primitive type occupies 64 bits of storage in memory?",
+                            "int", "short", "long", "byte",
+                            "C", "In Java, long is a 64-bit two's complement integer, whereas int is 32-bit.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "What is the maximum value of a Java `byte` data type?",
+                            "127", "128", "255", "256",
+                            "A", "The byte data type is an 8-bit signed two's complement integer ranging from -128 to 127.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Which type casting is performed automatically by Java without an explicit cast operator?",
+                            "Narrowing (double to int)", "Widening (int to double)", "Explicit string parsing", "Boolean to int",
+                            "B", "Widening conversion happens automatically when moving to a larger data type.");
+                    createQuestion(t, QuestionType.QUIZ,
+                            "What is the output of `System.out.println(10 / 4)` in Java?",
+                            "2.5", "2", "3", "Error",
+                            "B", "Integer division truncates the decimal portion, resulting in 2.");
+                } else if (t.getTitle().contains("Loops")) {
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Which loop construct is best suited when iterating across elements of an iterable collection?",
+                            "Classic for(;;)", "while loop", "Enhanced for-each loop", "do-while loop",
+                            "C", "The enhanced for-each loop cleanly iterates over each element without manual index tracking.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Which loop checks its boolean condition AFTER executing its loop body once?",
+                            "for loop", "while loop", "do-while loop", "nested for loop",
+                            "C", "The do-while loop always executes the body at least once because the test happens at the exit.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "What happens when you execute `for(;;)` in Java without a loop condition?",
+                            "Compile error", "It creates an infinite loop", "It executes zero times", "It throws a RuntimeException",
+                            "B", "An omitted condition in a for loop header evaluates to true, producing an infinite loop.");
+                    createQuestion(t, QuestionType.QUIZ,
+                            "What keyword skips only the current iteration of a loop without exiting?",
+                            "pass", "skip", "continue", "break",
+                            "C", "`continue` skips the rest of the current iteration and evaluates the next loop condition.");
+                } else if (t.getTitle().contains("Arrays")) {
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Which exception is thrown if you access `arr[arr.length]`?",
+                            "NullPointerException", "ArrayIndexOutOfBoundsException", "IllegalArgumentException", "IndexError",
+                            "B", "Array indices are 0 to length - 1. Accessing length throws ArrayIndexOutOfBoundsException.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "What does `Arrays.sort(arr)` do when given a primitive integer array?",
+                            "Sorts the array in ascending order in-place", "Returns a new sorted copy", "Throws an exception", "Sorts in descending order",
+                            "A", "java.util.Arrays.sort modifies the array directly in ascending numerical order.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "How do you initialize a 2D array with 3 rows and 4 columns in Java?",
+                            "int[][] m = new int[3][4];", "int[][] m = new int[4][3];", "int m = new int[3, 4];", "matrix[3][4] int;",
+                            "A", "The first bracket specifies the row count (3) and the second specifies columns (4).");
+                } else if (t.getTitle().contains("OOP")) {
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Can an abstract class in Java have concrete methods with method bodies?",
+                            "No, only abstract methods", "Yes, it can contain both abstract and concrete methods", "Only static methods", "Only private methods",
+                            "B", "An abstract class can declare both fully implemented concrete methods and abstract method signatures.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Which keyword prevents a class from being subclassed in Java?",
+                            "abstract", "static", "final", "sealed",
+                            "C", "Declaring a class `final` prevents any other class from extending it.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "What is the default access level of class members when no modifier is specified?",
+                            "private", "public", "protected", "Package-private (default)",
+                            "D", "Members without an access modifier are visible only within classes in the same package.");
+                } else if (t.getTitle().contains("Inheritance")) {
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "What does the `@Override` annotation indicate to the Java compiler?",
+                            "The method must be static", "The method overrides a superclass declaration and causes a compiler error if signatures mismatch", "The method runs faster", "The method is deprecated",
+                            "B", "`@Override` instructs the compiler to verify that the method actually overrides an inherited method.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Which class sits at the very root of the entire Java class hierarchy?",
+                            "java.lang.System", "java.lang.Object", "java.lang.Class", "java.lang.Base",
+                            "B", "Every class in Java is a direct or indirect descendant of java.lang.Object.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Can a subclass access `private` fields of its superclass directly?",
+                            "Yes, always", "No, private fields are not directly accessible in subclasses", "Only if in the same package", "Only using super.",
+                            "B", "Private members can only be accessed through public or protected getter/setter methods.");
+                } else if (t.getTitle().contains("Exception")) {
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Which of the following is an unchecked (Runtime) exception in Java?",
+                            "IOException", "SQLException", "NullPointerException", "ClassNotFoundException",
+                            "C", "Subclasses of RuntimeException (like NullPointerException) are unchecked in Java.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "What happens if both `try` and `finally` blocks have return statements?",
+                            "Compiler error", "The return value from the finally block overrides the try block", "The try block return value is returned", "An exception is thrown",
+                            "B", "Code in the finally block always executes and its return statement overrides any prior return.");
+                    createQuestion(t, QuestionType.PRACTICE,
+                            "Which collection does NOT allow duplicate elements?",
+                            "ArrayList", "LinkedList", "HashSet", "Vector",
+                            "C", "A Set (such as HashSet) guarantees unique elements and discards duplicate insertions.");
+                }
+            }
+        }
+
+        // Seed Python Course if not present
+        boolean hasPython = courseRepository.findAll().stream()
+                .anyMatch(c -> c.getTitle().toLowerCase().contains("python"));
+        if (!hasPython) {
+            Course pythonCourse = new Course();
+            pythonCourse.setTitle("Python & Data Science Foundations");
+            pythonCourse.setDescription("Master Python basics, data structures, NumPy arrays, and Pandas analysis with guided challenges.");
+            pythonCourse.setThumbnailUrl("https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600");
+            pythonCourse.setInstructor(instructor);
+            pythonCourse.setPublished(true);
+            pythonCourse = courseRepository.save(pythonCourse);
+
+            Topic pyT1 = createTopic(pythonCourse, 1, "Python Syntax & Built-in Types", "Variables, dynamic typing, strings, and numeric operations.");
+            createLesson(pyT1, 1, "Variables, F-Strings & Dynamic Types", 15,
+                    "Python is dynamically typed.;F-strings allow concise string interpolation.;Indentation defines block scope.",
+                    "<h3>Python Syntax Basics</h3><p>Python variables do not require explicit type declarations.</p><pre><code>name = 'EduNest'\ncount = 42\nprint(f'{name} has {count} drills')</code></pre>");
+            createQuestion(pyT1, QuestionType.DIAGNOSTIC,
+                    "Which built-in Python function returns the type of a variable?",
+                    "typeof()", "type()", "varType()", "inspect()",
+                    "B", "The `type()` built-in function returns the type object of any Python value.");
+            createQuestion(pyT1, QuestionType.PRACTICE,
+                    "How are code blocks defined in Python?",
+                    "Curly braces {}", "Keywords begin/end", "Consistent whitespace indentation", "Semicolons",
+                    "C", "Python relies strictly on indentation to demarcate code blocks.");
+            createQuestion(pyT1, QuestionType.QUIZ,
+                    "What is the output of `bool('')` in Python?",
+                    "True", "False", "None", "SyntaxError",
+                    "B", "An empty string evaluates to `False` in a boolean context.");
+
+            Topic pyT2 = createTopic(pythonCourse, 2, "Lists, Dictionaries & Comprehensions", "Sequence manipulation and key-value mapping.");
+            createLesson(pyT2, 1, "Python Collections & List Comprehensions", 18,
+                    "Lists are ordered and mutable.;Dicts provide fast O(1) key lookups.;List comprehensions offer concise iteration.",
+                    "<h3>Comprehensions in Python</h3><p>Create lists succinctly using comprehensions:</p><pre><code>squares = [x**2 for x in range(5)]\nprint(squares) # [0, 1, 4, 9, 16]</code></pre>");
+            createQuestion(pyT2, QuestionType.PRACTICE,
+                    "Which method removes and returns the last element of a Python list?",
+                    "remove()", "pop()", "discard()", "delete()",
+                    "B", "`list.pop()` removes and returns the last item by default.");
+            createQuestion(pyT2, QuestionType.QUIZ,
+                    "What data structure in Python does `{ 'a': 1, 'b': 2 }` represent?",
+                    "List", "Tuple", "Dictionary", "Set",
+                    "C", "Curly braces with key-value pairs define a dictionary (`dict`).");
+        }
+
+        // Seed Web Dev Course if not present
+        boolean hasWeb = courseRepository.findAll().stream()
+                .anyMatch(c -> c.getTitle().toLowerCase().contains("web"));
+        if (!hasWeb) {
+            Course webCourse = new Course();
+            webCourse.setTitle("Full-Stack Web Development");
+            webCourse.setDescription("Learn modern responsive HTML5, modern CSS layouts, and asynchronous JavaScript APIs.");
+            webCourse.setThumbnailUrl("https://images.unsplash.com/photo-1547658719-da2b51169166?w=600");
+            webCourse.setInstructor(instructor);
+            webCourse.setPublished(true);
+            webCourse = courseRepository.save(webCourse);
+
+            Topic webT1 = createTopic(webCourse, 1, "Modern Semantic HTML & Accessibility", "Clean document outlines, forms, and ARIA roles.");
+            createLesson(webT1, 1, "Semantic Elements & Accessible Documents", 14,
+                    "Use main, nav, section, and article for structure.;Label every interactive input.;Prefer semantic tags over generic div tags.",
+                    "<h3>Semantic HTML5</h3><p>Semantic markup makes websites accessible and SEO-friendly.</p><pre><code>&lt;header&gt;\n  &lt;nav&gt;...&lt;/nav&gt;\n&lt;/header&gt;</code></pre>");
+            createQuestion(webT1, QuestionType.PRACTICE,
+                    "Which HTML5 tag is most appropriate for a standalone, self-contained blog post?",
+                    "&lt;div&gt;", "&lt;section&gt;", "&lt;article&gt;", "&lt;aside&gt;",
+                    "C", "`&lt;article&gt;` represents a complete, self-contained composition.");
+            createQuestion(webT1, QuestionType.QUIZ,
+                    "What attribute connects an HTML `<label>` to its corresponding `<input>` element?",
+                    "name", "for", "rel", "id",
+                    "B", "The `<label for='id'>` matches the input element's `id` attribute.");
+        }
     }
 
     private Topic createTopic(Course course, int orderIndex, String title, String description) {

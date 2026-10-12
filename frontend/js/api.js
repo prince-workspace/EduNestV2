@@ -32,3 +32,20 @@ async function apiFetch(endpoint, options = {}) {
 
   return data;
 }
+
+// Convenient helper supporting both: apiRequest(url, method, body) and apiRequest(url, options)
+async function apiRequest(endpoint, methodOrOptions = 'GET', body = null) {
+  if (typeof methodOrOptions === 'object' && methodOrOptions !== null) {
+    return apiFetch(endpoint, methodOrOptions);
+  }
+  const method = (typeof methodOrOptions === 'string' ? methodOrOptions : 'GET').toUpperCase();
+  const options = { method };
+  if (body !== null && body !== undefined) {
+    options.body = typeof body === 'string' ? body : JSON.stringify(body);
+  }
+  return apiFetch(endpoint, options);
+}
+
+// Ensure global accessibility across all scripts
+window.apiFetch = apiFetch;
+window.apiRequest = apiRequest;

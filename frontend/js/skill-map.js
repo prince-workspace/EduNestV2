@@ -130,33 +130,37 @@ async function loadChallengesHub() {
 
         const challenges = await apiRequest(`/challenges/course/${courseId}`);
         if (listEl) {
-            listEl.innerHTML = challenges.map(ch => {
-                const statusBadge = ch.completed
-                    ? `<span class="badge badge-success">Completed (${ch.bestScore}%)</span>`
-                    : ch.unlocked
-                        ? `<span class="badge" style="background:#f59e0b;color:#fff;">Unlocked</span>`
-                        : `<span class="badge" style="background:#64748b;color:#fff;">Locked (${ch.currentTopicMastery}% / ${ch.unlockThreshold}%)</span>`;
+            if (!challenges || challenges.length === 0) {
+                listEl.innerHTML = `<div class="card" style="text-align:center; padding:2rem; color:#64748b;"><p>No practical challenges found for this course. Reach 90%+ Mastery in your topics to qualify for challenges!</p></div>`;
+            } else {
+                listEl.innerHTML = challenges.map(ch => {
+                    const statusBadge = ch.completed
+                        ? `<span class="badge badge-success">Completed (${ch.bestScore}%)</span>`
+                        : ch.unlocked
+                            ? `<span class="badge" style="background:#f59e0b;color:#fff;">Unlocked</span>`
+                            : `<span class="badge" style="background:#64748b;color:#fff;">Locked (${ch.currentTopicMastery}% / ${ch.unlockThreshold}%)</span>`;
 
-                return `
-                    <div class="card" style="opacity: ${ch.unlocked ? '1' : '0.82'}; border-left: 5px solid ${ch.completed ? '#10b981' : ch.unlocked ? '#f59e0b' : '#94a3b8'};">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem;">
-                            <div>
-                                <span style="font-size:0.8rem; font-weight:600; color:#6366f1;">${ch.topicTitle} • ${ch.difficulty} • ${ch.points} pts</span>
-                                <h3 style="margin:0.25rem 0;">${ch.title}</h3>
+                    return `
+                        <div class="card" style="opacity: ${ch.unlocked ? '1' : '0.82'}; border-left: 5px solid ${ch.completed ? '#10b981' : ch.unlocked ? '#f59e0b' : '#94a3b8'};">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem;">
+                                <div>
+                                    <span style="font-size:0.8rem; font-weight:600; color:#6366f1;">${ch.topicTitle} • ${ch.difficulty} • ${ch.points} pts</span>
+                                    <h3 style="margin:0.25rem 0;">${ch.title}</h3>
+                                </div>
+                                ${statusBadge}
                             </div>
-                            ${statusBadge}
+                            <p style="color:#475569; margin:0.65rem 0;">${ch.description}</p>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem;">
+                                <span style="font-size:0.85rem; color:#64748b;">Current Topic Mastery: <strong>${ch.currentTopicMastery}%</strong> (Requires ${ch.unlockThreshold}%)</span>
+                                ${ch.unlocked
+                                    ? `<a href="/student/challenge-detail.html?id=${ch.id}" class="btn btn-primary">${ch.completed ? 'Review / Resubmit' : 'Start Challenge'}</a>`
+                                    : `<a href="/student/quiz.html?topicId=${ch.topicId}" class="btn btn-secondary">Boost Topic Mastery</a>`
+                                }
+                            </div>
                         </div>
-                        <p style="color:#475569; margin:0.65rem 0;">${ch.description}</p>
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem;">
-                            <span style="font-size:0.85rem; color:#64748b;">Current Topic Mastery: <strong>${ch.currentTopicMastery}%</strong> (Requires ${ch.unlockThreshold}%)</span>
-                            ${ch.unlocked
-                                ? `<a href="/student/challenge-detail.html?id=${ch.id}" class="btn btn-primary">${ch.completed ? 'Review / Resubmit' : 'Start Challenge'}</a>`
-                                : `<a href="/student/quiz.html?topicId=${ch.topicId}" class="btn btn-secondary">Boost Topic Mastery</a>`
-                            }
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
+            }
         }
 
         const mySubs = await apiRequest('/challenges/my-submissions');

@@ -96,19 +96,29 @@ async function loadDailyPlanPage() {
     if (plan.length === 0) {
       planContainer.innerHTML = `<div class="card"><p>Your daily plan is empty. Enroll in a course to get started!</p></div>`;
     } else {
-      planContainer.innerHTML = plan.map(item => `
-        <div class="card" style="margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
-          <div>
-            <div style="display:flex; gap:0.6rem; align-items:center; margin-bottom:0.35rem;">
-              <span class="badge badge-student">Task ${item.order} · ${item.priorityBadge}</span>
-              <span style="font-size:0.85rem; color:var(--text-muted);">⏱ ${item.estimatedMinutes} mins</span>
+      planContainer.innerHTML = plan.map(item => {
+        const typeConfig = {
+          'URGENT_REVISION':   { icon: '🔁', label: 'Revision',   btnText: 'Start Revision →',  badgeBg: '#fef3c7', badgeColor: '#b45309' },
+          'WEAK_TOPIC_LESSON': { icon: '📖', label: 'Lesson',     btnText: 'Start Lesson →',    badgeBg: '#eff6ff', badgeColor: '#1d4ed8' },
+          'TARGETED_PRACTICE': { icon: '✏️', label: 'Practice',   btnText: 'Start Practice →',  badgeBg: '#f0fdf4', badgeColor: '#15803d' },
+          'TOPIC_QUIZ':        { icon: '📝', label: 'Quiz',       btnText: 'Start Quiz →',      badgeBg: '#faf5ff', badgeColor: '#7e22ce' },
+          'CHALLENGE':         { icon: '🏆', label: 'Challenge',  btnText: 'Start Challenge →', badgeBg: '#fff7ed', badgeColor: '#c2410c' }
+        };
+        const cfg = typeConfig[item.taskType] || { icon: '📌', label: item.taskType || 'Task', btnText: 'Start Task →', badgeBg: '#f1f5f9', badgeColor: '#475569' };
+        return `
+        <div class="daily-plan-card">
+          <div class="daily-plan-card-left">
+            <div class="daily-plan-card-meta">
+              <span class="daily-plan-type-badge" style="background:${cfg.badgeBg}; color:${cfg.badgeColor};">${cfg.icon} ${cfg.label}</span>
+              <span class="daily-plan-priority-badge">${item.priorityBadge}</span>
+              <span class="daily-plan-time">⏱ ${item.estimatedMinutes} mins</span>
             </div>
-            <h3 style="font-size:1.08rem;">${item.title}</h3>
-            <p style="font-size:0.9rem; color:var(--text-muted); margin-top:0.2rem;">${item.subtitle}</p>
+            <h3 class="daily-plan-card-title">${item.title}</h3>
+            <p class="daily-plan-card-sub">${item.subtitle}</p>
           </div>
-          <a href="${item.targetUrl}" class="btn btn-primary btn-sm">Start Task →</a>
-        </div>
-      `).join('');
+          <a href="${item.targetUrl}" class="btn btn-primary btn-sm">${cfg.btnText}</a>
+        </div>`;
+      }).join('');
     }
 
     const sessionsContainer = document.getElementById('sessionsHistoryList');

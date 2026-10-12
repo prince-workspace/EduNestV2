@@ -6,34 +6,52 @@
   <title>Topic Assessment Quiz — EduNest</title>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
-<body>
-  <nav class="navbar">
-    <a href="/student/dashboard.html" class="brand">🎓 <span>EduNest</span></a>
-    <div class="nav-links">
-      <a href="/student/dashboard.html">Dashboard</a>
-      <a href="/student/courses.html">Courses</a>
-      <span id="quizTimer" class="badge hidden" style="background:#fee2e2; color:#b91c1c; font-size:0.9rem;">⏱ 10:00</span>
-      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+<body style="background: #f8fafc;">
+  <div class="quiz-page-container">
+    <!-- Breadcrumb -->
+    <div class="quiz-breadcrumb">
+      <span class="quiz-breadcrumb-dot"></span>
+      <span id="quizBreadcrumbText">ASSESSMENT &bull; JAVA PROGRAMMING FUNDAMENTALS</span>
     </div>
-  </nav>
 
-  <div class="container" style="max-width: 860px;">
-    <div class="dashboard-header">
-      <div>
-        <span class="card-question">Graded Topic Assessment (40% Mastery Weight)</span>
-        <h2 id="quizTitle" style="margin-top: 0.25rem;">Loading Topic Quiz...</h2>
-        <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 0.25rem;">
-          Complete this quiz to update your Topic Mastery score and personalized learning recommendations.
-        </p>
+    <!-- Header: Title + Untimed / Timed Pill -->
+    <div class="quiz-header-row">
+      <h1 class="quiz-header-title" id="quizTitle">Java Basics Quiz</h1>
+      <div id="quizTimer" class="quiz-mode-pill">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="quizTimerText">Untimed &bull; Take your time</span>
       </div>
-      <span id="questionCountBadge" class="badge badge-student">0 Questions</span>
     </div>
 
-    <div id="questionsContainer"></div>
+    <!-- Progress: Question X of Y | Z% Complete + Bar -->
+    <div class="quiz-progress-section">
+      <div class="quiz-progress-text-row">
+        <span class="quiz-progress-question-count" id="questionProgressText">Question 1 of 5</span>
+        <span class="quiz-progress-pct" id="questionProgressPct">20% Complete</span>
+      </div>
+      <div class="quiz-progress-track">
+        <div class="quiz-progress-fill" id="questionProgressBar" style="width: 20%;"></div>
+      </div>
+    </div>
 
-    <div style="display:flex; justify-content:flex-end; margin-top: 1.5rem;">
-      <button class="btn btn-primary" onclick="submitCurrentQuiz()">
-        Submit Quiz &amp; View Performance Analysis →
+    <!-- Active Question Card -->
+    <div id="questionCardContainer">
+      <!-- Populated dynamically -->
+    </div>
+
+    <!-- Bottom Actions: Previous Question, Flag for Review, Next Question / Submit -->
+    <div class="quiz-action-bar">
+      <button class="btn-quiz-prev" id="prevQuestionBtn" onclick="navigateQuestion(-1)" disabled>
+        &larr; Previous Question
+      </button>
+
+      <button class="btn-quiz-flag" id="flagQuestionBtn" onclick="toggleFlagCurrentQuestion()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        <span id="flagQuestionText">Flag for review</span>
+      </button>
+
+      <button class="btn-quiz-next" id="nextQuestionBtn" onclick="navigateQuestion(1)">
+        <span>Next Question</span> &rarr;
       </button>
     </div>
   </div>

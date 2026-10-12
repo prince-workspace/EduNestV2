@@ -7,49 +7,216 @@
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-  <nav class="navbar"></nav>
+  <div class="app-shell">
+    <!-- Left Sidebar -->
+    <aside class="app-sidebar">
+      <a href="/student/dashboard.html" class="sidebar-brand">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <path d="M16 4L2 11L16 18L30 11L16 4Z" fill="#1e3a8a"/>
+          <path d="M7 14.5V22.5C7 22.5 11 26 16 26C21 26 25 22.5 25 22.5V14.5L16 19L7 14.5Z" fill="#2563eb"/>
+          <path d="M28 12.5V21" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <div class="sidebar-brand-text">Edu<span>Nest</span></div>
+      </a>
 
-  <div class="container">
-    <div class="dashboard-header">
-      <div>
-        <span class="card-question">Topic-Level Mastery Breakdown</span>
-        <h2 id="profileCourseTitle" style="margin-top: 0.25rem;">Knowledge Profile</h2>
-        <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 0.25rem;">
-          Formula: <strong>Diagnostic (20%) + Practice (20%) + Quiz (40%) + Revision (20%)</strong>
-        </p>
+      <nav class="sidebar-nav">
+        <a href="/student/dashboard.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="/student/courses.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>My Courses</span>
+        </a>
+        <a href="/student/knowledge-profile.html" class="sidebar-link active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Knowledge Profile</span>
+        </a>
+        <a href="/student/challenges.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          <span>Challenges</span>
+        </a>
+        <a href="/student/revision.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Revision</span>
+        </a>
+        <a href="/student/bookmarks.html" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <span>Bookmarks</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="/student/dashboard.html#goalEditorRow" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings</span>
+        </a>
+        <button onclick="logout()" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Logout</span>
+        </button>
       </div>
-      <div style="text-align: right;">
-        <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">OVERALL MASTERY</span>
-        <div id="overallMasteryPct" style="font-size: 2rem; font-weight: 800; color: var(--primary);">0%</div>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="app-main">
+      <!-- Top Search Bar -->
+      <header class="app-topbar">
+        <div class="topbar-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="globalSearchInput" placeholder="Search courses or topics..." />
+        </div>
+        <div class="topbar-user">
+          <div class="topbar-status">
+            <span class="topbar-status-dot"></span>
+            <span>Online</span>
+          </div>
+          <div class="user-avatar-chip">
+            <div class="user-avatar-circle" id="topUserInitials">AS</div>
+            <span id="topUserName">Aarav Sharma</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="app-content">
+        <div class="dashboard-header" style="margin-bottom: 1rem;">
+          <div>
+            <span class="card-question">Topic-Level Mastery Breakdown</span>
+            <h2 id="profileCourseTitle" style="margin-top: 0.25rem;">Knowledge Profile</h2>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 0.2rem;">
+              Formula: <strong>Practice (25%) + Quiz (50%) + Revision (25%)</strong>
+            </p>
+          </div>
+          <div style="text-align: right;">
+            <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">OVERALL MASTERY</span>
+            <div id="overallMasteryPct" style="font-size: 1.9rem; font-weight: 800; color: var(--primary);">0%</div>
+          </div>
+        </div>
+
+        <!-- Summary Counters (KPI Cards) -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:0.75rem; margin-bottom:1.25rem;">
+          <div class="card" style="border-top: 3px solid #ef4444; padding: 0.85rem 1rem;">
+            <span style="font-size:0.76rem; color:var(--text-muted); font-weight:700;">WEAK (&lt;40%)</span>
+            <h3 id="weakCountVal" style="color:#ef4444; margin:0.2rem 0 0 0; font-size:1.4rem;">0</h3>
+          </div>
+          <div class="card" style="border-top: 3px solid #f59e0b; padding: 0.85rem 1rem;">
+            <span style="font-size:0.76rem; color:var(--text-muted); font-weight:700;">NEEDS PRACTICE (40–69%)</span>
+            <h3 id="needsWorkCountVal" style="color:#f59e0b; margin:0.2rem 0 0 0; font-size:1.4rem;">0</h3>
+          </div>
+          <div class="card" style="border-top: 3px solid #10b981; padding: 0.85rem 1rem;">
+            <span style="font-size:0.76rem; color:var(--text-muted); font-weight:700;">STRONG (70–89%)</span>
+            <h3 id="strongCountVal" style="color:#10b981; margin:0.2rem 0 0 0; font-size:1.4rem;">0</h3>
+          </div>
+          <div class="card" style="border-top: 3px solid #8b5cf6; padding: 0.85rem 1rem;">
+            <span style="font-size:0.76rem; color:var(--text-muted); font-weight:700;">MASTERED (90%+)</span>
+            <h3 id="masteredCountVal" style="color:#8b5cf6; margin:0.2rem 0 0 0; font-size:1.4rem;">0</h3>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.85rem; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a;">Topic-by-Topic Mastery</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.1rem;">Click View breakdown on any topic for performance insights and targeted drills.</p>
+          </div>
+          <a href="/student/courses.html" class="btn btn-outline btn-sm">← Back to My Courses</a>
+        </div>
+
+        <!-- Filter Tabs & Sort Indicator matching reference design -->
+        <div class="topic-filter-bar" id="topicFilterBar">
+          <button class="topic-filter-pill active" onclick="setTopicFilter('ALL', this)">All Topics (<span id="filterAllCount">0</span>)</button>
+          <button class="topic-filter-pill" onclick="setTopicFilter('WEAK', this)">Focus Weak Areas (<span id="filterWeakCount">0</span>)</button>
+          <button class="topic-filter-pill" onclick="setTopicFilter('STRONG', this)">In Good Shape (<span id="filterStrongCount">0</span>)</button>
+          <button class="topic-filter-pill" onclick="setTopicFilter('MASTERED', this)">Mastered (<span id="filterMasteredCount">0</span>)</button>
+        </div>
+
+        <div class="topic-sort-indicator">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="16" y2="12"></line>
+            <line x1="3" y1="18" x2="10" y2="18"></line>
+          </svg>
+          <span>Sorted in ascending order (Topic 1, 2, 3...)</span>
+        </div>
+
+        <!-- Topic Mastery Cards Container -->
+        <div id="topicMasteryList"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Review Pop-up Modal -->
+  <div id="topicReviewModalBackdrop" class="review-modal-backdrop" onclick="handleReviewBackdropClick(event)">
+    <div class="review-modal-card" id="topicReviewModalCard" role="dialog" aria-modal="true">
+      <div class="review-modal-header">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+            <span class="badge" id="modalTopicBadge" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; font-weight: 700; font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 999px;">TOPIC REPORT</span>
+            <span id="modalTopicMasteryBadge" class="badge" style="background: #f59e0b20; color: #f59e0b; font-weight: 700; font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 999px;">NEEDS PRACTICE</span>
+          </div>
+          <h3 id="modalTopicTitle" style="font-size: 1.28rem; font-weight: 800; color: #0f172a; margin: 0;">Topic Title</h3>
+        </div>
+        <button class="review-modal-close-btn" onclick="closeTopicReviewModal()" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="review-modal-body">
+        <!-- Topic Progress & Formula Bar -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+            <span style="font-size: 0.82rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.03em;">Topic Mastery Score</span>
+            <span id="modalTopicScoreText" style="font-size: 1.35rem; font-weight: 800; color: #2563eb;">50%</span>
+          </div>
+          <div style="background: #e2e8f0; height: 10px; border-radius: 999px; overflow: hidden; margin-bottom: 0.45rem;">
+            <div id="modalTopicProgressBar" style="width: 50%; height: 100%; background: #2563eb; transition: width 0.35s ease;"></div>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">
+            Formula: <strong>Practice (25%) + Quiz (50%) + Revision (25%)</strong>
+          </div>
+        </div>
+
+        <!-- Formula 3-Metric Breakdown Grid -->
+        <div class="review-score-grid">
+          <div class="review-score-box">
+            <div class="review-score-label">Practice</div>
+            <div class="review-score-val" id="modalPracticeScore">0%</div>
+            <div class="review-score-weight">25% weight</div>
+          </div>
+          <div class="review-score-box">
+            <div class="review-score-label">Topic Quiz</div>
+            <div class="review-score-val" id="modalQuizScore">100%</div>
+            <div class="review-score-weight">50% weight</div>
+          </div>
+          <div class="review-score-box">
+            <div class="review-score-label">Revision</div>
+            <div class="review-score-val" id="modalRevisionScore">&mdash;</div>
+            <div class="review-score-weight">25% weight</div>
+          </div>
+        </div>
+
+        <!-- Diagnostic & Missed Concepts Callout (Report Card) -->
+        <div id="modalReportCallout">
+          <!-- Populated dynamically matching reference images -->
+        </div>
+
+        <!-- Action Hub Section (3 options: Practice, Quiz, Revision) -->
+        <div>
+          <div class="review-actions-header">
+            <span>Select Learning Action for this Topic</span>
+            <span style="font-size: 0.74rem; color: #64748b; font-weight: 600;">Choose an option below</span>
+          </div>
+          <div class="review-actions-grid" id="modalActionsGrid">
+            <!-- Populated dynamically with Practice, Quiz, Revision -->
+          </div>
+        </div>
+      </div>
+
+      <div class="review-modal-footer">
+        <div id="modalLessonLinkWrap">
+          <!-- Optional primary lesson link -->
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="closeTopicReviewModal()">Close Review</button>
       </div>
     </div>
-
-    <!-- Summary Counters -->
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:1rem; margin-bottom:2rem;">
-      <div class="card" style="border-top: 4px solid #ef4444;">
-        <span style="font-size:0.82rem; color:var(--text-muted); font-weight:700;">WEAK (&lt;40%)</span>
-        <h2 id="weakCountVal" style="color:#ef4444; margin-top:0.25rem;">0</h2>
-      </div>
-      <div class="card" style="border-top: 4px solid #f59e0b;">
-        <span style="font-size:0.82rem; color:var(--text-muted); font-weight:700;">NEEDS PRACTICE (40–69%)</span>
-        <h2 id="needsWorkCountVal" style="color:#f59e0b; margin-top:0.25rem;">0</h2>
-      </div>
-      <div class="card" style="border-top: 4px solid #10b981;">
-        <span style="font-size:0.82rem; color:var(--text-muted); font-weight:700;">STRONG (70–89%)</span>
-        <h2 id="strongCountVal" style="color:#10b981; margin-top:0.25rem;">0</h2>
-      </div>
-      <div class="card" style="border-top: 4px solid #8b5cf6;">
-        <span style="font-size:0.82rem; color:var(--text-muted); font-weight:700;">MASTERED (90%+)</span>
-        <h2 id="masteredCountVal" style="color:#8b5cf6; margin-top:0.25rem;">0</h2>
-      </div>
-    </div>
-
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-      <h3>Topic-by-Topic Mastery</h3>
-      <a href="/student/learning-path.html" class="btn btn-primary btn-sm">View Personalized Learning Path →</a>
-    </div>
-
-    <div id="topicMasteryList"></div>
   </div>
 
   <script src="/js/api.js"></script>
