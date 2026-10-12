@@ -1,0 +1,20 @@
+# Maven build output
+backend/target/
+target/
+*.class
+
+# Log files
+*.log
+
+# Package lock if npm is not used
+package-lock.json
+node_modules/
+
+# IDE and OS files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*~

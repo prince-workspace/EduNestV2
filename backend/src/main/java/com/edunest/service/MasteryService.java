@@ -65,17 +65,21 @@ public class MasteryService {
         double weightedSum = 0.0;
         double activeWeight = 0.0;
 
+        if (tm.getDiagnosticScore() != null) {
+            weightedSum += tm.getDiagnosticScore() * 0.20;
+            activeWeight += 0.20;
+        }
         if (tm.getPracticeScore() != null) {
-            weightedSum += tm.getPracticeScore() * 0.25;
-            activeWeight += 0.25;
+            weightedSum += tm.getPracticeScore() * 0.20;
+            activeWeight += 0.20;
         }
         if (tm.getQuizScore() != null) {
-            weightedSum += tm.getQuizScore() * 0.50;
-            activeWeight += 0.50;
+            weightedSum += tm.getQuizScore() * 0.40;
+            activeWeight += 0.40;
         }
         if (tm.getRevisionScore() != null) {
-            weightedSum += tm.getRevisionScore() * 0.25;
-            activeWeight += 0.25;
+            weightedSum += tm.getRevisionScore() * 0.20;
+            activeWeight += 0.20;
         }
 
         double calculated = activeWeight > 0 ? (weightedSum / activeWeight) : 0.0;
@@ -127,29 +131,8 @@ public class MasteryService {
 
         for (Topic t : courseTopics) {
             TopicMastery tm = masteryByTopic.get(t.getId());
-            double score = 0.0;
-            if (tm != null) {
-                double wSum = 0.0;
-                double aWeight = 0.0;
-                if (tm.getPracticeScore() != null) {
-                    wSum += tm.getPracticeScore() * 0.25;
-                    aWeight += 0.25;
-                }
-                if (tm.getQuizScore() != null) {
-                    wSum += tm.getQuizScore() * 0.50;
-                    aWeight += 0.50;
-                }
-                if (tm.getRevisionScore() != null) {
-                    wSum += tm.getRevisionScore() * 0.25;
-                    aWeight += 0.25;
-                }
-                if (aWeight > 0) {
-                    score = Math.round((wSum / aWeight) * 10.0) / 10.0;
-                } else {
-                    score = tm.getMasteryScore();
-                }
-            }
-            MasteryLevel level = MasteryLevel.fromScore(score);
+            double score = tm != null ? tm.getMasteryScore() : 0.0;
+            MasteryLevel level = tm != null ? tm.getMasteryLevel() : MasteryLevel.WEAK;
 
             switch (level) {
                 case WEAK -> weakCount++;

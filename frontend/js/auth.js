@@ -99,6 +99,10 @@ function buildSidebarLinksHtml(role, currentPath) {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       <span>My Courses</span>
     </a>
+    <a href="/student/daily-plan.html" class="sidebar-link ${isActive('/student/daily-plan.html')}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Daily Plan</span>
+    </a>
     <a href="/student/knowledge-profile.html" class="sidebar-link ${isActive('/student/knowledge-profile.html')}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
       <span>Knowledge Profile</span>
@@ -123,6 +127,10 @@ function buildSidebarLinksHtml(role, currentPath) {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
       <span>Bookmarks</span>
     </a>
+    <a href="/student/profile.html" class="sidebar-link ${isActive('/student/profile.html')}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile & Goals</span>
+    </a>
   `;
 }
 
@@ -145,6 +153,7 @@ function initModernAppShell() {
   const userName = localStorage.getItem('edunest_name') || 'Aarav Sharma';
   const initials = userName.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
   const homeUrl = role === 'INSTRUCTOR' ? '/instructor/dashboard.html' : role === 'ADMIN' ? '/admin/dashboard.html' : '/student/dashboard.html';
+  const profileUrl = role === 'STUDENT' ? '/student/profile.html' : homeUrl;
 
   const contentNodes = [];
   let sibling = oldNav.nextSibling;
@@ -174,9 +183,9 @@ function initModernAppShell() {
         ${buildSidebarLinksHtml(role, path)}
       </nav>
       <div class="sidebar-footer">
-        <a href="${homeUrl}" class="sidebar-link">
+        <a href="${profileUrl}" class="sidebar-link">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          <span>Settings</span>
+          <span>Profile & Settings</span>
         </a>
         <button onclick="logout()" class="sidebar-link">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -191,10 +200,10 @@ function initModernAppShell() {
           <input type="text" id="globalSearchInput" placeholder="Search for courses, topics or resources..." />
         </div>
         <div class="topbar-user">
-          <div class="user-avatar-chip">
+          <a href="${profileUrl}" class="user-avatar-chip" style="text-decoration:none; color:inherit;">
             <div class="user-avatar-circle">${initials}</div>
             <span>${userName}</span>
-          </div>
+          </a>
         </div>
       </header>
       <div class="app-content" id="appShellContent"></div>
@@ -226,9 +235,13 @@ function wireGlobalSearchInput() {
         window.location.href = '/student/skill-map.html';
       } else if (q.includes('challenge') || q.includes('code')) {
         window.location.href = '/student/challenges.html';
+      } else if (q.includes('daily') || q.includes('plan')) {
+        window.location.href = '/student/daily-plan.html';
+      } else if (q.includes('profile') || q.includes('goal') || q.includes('setting')) {
+        window.location.href = '/student/profile.html';
       } else if (q.includes('revise') || q.includes('revision')) {
         window.location.href = '/student/revision.html';
-      } else if (q.includes('weak') || q.includes('mastery') || q.includes('profile')) {
+      } else if (q.includes('weak') || q.includes('mastery')) {
         window.location.href = '/student/knowledge-profile.html';
       } else {
         window.location.href = '/student/courses.html';

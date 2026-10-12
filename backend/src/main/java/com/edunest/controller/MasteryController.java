@@ -20,11 +20,22 @@ public class MasteryController {
 
     private final MasteryService masteryService;
     private final RecommendationService recommendationService;
+    private final com.edunest.service.UserService userService;
 
     public MasteryController(MasteryService masteryService,
-                             RecommendationService recommendationService) {
+                             RecommendationService recommendationService,
+                             com.edunest.service.UserService userService) {
         this.masteryService = masteryService;
         this.recommendationService = recommendationService;
+        this.userService = userService;
+    }
+
+    @PutMapping("/goal")
+    public ResponseEntity<com.edunest.dto.response.AuthResponse> updateGoal(
+            @RequestBody java.util.Map<String, String> payload,
+            Authentication authentication) {
+        String goal = payload.getOrDefault("learningGoal", "");
+        return ResponseEntity.ok(userService.updateLearningGoal(authentication.getName(), goal));
     }
 
     @GetMapping("/mastery")
