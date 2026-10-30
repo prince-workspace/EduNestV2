@@ -131,6 +131,71 @@ public class NoteBookmarkService {
         bookmarkRepository.delete(bookmark);
     }
 
+    @Transactional(readOnly = true)
+    public java.util.Map<String, Object> getBookmarkStatusForLesson(Long lessonId, String studentEmail) {
+        User student = userRepository.findByEmail(studentEmail)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        java.util.Optional<Bookmark> opt = bookmarkRepository.findByUserIdAndLessonId(student.getId(), lessonId);
+        if (opt.isPresent()) {
+            return java.util.Map.of(
+                    "bookmarked", true,
+                    "bookmark", toBookmarkDto(opt.get())
+            );
+        } else {
+            return java.util.Map.of(
+                    "bookmarked", false
+            );
+        }
+    }
+
+    @Transactional
+    public java.util.Map<String, Object> toggleBookmark(BookmarkRequest req, String studentEmail) {
+        User student = userRepository.findByEmail(studentEmail)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Lesson lesson = lessonRepository.findById(req.getLessonId())
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+
+        java.util.Optional<Bookmark> existing = bookmarkRepository.findByUserIdAndLessonId(student.getId(), lesson.getId());
+        if (existing.isPresent()) {
+            bookmarkRepository.delete(existing.get());
+            return java.util.Map.of(
+                    "bookmarked", false,
+                    "lessonId", lesson.getId(),
+                    "message", "Bookmark removed successfully"
+            );
+        } else {
+            Bookmark b = new Bookmark();
+            b.setUser(student);
+            b.setLesson(lesson);
+            String label = (req.getNoteLabel() != null && !req.getNoteLabel().isBlank())
+                    ? req.getNoteLabel().trim()
+                    : "Saved for review";
+            b.setNoteLabel(label);
+            b.setCreatedAt(LocalDateTime.now());
+            Bookmark saved = bookmarkRepository.save(b);
+            return java.util.Map.of(
+                    "bookmarked", true,
+                    "lessonId", lesson.getId(),
+                    "message", "Lesson bookmarked successfully",
+                    "bookmark", toBookmarkDto(saved)
+            );
+        }
+    }
+
+    @Transactional
+    public java.util.Map<String, Object> deleteBookmarkByLessonId(Long lessonId, String studentEmail) {
+        User student = userRepository.findByEmail(studentEmail)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        bookmarkRepository.findByUserIdAndLessonId(student.getId(), lessonId)
+                .ifPresent(bookmarkRepository::delete);
+        return java.util.Map.of(
+                "bookmarked", false,
+                "lessonId", lessonId,
+                "message", "Bookmark removed successfully"
+        );
+    }
+
     private NoteDto toNoteDto(Note n) {
         Lesson l = n.getLesson();
         Topic t = l.getTopic();

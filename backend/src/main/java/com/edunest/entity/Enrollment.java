@@ -29,6 +29,21 @@ public class Enrollment {
     @Column(name = "diagnostic_completed", nullable = false)
     private boolean diagnosticCompleted = false;
 
+    @Column(name = "completed", nullable = false)
+    private boolean completed = false;
+
+    @Column(name = "completed_at")
+    private LocalDateTime completedAt;
+
+    @Column(name = "final_score")
+    private Double finalScore;
+
+    @Column(name = "final_assessment_passed", nullable = false)
+    private boolean finalAssessmentPassed = false;
+
+    @Column(name = "final_attempt_count", nullable = false)
+    private int finalAttemptCount = 0;
+
     public Enrollment() {
     }
 
@@ -70,5 +85,45 @@ public class Enrollment {
 
     public void setDiagnosticCompleted(boolean diagnosticCompleted) {
         this.diagnosticCompleted = diagnosticCompleted;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public LocalDateTime getCompletedAt() {
+        return completedAt;
+    }
+
+    public void setCompletedAt(LocalDateTime completedAt) {
+        this.completedAt = completedAt;
+    }
+
+    public Double getFinalScore() {
+        return finalScore;
+    }
+
+    public void setFinalScore(Double finalScore) {
+        this.finalScore = finalScore;
+    }
+
+    public boolean isFinalAssessmentPassed() {
+        return finalAssessmentPassed;
+    }
+
+    public void setFinalAssessmentPassed(boolean finalAssessmentPassed) {
+        this.finalAssessmentPassed = finalAssessmentPassed;
+    }
+
+    public int getFinalAttemptCount() {
+        return finalAttemptCount;
+    }
+
+    public void setFinalAttemptCount(int finalAttemptCount) {
+        this.finalAttemptCount = finalAttemptCount;
     }
 }

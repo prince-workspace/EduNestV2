@@ -10,11 +10,14 @@ import com.edunest.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class QuizService {
+
+    public static final double FINAL_ASSESSMENT_PASSING_SCORE = 70.0;
 
     private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
@@ -26,6 +29,9 @@ public class QuizService {
     private final UserRepository userRepository;
     private final ScoringService scoringService;
     private final MasteryService masteryService;
+    private final LessonRepository lessonRepository;
+    private final LessonProgressRepository lessonProgressRepository;
+    private final CertificateService certificateService;
 
     public QuizService(QuizRepository quizRepository,
                        QuestionRepository questionRepository,
@@ -36,7 +42,10 @@ public class QuizService {
                        EnrollmentRepository enrollmentRepository,
                        UserRepository userRepository,
                        ScoringService scoringService,
-                       MasteryService masteryService) {
+                       MasteryService masteryService,
+                       LessonRepository lessonRepository,
+                       LessonProgressRepository lessonProgressRepository,
+                       CertificateService certificateService) {
         this.quizRepository = quizRepository;
         this.questionRepository = questionRepository;
         this.attemptRepository = attemptRepository;
@@ -47,6 +56,9 @@ public class QuizService {
         this.userRepository = userRepository;
         this.scoringService = scoringService;
         this.masteryService = masteryService;
+        this.lessonRepository = lessonRepository;
+        this.lessonProgressRepository = lessonProgressRepository;
+        this.certificateService = certificateService;
     }
 
     @Transactional
@@ -270,7 +282,60 @@ public class QuizService {
             enrollmentRepository.save(enrollment);
         }
 
-        return buildResultResponse(attempt, records, quiz);
+        // If FINAL_ASSESSMENT quiz, handle passing and course completion
+        boolean isFinal = (quiz.getQuizType() == QuizType.FINAL_ASSESSMENT);
+        boolean passed = false;
+        boolean courseCompleted = false;
+        String completionMsg = null;
+
+        if (isFinal) {
+            Long courseId = quiz.getCourse().getId();
+            Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(student.getId(), courseId)
+                    .orElseGet(() -> {
+                        Enrollment e = new Enrollment();
+                        e.setUser(student);
+                        e.setCourse(quiz.getCourse());
+                        return e;
+                    });
+
+            enrollment.setFinalAttemptCount(enrollment.getFinalAttemptCount() + 1);
+            enrollment.setFinalScore(percentage);
+
+            passed = (percentage >= FINAL_ASSESSMENT_PASSING_SCORE);
+            if (passed) {
+                enrollment.setFinalAssessmentPassed(true);
+            }
+
+            int totalLessons = lessonRepository.findByTopicCourseIdOrderByTopicOrderIndexAscOrderIndexAsc(courseId).size();
+            int completedLessons = lessonProgressRepository
+                    .findByUserIdAndLessonTopicCourseIdAndCompletedTrue(student.getId(), courseId).size();
+
+            if (passed && totalLessons > 0 && completedLessons >= totalLessons) {
+                enrollment.setCompleted(true);
+                if (enrollment.getCompletedAt() == null) {
+                    enrollment.setCompletedAt(LocalDateTime.now());
+                }
+                courseCompleted = true;
+                completionMsg = "Congratulations! You have passed the final assessment and successfully completed the course!";
+                certificateService.generateCertificateIfEligible(student, quiz.getCourse(), percentage);
+            } else if (passed) {
+                completionMsg = "You passed the final assessment! Complete any remaining lessons to earn your full course completion.";
+            } else {
+                completionMsg = "You scored " + percentage + "%. A minimum passing score of "
+                        + FINAL_ASSESSMENT_PASSING_SCORE + "% is required. Review the modules and try again!";
+            }
+
+            enrollmentRepository.save(enrollment);
+        }
+
+        QuizResultResponse res = buildResultResponse(attempt, records, quiz);
+        if (isFinal) {
+            res.setPassingScore(FINAL_ASSESSMENT_PASSING_SCORE);
+            res.setPassed(passed);
+            res.setCourseCompleted(courseCompleted);
+            res.setCompletionMessage(completionMsg);
+        }
+        return res;
     }
 
     @Transactional(readOnly = true)
@@ -279,7 +344,24 @@ public class QuizService {
                 .orElseThrow(() -> new RuntimeException("Quiz attempt not found"));
 
         List<QuizAnswerRecord> records = answerRecordRepository.findByAttemptId(attemptId);
-        return buildResultResponse(attempt, records, attempt.getQuiz());
+        QuizResultResponse res = buildResultResponse(attempt, records, attempt.getQuiz());
+
+        if (attempt.getQuiz().getQuizType() == QuizType.FINAL_ASSESSMENT) {
+            res.setPassingScore(FINAL_ASSESSMENT_PASSING_SCORE);
+            boolean passed = attempt.getPercentage() >= FINAL_ASSESSMENT_PASSING_SCORE;
+            res.setPassed(passed);
+            enrollmentRepository.findByUserIdAndCourseId(attempt.getUser().getId(), attempt.getQuiz().getCourse().getId())
+                    .ifPresent(e -> {
+                        res.setCourseCompleted(e.isCompleted());
+                    });
+            if (passed) {
+                res.setCompletionMessage("Passed with " + attempt.getPercentage() + "%! (Passing threshold: " + FINAL_ASSESSMENT_PASSING_SCORE + "%)");
+            } else {
+                res.setCompletionMessage("Score: " + attempt.getPercentage() + "%. Minimum " + FINAL_ASSESSMENT_PASSING_SCORE + "% required to pass.");
+            }
+        }
+
+        return res;
     }
 
     @Transactional(readOnly = true)
@@ -302,8 +384,8 @@ public class QuizService {
     }
 
     private QuizResultResponse buildResultResponse(QuizAttempt attempt,
-                                                   List<QuizAnswerRecord> records,
-                                                   Quiz quiz) {
+                                                    List<QuizAnswerRecord> records,
+                                                    Quiz quiz) {
         List<TopicScoreDto> topicBreakdown = scoringService.computeTopicBreakdown(records);
 
         List<QuizResultResponse.AnswerDetail> details = records.stream()
@@ -335,6 +417,67 @@ public class QuizService {
         );
     }
 
+    @Transactional
+    public QuizQuestionsResponse getFinalAssessmentQuestions(Long courseId, String studentEmail) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        if (studentEmail != null) {
+            User student = userRepository.findByEmail(studentEmail)
+                    .orElseThrow(() -> new RuntimeException("Student not found"));
+
+            List<Lesson> allCourseLessons =
+                    lessonRepository.findByTopicCourseIdOrderByTopicOrderIndexAscOrderIndexAsc(courseId);
+            int totalLessons = allCourseLessons.size();
+            int completedLessons = lessonProgressRepository
+                    .findByUserIdAndLessonTopicCourseIdAndCompletedTrue(student.getId(), courseId).size();
+
+            if (totalLessons > 0 && completedLessons < totalLessons) {
+                throw new IllegalStateException("Final Assessment is locked. You must complete all "
+                        + totalLessons + " lessons before taking the final assessment ("
+                        + completedLessons + "/" + totalLessons + " completed).");
+            }
+        }
+
+        Quiz quiz = quizRepository.findByCourseIdAndQuizType(courseId, QuizType.FINAL_ASSESSMENT)
+                .orElseGet(() -> {
+                    List<Question> finalQuestions =
+                            questionRepository.findByTopicCourseIdAndQuestionType(courseId, QuestionType.FINAL_ASSESSMENT);
+                    if (finalQuestions.isEmpty()) {
+                        finalQuestions = questionRepository.findByTopicCourseIdAndQuestionType(courseId, QuestionType.QUIZ);
+                    }
+                    Quiz newQuiz = new Quiz();
+                    newQuiz.setCourse(course);
+                    newQuiz.setTitle(course.getTitle() + " - Final Comprehensive Assessment");
+                    newQuiz.setQuizType(QuizType.FINAL_ASSESSMENT);
+                    newQuiz.setTimeLimitMinutes(25);
+                    newQuiz.setQuestions(new ArrayList<>(finalQuestions));
+                    return quizRepository.save(newQuiz);
+                });
+
+        List<Question> freshFinal = questionRepository.findByTopicCourseIdAndQuestionType(courseId, QuestionType.FINAL_ASSESSMENT);
+        if (!freshFinal.isEmpty() && freshFinal.size() != quiz.getQuestions().size()) {
+            quiz.setQuestions(new ArrayList<>(freshFinal));
+            quiz = quizRepository.save(quiz);
+        }
+
+        List<Question> list = new ArrayList<>(quiz.getQuestions());
+        Collections.shuffle(list);
+        List<QuestionDto> questions = list.stream()
+                .map(q -> toQuestionDto(q, false))
+                .toList();
+
+        return new QuizQuestionsResponse(
+                quiz.getId(),
+                course.getId(),
+                null,
+                quiz.getTitle(),
+                quiz.getQuizType(),
+                quiz.getTimeLimitMinutes(),
+                questions
+        );
+    }
+
     private QuestionDto toQuestionDto(Question q, boolean includeAnswer) {
         return new QuestionDto(
                 q.getId(),
@@ -346,7 +489,8 @@ public class QuizService {
                 q.getOptionC(),
                 q.getOptionD(),
                 includeAnswer ? q.getCorrectOption() : null,
-                includeAnswer ? q.getExplanation() : null
+                includeAnswer ? q.getExplanation() : null,
+                q.getHint()
         );
     }
 }

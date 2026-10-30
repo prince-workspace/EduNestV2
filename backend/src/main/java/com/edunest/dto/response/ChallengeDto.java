@@ -19,6 +19,12 @@ public class ChallengeDto {
     private boolean completed;
     private Double bestScore;
     private String lastFeedback;
+    private String starterCodePython;
+    private String starterCodeJs;
+    private String inputFormat;
+    private String outputFormat;
+    private String constraints;
+    private String sampleTestCasesJson;
 
     public ChallengeDto() {
     }
@@ -172,5 +178,53 @@ public class ChallengeDto {
 
     public void setLastFeedback(String lastFeedback) {
         this.lastFeedback = lastFeedback;
+    }
+
+    public String getStarterCodePython() {
+        return starterCodePython;
+    }
+
+    public void setStarterCodePython(String starterCodePython) {
+        this.starterCodePython = starterCodePython;
+    }
+
+    public String getStarterCodeJs() {
+        return starterCodeJs;
+    }
+
+    public void setStarterCodeJs(String starterCodeJs) {
+        this.starterCodeJs = starterCodeJs;
+    }
+
+    public String getInputFormat() {
+        return inputFormat;
+    }
+
+    public void setInputFormat(String inputFormat) {
+        this.inputFormat = inputFormat;
+    }
+
+    public String getOutputFormat() {
+        return outputFormat;
+    }
+
+    public void setOutputFormat(String outputFormat) {
+        this.outputFormat = outputFormat;
+    }
+
+    public String getConstraints() {
+        return constraints;
+    }
+
+    public void setConstraints(String constraints) {
+        this.constraints = constraints;
+    }
+
+    public String getSampleTestCasesJson() {
+        return sampleTestCasesJson;
+    }
+
+    public void setSampleTestCasesJson(String sampleTestCasesJson) {
+        this.sampleTestCasesJson = sampleTestCasesJson;
     }
 }

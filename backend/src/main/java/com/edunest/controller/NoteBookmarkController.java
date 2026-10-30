@@ -59,6 +59,24 @@ public class NoteBookmarkController {
         return ResponseEntity.ok(noteBookmarkService.getMyBookmarks(authentication.getName()));
     }
 
+    @GetMapping("/bookmarks/lesson/{lessonId}")
+    public ResponseEntity<Map<String, Object>> getBookmarkStatusForLesson(@PathVariable Long lessonId,
+                                                                          Authentication authentication) {
+        return ResponseEntity.ok(noteBookmarkService.getBookmarkStatusForLesson(lessonId, authentication.getName()));
+    }
+
+    @PostMapping("/bookmarks/toggle")
+    public ResponseEntity<Map<String, Object>> toggleBookmark(@Valid @RequestBody BookmarkRequest req,
+                                                              Authentication authentication) {
+        return ResponseEntity.ok(noteBookmarkService.toggleBookmark(req, authentication.getName()));
+    }
+
+    @DeleteMapping("/bookmarks/lesson/{lessonId}")
+    public ResponseEntity<Map<String, Object>> deleteBookmarkByLesson(@PathVariable Long lessonId,
+                                                                      Authentication authentication) {
+        return ResponseEntity.ok(noteBookmarkService.deleteBookmarkByLessonId(lessonId, authentication.getName()));
+    }
+
     @DeleteMapping("/bookmarks/{bookmarkId}")
     public ResponseEntity<Map<String, String>> deleteBookmark(@PathVariable Long bookmarkId,
                                                               Authentication authentication) {

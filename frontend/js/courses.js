@@ -83,8 +83,8 @@ const defaultAvailableCourses = [
 async function loadCourseCatalog() {
   try {
     // Populate topbar user details
-    const userName = localStorage.getItem('edunest_name') || 'Aarav Sharma';
-    const initials = userName.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
+    const userName = localStorage.getItem('edunest_name') || 'Student';
+    const initials = userName.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase() || 'ST';
     const topNameEl = document.getElementById('topUserName');
     if (topNameEl) topNameEl.textContent = userName;
     const topInitialsEl = document.getElementById('topUserInitials');
@@ -113,16 +113,8 @@ async function loadCourseCatalog() {
       }
     });
 
-    // If backend returns the seeded Java course, ensure it's marked as enrolled if enrolled
-    if (allEnrolledCourses.length === 0 && allPublishedCourses.length > 0) {
-      const javaCourse = allPublishedCourses.find(c => c.enrolled || c.id === 1);
-      if (javaCourse) {
-        allEnrolledCourses = [javaCourse];
-      }
-    }
-
     // Try fetching knowledge profile to get actual mastery progress for the primary enrolled course
-    let progressPct = 40;
+    let progressPct = 0;
     if (allEnrolledCourses.length > 0) {
       try {
         const kp = await apiFetch(`/students/me/courses/${allEnrolledCourses[0].id}/knowledge-profile`);
@@ -130,43 +122,77 @@ async function loadCourseCatalog() {
           progressPct = Math.round(kp.overallCourseMastery);
         }
       } catch (e) {
-        progressPct = 40;
+        progressPct = 0;
       }
     }
 
-    renderEnrolledCourses(allEnrolledCourses, progressPct);
+    // Check for first-time onboarding mode
+    const params = new URLSearchParams(window.location.search);
+    const isOnboarding = params.get('onboarding') === 'true';
+    if (isOnboarding) {
+      const bannerContainer = document.getElementById('onboardingBannerContainer');
+      const studentName = localStorage.getItem('edunest_name') || 'Student';
+      const firstName = studentName.split(' ')[0] || 'Student';
+      if (bannerContainer) {
+        bannerContainer.innerHTML = `
+          <div class="card" style="background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%); border: 1px solid #bfdbfe; border-radius: 16px; padding: 1.6rem 2rem; margin-bottom: 2rem; box-shadow: 0 4px 16px rgba(37,99,235,0.06);">
+            <span style="font-size: 0.78rem; font-weight: 700; color: #2563eb; letter-spacing: 0.06em; text-transform: uppercase;">WELCOME TO EDUNEST 🎉</span>
+            <h2 style="font-size: 1.55rem; color: #0f172a; margin: 0.35rem 0 0.4rem 0;">Welcome, ${firstName}! Choose your first course to begin.</h2>
+            <p style="color: #475569; font-size: 0.95rem; margin: 0; max-width: 680px; line-height: 1.5;">
+              Explore all available courses below. Preview the syllabus, topics, and instructor details, then click <strong>Preview &amp; Enroll</strong> to start learning.
+            </p>
+          </div>
+        `;
+      }
+    }
+
+    renderEnrolledCourses(allEnrolledCourses, progressPct, isOnboarding);
     renderAvailableCourses();
   } catch (err) {
     console.error('Error loading courses:', err);
-    // Render graceful fallbacks matching design
-    renderEnrolledCourses([], 40);
+    renderEnrolledCourses([], 0, false);
     renderAvailableCourses();
   }
 }
 
-function renderEnrolledCourses(courses, progressPct = 40) {
+function renderEnrolledCourses(courses, progressPct = 0, isOnboarding = false) {
+  const sectionEl = document.getElementById('enrolledCoursesSection');
   const container = document.getElementById('myCoursesList');
   const countBadge = document.getElementById('enrolledActiveCount');
   if (!container) return;
 
-  const enrolled = courses && courses.length > 0 ? courses : [
-    {
-      id: 1,
-      title: 'Java Programming - From Fundamentals to OOP',
-      topicCount: 6,
-      enrollmentCount: 2,
-      instructorName: 'Prof. Vikram Verma',
-      description: 'Master Core Java with adaptive diagnostics, topic-level mastery tracking, spaced revision, and practical coding challenges.',
-      diagnosticCompleted: true
-    }
-  ];
+  const enrolled = (courses && Array.isArray(courses)) ? courses : [];
 
+  if (enrolled.length === 0) {
+    if (isOnboarding && sectionEl) {
+      sectionEl.style.display = 'none';
+      return;
+    }
+    if (sectionEl) sectionEl.style.display = 'block';
+    if (countBadge) countBadge.textContent = '0 Active';
+    container.innerHTML = `
+      <div class="card" style="padding: 1.75rem; text-align: center; color: #64748b; font-size: 0.92rem; border-radius: 14px;">
+        You haven't enrolled in any courses yet. Browse all available courses below and enroll to get started.
+      </div>
+    `;
+    return;
+  }
+
+  if (sectionEl) sectionEl.style.display = 'block';
   if (countBadge) {
     countBadge.textContent = `${enrolled.length} Active`;
   }
 
-  container.innerHTML = enrolled.map(c => `
-    <div class="enrolled-course-card">
+  container.innerHTML = enrolled.map(c => {
+    const isCompleted = Boolean(c.completed);
+    const statusPill = isCompleted
+      ? `<span class="badge" style="background:#ecfdf5; color:#047857; font-weight:800; font-size:0.75rem; padding:0.25rem 0.65rem; border:1px solid #a7f3d0; border-radius:999px;">🏆 Completed &bull; Final Score: ${c.finalScore || 100}%</span>`
+      : `<span class="diagnostic-active-pill"><span class="status-dot"></span><span>In Progress</span></span>`;
+
+    const displayPct = isCompleted ? 100 : progressPct;
+
+    return `
+    <div class="enrolled-course-card" style="${isCompleted ? 'border-color: #86efac; background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);' : ''}">
       <div class="enrolled-card-top">
         <div class="enrolled-meta-left">
           <span class="topics-pill">
@@ -179,10 +205,7 @@ function renderEnrolledCourses(courses, progressPct = 40) {
             <span>${c.enrollmentCount || 2} enrolled in your batch</span>
           </span>
         </div>
-        <span class="diagnostic-active-pill">
-          <span class="status-dot"></span>
-          <span>Diagnostic Active</span>
-        </span>
+        ${statusPill}
       </div>
 
       <h2 class="enrolled-course-title">${c.title}</h2>
@@ -192,20 +215,21 @@ function renderEnrolledCourses(courses, progressPct = 40) {
       <div class="enrolled-card-bottom">
         <div class="enrolled-progress-box">
           <div class="enrolled-progress-labels">
-            <span class="label">Course Progress</span>
-            <span class="pct">${progressPct}% Completed</span>
+            <span class="label">Lesson Completion</span>
+            <span class="pct">${displayPct}% Finished</span>
           </div>
           <div class="enrolled-progress-track">
-            <div class="enrolled-progress-fill" style="width: ${progressPct}%;"></div>
+            <div class="enrolled-progress-fill" style="width: ${displayPct}%; background: ${isCompleted ? '#10b981' : '#2563eb'};"></div>
           </div>
         </div>
 
-        <a href="/student/course-detail.html?id=${c.id}" class="btn-continue-learning">
-          Continue Learning &rarr;
+        <a href="/student/course-detail.html?id=${c.id}" class="btn-continue-learning" style="${isCompleted ? 'background:#059669;' : ''}">
+          ${isCompleted ? 'View Course &amp; Results &rarr;' : 'Continue Learning &rarr;'}
         </a>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function renderAvailableCourses() {
@@ -397,6 +421,8 @@ async function executeEnrollment(courseId) {
         renderEnrolledCourses(allEnrolledCourses, 0);
         renderAvailableCourses();
       }
+      localStorage.setItem('edunest_activeCourseId', courseId);
+      window.location.href = `/student/course-detail.html?id=${courseId}`;
       return;
     }
     await apiFetch(`/courses/${courseId}/enroll`, { method: 'POST' });
@@ -422,6 +448,37 @@ async function enrollInCourse(courseId) {
   openCoursePreview(courseId);
 }
 
+// Module definitions for structured curriculum presentation
+const COURSE_MODULE_DEFINITIONS = {
+  // Course 1: Java Programming - From Fundamentals to OOP
+  1: [
+    {
+      moduleNumber: 1,
+      title: "Java Fundamentals & Syntax",
+      description: "Architecture, bytecode, variables, data types, operators, and control structures.",
+      topicOrderIndices: [1, 2]
+    },
+    {
+      moduleNumber: 2,
+      title: "Data Structures & Memory Layout",
+      description: "Linear array collections, multi-dimensional matrices, and runtime memory allocation.",
+      topicOrderIndices: [3]
+    },
+    {
+      moduleNumber: 3,
+      title: "Object-Oriented Programming (OOP)",
+      description: "Encapsulation, constructors, inheritance hierarchies, and dynamic runtime polymorphism.",
+      topicOrderIndices: [4, 5]
+    },
+    {
+      moduleNumber: 4,
+      title: "Advanced Core Java & Collections",
+      description: "Exception handling mechanics, resource safety, and standard Collections Framework.",
+      topicOrderIndices: [6]
+    }
+  ]
+};
+
 async function loadCourseDetail() {
   const params = new URLSearchParams(window.location.search);
   const courseId = params.get('id') || localStorage.getItem('edunest_activeCourseId') || 1;
@@ -430,63 +487,345 @@ async function loadCourseDetail() {
     const detail = await apiFetch(`/courses/${courseId}`);
     localStorage.setItem('edunest_activeCourseId', detail.id);
 
-    document.getElementById('courseTitle').textContent = detail.title;
-    document.getElementById('courseMeta').textContent = `Instructor: ${detail.instructorName} · ${detail.topics.length} Structured Topics`;
+    // Sync persistent lesson completion from backend if enrolled
+    if (detail.enrolled) {
+      try {
+        const completedIds = await apiFetch(`/lessons/completed?courseId=${detail.id}`).catch(() => null);
+        if (Array.isArray(completedIds)) {
+          localStorage.setItem('edunest_completed_lessons', JSON.stringify(completedIds));
+        } else {
+          const kp = await apiFetch(`/students/me/courses/${detail.id}/knowledge-profile`).catch(() => null);
+          if (kp && Array.isArray(kp.completedLessonIds)) {
+            localStorage.setItem('edunest_completed_lessons', JSON.stringify(kp.completedLessonIds));
+          }
+        }
+      } catch (kpErr) {
+        console.warn('Could not load course progress:', kpErr);
+      }
+    }
+
+    // Essential Course Information
+    const titleEl = document.getElementById('courseTitle');
+    if (titleEl) {
+      titleEl.textContent = detail.title || 'Java Programming - From Fundamentals to OOP';
+    }
+    document.title = `${detail.title || 'Course Workspace'} — EduNest`;
+
+    const totalLessons = detail.topics.reduce((acc, t) => acc + (t.lessons ? t.lessons.length : 0), 0);
+    document.getElementById('courseMeta').textContent = `Instructor: ${detail.instructorName} · ${detail.topics.length} Topics · ${totalLessons} Lessons`;
     document.getElementById('courseDesc').textContent = detail.description || '';
 
+    // Calculate lesson completion counts
+    let completedLessons = 0;
+    if (detail.enrolled) {
+      detail.topics.forEach(t => {
+        if (t.lessons) {
+          completedLessons += t.lessons.filter(l => isLessonCompleted(l.id)).length;
+        }
+      });
+    }
+    const isUnlocked = detail.finalAssessmentUnlocked || (totalLessons > 0 && completedLessons >= totalLessons);
+    const passingScore = detail.finalAssessmentPassingScore || 70.0;
+    const lessonCompletionPct = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
+    // Course Completion Banner
+    const bannerEl = document.getElementById('courseCompletionBanner');
+    if (bannerEl) {
+      if (detail.courseCompleted) {
+        bannerEl.style.display = 'block';
+        bannerEl.innerHTML = `
+          <div style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%); border: 1.5px solid #86efac; border-radius: 14px; padding: 1.3rem 1.6rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; box-shadow: 0 4px 14px rgba(16,185,129,0.08);">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div style="font-size: 2.2rem; line-height: 1;">🏆</div>
+              <div>
+                <span style="font-size: 0.74rem; font-weight: 800; color: #047857; text-transform: uppercase; letter-spacing: 0.06em;">Course Completed</span>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: #064e3b; margin: 0.15rem 0 0.35rem 0;">Congratulations on completing ${detail.title}!</h3>
+                <div style="display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap; font-size: 0.88rem; color: #047857;">
+                  <span>📚 <strong>Lesson Completion:</strong> ${lessonCompletionPct}% (${completedLessons}/${totalLessons} finished)</span>
+                  <span>&bull;</span>
+                  <span>🎯 <strong>Final Assessment Score:</strong> ${detail.finalScore}% (Passed &ge; ${passingScore}%)</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.6rem;">
+              <a href="/student/profile.html" class="btn btn-primary" style="background:#059669; border-color:#059669; font-weight:700; padding:0.55rem 1.15rem; text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; box-shadow:0 2px 10px rgba(5,150,105,0.25);">
+                <span>View Certificate</span> 🎓
+              </a>
+            </div>
+          </div>
+        `;
+      } else {
+        bannerEl.style.display = 'none';
+      }
+    }
+
+    // Simple Overall Course Progress Indicator
+    const progressContainer = document.getElementById('courseProgressBreakdown');
+    if (progressContainer) {
+      if (detail.enrolled) {
+        progressContainer.style.display = 'block';
+        progressContainer.innerHTML = `
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.15rem 1.4rem; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.55rem; flex-wrap: wrap; gap: 0.5rem;">
+              <span style="font-weight: 700; font-size: 0.95rem; color: #0f172a;">Curriculum Progress</span>
+              <span style="font-weight: 700; font-size: 0.88rem; color: ${lessonCompletionPct === 100 ? '#047857' : '#2563eb'};">
+                ${lessonCompletionPct === 100 ? '✓ ' : ''}Lesson Completion: ${lessonCompletionPct}% (${completedLessons} of ${totalLessons} Lessons Finished)
+              </span>
+            </div>
+            <div style="background: #e2e8f0; border-radius: 999px; height: 9px; overflow: hidden;">
+              <div style="background: ${lessonCompletionPct === 100 ? '#10b981' : '#2563eb'}; width: ${lessonCompletionPct}% ; height: 100%; border-radius: 999px; transition: width 0.3s ease;"></div>
+            </div>
+          </div>
+        `;
+      } else {
+        progressContainer.style.display = 'none';
+      }
+    }
+
+    // Enrollment Action Area (Clean & Consistent, no duplicate score dump)
     const actionArea = document.getElementById('enrollmentActionArea');
     if (!detail.enrolled) {
       actionArea.innerHTML = `
         <button class="btn btn-primary" onclick="enrollInCourse(${detail.id})">
-          Enroll in Course to Track Mastery
+          Enroll in Course
         </button>`;
-    } else if (!detail.diagnosticCompleted) {
+    } else if (detail.courseCompleted) {
       actionArea.innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:0.5rem; align-items:flex-end;">
-          <span class="badge" style="background:#fef3c7; color:#b45309;">Diagnostic Recommended</span>
-          <a href="/student/diagnostic.html?courseId=${detail.id}" class="btn btn-primary btn-sm">
-            Start Diagnostic Test →
-          </a>
-        </div>`;
+        <span class="badge" style="background:#ecfdf5; color:#047857; font-weight:700; font-size:0.84rem; padding:0.4rem 0.85rem; border-radius:999px; border:1px solid #a7f3d0; display:inline-flex; align-items:center; gap:0.35rem;">
+          ✓ Completed
+        </span>`;
     } else {
       actionArea.innerHTML = `
-        <div style="display:flex; gap:0.6rem; align-items:center;">
-          <span class="badge" style="background:#d1fae5; color:#047857;">✓ Diagnostic Complete</span>
-          <a href="/student/diagnostic.html?courseId=${detail.id}" class="btn btn-outline btn-sm">Retake Diagnostic</a>
-        </div>`;
+        <span class="badge" style="background:#ecfdf5; color:#047857; font-weight:700; font-size:0.84rem; padding:0.4rem 0.85rem; border-radius:999px; border:1px solid #a7f3d0;">
+          ✓ Enrolled (In Progress)
+        </span>`;
+    }
+
+    // Final Assessment Section Gate & Status
+    const finalSection = document.getElementById('finalAssessmentSection');
+    if (finalSection) {
+      if (!detail.enrolled) {
+        finalSection.style.display = 'none';
+      } else {
+        finalSection.style.display = 'block';
+        if (detail.finalAssessmentPassed) {
+          finalSection.innerHTML = `
+            <div class="card" style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1.5px solid #86efac; border-radius: 16px; padding: 1.6rem 1.8rem; box-shadow: 0 4px 16px rgba(16,185,129,0.06);">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="max-width: 620px;">
+                  <span style="font-size: 0.74rem; font-weight: 800; color: #059669; letter-spacing: 0.06em; text-transform: uppercase;">✅ Final Assessment Passed</span>
+                  <h3 style="font-size: 1.25rem; font-weight: 800; color: #064e3b; margin: 0.25rem 0 0.4rem 0;">Course Final Assessment</h3>
+                  <p style="color: #047857; font-size: 0.88rem; margin: 0; line-height: 1.55;">
+                    🎯 <strong>Final Assessment Score:</strong> ${detail.finalScore}% (Passing Score: ${passingScore}% required) &bull;
+                    <strong>Status:</strong> Passed with academic distinction.
+                  </p>
+                </div>
+                <div>
+                  <a href="/student/quiz.html?courseId=${detail.id}&mode=FINAL_ASSESSMENT" class="btn btn-outline" style="border-color:#86efac; color:#064e3b; font-weight:700; padding:0.65rem 1.2rem; background:#ffffff;">
+                    Review / Retake Assessment &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (isUnlocked) {
+          finalSection.innerHTML = `
+            <div class="card" style="background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%); border: 1.5px solid #93c5fd; border-radius: 16px; padding: 1.6rem 1.8rem; box-shadow: 0 4px 16px rgba(37,99,235,0.08);">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="max-width: 620px;">
+                  <span style="font-size: 0.74rem; font-weight: 800; color: #2563eb; letter-spacing: 0.06em; text-transform: uppercase;">🎓 Unlocked &bull; Ready to Take</span>
+                  <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0 0.4rem 0;">Final Course Assessment</h3>
+                  <p style="color: #334155; font-size: 0.88rem; margin: 0; line-height: 1.5;">
+                    All required lessons are completed! You can now take the comprehensive final assessment to evaluate your knowledge and complete the course.
+                    <br><strong>Passing Score: ${passingScore}%</strong> &bull; 18 questions &bull; 25 minutes.
+                    ${detail.finalScore != null ? `<br><span style="color:#b91c1c; font-weight:600;">Previous score: ${detail.finalScore}%. Retake to achieve &ge; ${passingScore}%.</span>` : ''}
+                  </p>
+                </div>
+                <div>
+                  <a href="/student/quiz.html?courseId=${detail.id}&mode=FINAL_ASSESSMENT" class="btn btn-primary" style="padding: 0.75rem 1.45rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);">
+                    <span>Take Final Assessment</span> &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          finalSection.innerHTML = `
+            <div class="card" style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 16px; padding: 1.6rem 1.8rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="max-width: 620px;">
+                  <span style="font-size: 0.74rem; font-weight: 800; color: #64748b; letter-spacing: 0.06em; text-transform: uppercase;">🔒 Final Assessment Locked</span>
+                  <h3 style="font-size: 1.25rem; font-weight: 800; color: #475569; margin: 0.25rem 0 0.4rem 0;">Final Course Assessment</h3>
+                  <p style="color: #64748b; font-size: 0.88rem; margin: 0; line-height: 1.5;">
+                    The final assessment is locked until all required lessons are completed.
+                    Complete all <strong>${totalLessons} lessons</strong> to unlock (${completedLessons}/${totalLessons} completed).
+                    A minimum passing score of <strong>${passingScore}%</strong> is required to complete the course.
+                  </p>
+                </div>
+                <div>
+                  <button class="btn btn-outline" disabled style="opacity: 0.6; cursor: not-allowed; background: #e2e8f0; color: #64748b; border: 1px solid #cbd5e1; padding: 0.75rem 1.25rem; font-weight: 700;">
+                    🔒 Complete All Lessons to Unlock
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Identify next unfinished lesson in curriculum order for subtle highlighting
+    let nextUnfinishedLessonId = null;
+    if (detail.enrolled && detail.topics) {
+      for (const t of detail.topics) {
+        if (t.lessons) {
+          for (const l of t.lessons) {
+            if (!isLessonCompleted(l.id)) {
+              nextUnfinishedLessonId = l.id;
+              break;
+            }
+          }
+        }
+        if (nextUnfinishedLessonId) break;
+      }
+    }
+
+    // Group curriculum into Modules, Topics, and Lessons
+    const modulesDef = COURSE_MODULE_DEFINITIONS[detail.id] || [];
+    let modulesList = [];
+
+    if (modulesDef.length > 0) {
+      modulesDef.forEach(mDef => {
+        const moduleTopics = detail.topics.filter(t => mDef.topicOrderIndices.includes(t.orderIndex));
+        if (moduleTopics.length > 0) {
+          modulesList.push({
+            moduleNumber: mDef.moduleNumber,
+            title: mDef.title,
+            description: mDef.description,
+            topics: moduleTopics
+          });
+        }
+      });
+    } else {
+      // Default: single module or pair grouping for dynamic courses
+      modulesList.push({
+        moduleNumber: 1,
+        title: "Course Curriculum",
+        description: "Study concepts sequentially through topics and lessons.",
+        topics: detail.topics
+      });
     }
 
     const topicsContainer = document.getElementById('topicsAccordion');
-    topicsContainer.innerHTML = detail.topics.map((t, idx) => `
-      <div class="card" style="margin-bottom:0.75rem; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #eef2f6; background: #ffffff;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.4rem;">
-          <div style="display:flex; align-items:center; gap:0.5rem;">
-            <span style="font-size:0.74rem; font-weight:700; color:#64748b; text-transform:uppercase;">Topic ${idx + 1}</span>
-            <h3 style="font-size:1.02rem; font-weight:700; color:#0f172a; margin:0;">${t.title}</h3>
-          </div>
-          <div style="display:flex; gap:0.4rem; align-items:center;">
-            <a href="/student/practice.html?topicId=${t.id}" class="btn btn-outline btn-sm">⚡ Practice (25%)</a>
-            <a href="/student/quiz.html?topicId=${t.id}" class="btn btn-primary btn-sm">📝 Topic Quiz (50%)</a>
-          </div>
-        </div>
-        <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:0.75rem; line-height:1.4;">${t.description || ''}</p>
-        <div style="display:flex; flex-direction:column; gap:0.35rem;">
-          ${t.lessons.map(l => {
-            const done = isLessonCompleted(l.id);
-            return `
-            <a href="/student/lesson.html?id=${l.id}"
-               style="display:flex; justify-content:space-between; align-items:center; padding:0.55rem 0.85rem; background:${done ? '#f0fdf4' : '#f8fafc'}; border:1px solid ${done ? '#bbf7d0' : '#e2e8f0'}; border-radius:8px; text-decoration:none; color:#1e293b; font-size:0.86rem; transition: background 0.15s ease;">
-              <span style="display:flex; align-items:center; gap:0.55rem;">
+    topicsContainer.innerHTML = modulesList.map(mod => {
+      // Compute module-level progress
+      let modCompleted = 0;
+      let modTotal = 0;
+      mod.topics.forEach(t => {
+        if (t.lessons) {
+          modTotal += t.lessons.length;
+          modCompleted += t.lessons.filter(l => isLessonCompleted(l.id)).length;
+        }
+      });
+      const modProgressBadge = detail.enrolled && modTotal > 0
+        ? `<span style="font-size:0.75rem; font-weight:700; color:#1d4ed8; background:#eff6ff; border:1px solid #bfdbfe; padding:0.22rem 0.65rem; border-radius:999px;">${modCompleted}/${modTotal} Lessons Completed</span>`
+        : '';
+
+      const topicsHtml = mod.topics.map(t => {
+        const completedCount = t.lessons ? t.lessons.filter(l => isLessonCompleted(l.id)).length : 0;
+        const totalCount = t.lessons ? t.lessons.length : 0;
+        const topicPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+        let progressPill = '';
+        if (detail.enrolled && totalCount > 0) {
+          if (completedCount === totalCount) {
+            progressPill = `<span class="badge" style="background:#ecfdf5; color:#047857; font-size:0.72rem; font-weight:700; padding:0.18rem 0.55rem; border:1px solid #a7f3d0; border-radius:999px;">✓ Completed (${completedCount}/${totalCount})</span>`;
+          } else if (completedCount > 0) {
+            progressPill = `<span class="badge" style="background:#eff6ff; color:#1d4ed8; font-size:0.72rem; font-weight:700; padding:0.18rem 0.55rem; border:1px solid #bfdbfe; border-radius:999px;">In Progress (${completedCount}/${totalCount})</span>`;
+          } else {
+            progressPill = `<span class="badge" style="background:#f8fafc; color:#64748b; font-size:0.72rem; font-weight:600; padding:0.18rem 0.55rem; border:1px solid #e2e8f0; border-radius:999px;">0/${totalCount} Completed</span>`;
+          }
+        }
+
+        const lessonsHtml = (t.lessons || []).map(l => {
+          const done = isLessonCompleted(l.id);
+          const isCurrent = detail.enrolled && l.id === nextUnfinishedLessonId;
+
+          let rowClass = 'lesson-item-row incomplete';
+          let statusBadge = `<span class="lesson-indicator-pill pill-todo">○ Incomplete</span>`;
+          let rightAction = `<span style="font-size:0.76rem; color:#64748b;">⏱ ${l.estimatedMinutes} mins →</span>`;
+
+          if (done) {
+            rowClass = 'lesson-item-row completed';
+            statusBadge = `<span class="lesson-indicator-pill pill-done">✓ Completed</span>`;
+            rightAction = `<span style="font-size:0.76rem; color:#047857; font-weight:600;">⏱ ${l.estimatedMinutes} mins &bull; Review</span>`;
+          } else if (isCurrent) {
+            rowClass = 'lesson-item-row current';
+            statusBadge = `<span class="lesson-indicator-pill pill-current">★ Current Lesson</span>`;
+            rightAction = `<span style="font-size:0.78rem; font-weight:700; color:#2563eb; display:inline-flex; align-items:center; gap:0.25rem;">Study Now &rarr;</span>`;
+          }
+
+          return `
+            <a href="/student/lesson.html?id=${l.id}&courseId=${detail.id}" class="${rowClass}">
+              <div class="lesson-left-content">
                 <span>📖 <strong>${l.title}</strong></span>
-                ${done ? `<span class="badge" style="background:#dcfce7; color:#15803d; font-size:0.7rem; padding:0.12rem 0.45rem; font-weight:700;">✓ Completed</span>` : ''}
-              </span>
-              <span style="font-size:0.78rem; color:#64748b;">⏱ ${l.estimatedMinutes} mins →</span>
+                ${statusBadge}
+              </div>
+              <div>
+                ${rightAction}
+              </div>
             </a>
-            `;
-          }).join('')}
+          `;
+        }).join('');
+
+        const progressBarHtml = detail.enrolled && totalCount > 0 ? `
+          <div class="topic-progress-track">
+            <div class="topic-progress-fill" style="width: ${topicPct}%; background: ${topicPct === 100 ? '#10b981' : '#2563eb'};"></div>
+          </div>
+        ` : '';
+
+        return `
+          <div class="topic-card">
+            <div class="topic-header-row">
+              <div class="topic-title-group">
+                <span class="topic-order-pill">Topic ${t.orderIndex}</span>
+                <h4 class="topic-name">${t.title}</h4>
+                ${progressPill}
+              </div>
+              <div class="topic-actions-group">
+                <a href="/student/practice.html?topicId=${t.id}" class="btn-action-topic-outline" title="Practice topic questions with hints and step-by-step explanations">
+                  ⚡ Practice
+                </a>
+                <a href="/student/quiz.html?topicId=${t.id}&mode=CHAPTER_QUIZ" class="btn-action-topic-primary" title="Test your topic understanding with an assessment quiz">
+                  📝 Take Quiz
+                </a>
+              </div>
+            </div>
+            ${progressBarHtml}
+            <p class="topic-desc-text">${t.description || ''}</p>
+            <div class="lessons-list-stack">
+              ${lessonsHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="course-module-group" style="margin-bottom: 2rem;">
+          <div class="module-header-box">
+            <div>
+              <span class="module-badge-tag">Module ${mod.moduleNumber}</span>
+              <h3 class="module-title-text">${mod.title}</h3>
+              ${mod.description ? `<p class="module-desc-text">${mod.description}</p>` : ''}
+            </div>
+            ${modProgressBadge}
+          </div>
+          <div class="module-topics-list">
+            ${topicsHtml}
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   } catch (err) {
     console.error('Failed to load course detail:', err);
   }
@@ -561,8 +900,15 @@ function updateLessonCompletionUI() {
   }
 }
 
-function completeCurrentLesson() {
+async function completeCurrentLesson() {
   if (!currentLoadedLesson) return;
+
+  // Persist lesson completion directly to database
+  try {
+    await apiFetch(`/lessons/${currentLoadedLesson.id}/complete`, { method: 'POST' });
+  } catch (err) {
+    console.error('Failed to record lesson completion on server:', err);
+  }
 
   markLessonAsCompleted(currentLoadedLesson.id);
   updateLessonCompletionUI();
@@ -571,7 +917,7 @@ function completeCurrentLesson() {
   const modal = document.getElementById('lessonCompletionModal');
   const subTitle = document.getElementById('completionModalSubtitle');
   if (subTitle) {
-    subTitle.innerHTML = `Great job! You've successfully finished <strong>${currentLoadedLesson.title}</strong>. <strong>+30 Mastery XP</strong> awarded!`;
+    subTitle.innerHTML = `Great job! You've successfully finished <strong>${currentLoadedLesson.title}</strong>.`;
   }
 
   const modalNextBtn = document.getElementById('modalNextLessonBtn');
@@ -622,20 +968,156 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+function showLessonError(title, message, courseId = null) {
+  const lessonTitle = document.getElementById('lessonTitle');
+  if (lessonTitle) lessonTitle.textContent = `⚠️ ${title}`;
+
+  const topicBadge = document.getElementById('topicBadge');
+  if (topicBadge) {
+    topicBadge.textContent = 'Notice';
+    topicBadge.style.display = 'inline-block';
+    topicBadge.style.background = '#fef2f2';
+    topicBadge.style.color = '#dc2626';
+  }
+
+  const lessonStatusBadge = document.getElementById('lessonStatusBadge');
+  if (lessonStatusBadge) lessonStatusBadge.style.display = 'none';
+
+  const lessonTime = document.getElementById('lessonTime');
+  if (lessonTime) lessonTime.textContent = '';
+
+  const topCompleteBtn = document.getElementById('topCompleteBtn');
+  if (topCompleteBtn) topCompleteBtn.style.display = 'none';
+
+  const bookmarkBtn = document.getElementById('bookmarkLessonBtn');
+  if (bookmarkBtn) bookmarkBtn.style.display = 'none';
+
+  const kpBox = document.querySelector('.key-points-box');
+  if (kpBox) kpBox.style.display = 'none';
+
+  const bottomActions = document.querySelector('.lesson-bottom-actions');
+  if (bottomActions) bottomActions.style.display = 'none';
+
+  const notesPanel = document.getElementById('lessonNoteContent')?.closest('.card');
+  if (notesPanel) notesPanel.style.display = 'none';
+
+  const lessonBody = document.getElementById('lessonBody');
+  if (lessonBody) {
+    const courseUrl = courseId ? `/student/course-detail.html?id=${courseId}` : '/student/courses.html';
+    lessonBody.innerHTML = `
+      <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:14px; padding:2.5rem 1.75rem; text-align:center; margin:1rem 0;">
+        <div style="font-size:2.8rem; margin-bottom:0.75rem;">⚠️</div>
+        <h3 style="color:#9f1239; margin-bottom:0.6rem; font-size:1.3rem; font-weight:700;">${title}</h3>
+        <p style="color:#4c0519; margin-bottom:1.5rem; font-size:0.95rem; max-width:540px; margin-left:auto; margin-right:auto; line-height:1.55;">
+          ${message}
+        </p>
+        <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+          <a href="${courseUrl}" class="btn btn-primary" style="padding:0.6rem 1.25rem;">← Back to Course Workspace</a>
+          <a href="/student/dashboard.html" class="btn btn-outline" style="padding:0.6rem 1.25rem;">Student Dashboard</a>
+          <button onclick="location.reload()" class="btn btn-secondary" style="padding:0.6rem 1.25rem;">↻ Retry</button>
+        </div>
+      </div>
+    `;
+  }
+}
+
 async function loadLessonReader() {
   const params = new URLSearchParams(window.location.search);
-  const lessonId = params.get('id');
-  if (!lessonId) return;
+  let lessonId = params.get('id') || params.get('lessonId');
+  let courseId = params.get('courseId');
+
+  // If no direct lessonId, resolve next unfinished lesson from course
+  if (!lessonId) {
+    try {
+      if (!courseId) {
+        courseId = localStorage.getItem('edunest_activeCourseId');
+      }
+      if (!courseId) {
+        const myCourses = await apiFetch('/courses/my').catch(() => []);
+        if (myCourses && myCourses.length > 0) {
+          courseId = myCourses[0].id;
+        }
+      }
+
+      if (courseId) {
+        const [courseDetail, completedIds] = await Promise.all([
+          apiFetch(`/courses/${courseId}`),
+          apiFetch(`/lessons/completed?courseId=${courseId}`).catch(() => [])
+        ]);
+
+        const completedSet = new Set(Array.isArray(completedIds) ? completedIds : []);
+        const topics = (courseDetail && courseDetail.topics) ? courseDetail.topics : [];
+
+        for (const t of topics) {
+          const lessons = t.lessons || [];
+          for (const l of lessons) {
+            if (!completedSet.has(l.id)) {
+              lessonId = l.id;
+              break;
+            }
+          }
+          if (lessonId) break;
+        }
+
+        // If all completed, open first lesson
+        if (!lessonId && topics.length > 0 && topics[0].lessons && topics[0].lessons.length > 0) {
+          lessonId = topics[0].lessons[0].id;
+        }
+
+        if (lessonId && window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', `/student/lesson.html?id=${lessonId}&courseId=${courseId}`);
+        }
+      }
+    } catch (resolveErr) {
+      console.warn('Could not auto-resolve next unfinished lesson:', resolveErr);
+    }
+  }
+
+  if (!lessonId) {
+    showLessonError(
+      'No Lesson Specified',
+      'No lesson was selected to display. Please return to your course syllabus to choose a lesson to study.',
+      courseId
+    );
+    return;
+  }
 
   try {
     const lesson = await apiFetch(`/lessons/${lessonId}`);
+    if (!lesson || !lesson.id) {
+      showLessonError(
+        'Lesson Not Found',
+        `The requested lesson (#${lessonId}) could not be found. It may have been moved or removed.`,
+        courseId
+      );
+      return;
+    }
+
     currentLoadedLesson = lesson;
+
+    // Refresh completed lesson ids from server so state is accurate across reloads & sessions
+    try {
+      const completedList = await apiFetch(`/lessons/completed?courseId=${lesson.courseId}`);
+      if (Array.isArray(completedList)) {
+        localStorage.setItem('edunest_completed_lessons', JSON.stringify(completedList));
+      }
+    } catch (syncErr) {
+      console.warn('Could not sync completed lessons:', syncErr);
+    }
 
     const breadcrumb = document.getElementById('breadcrumbCourse');
     if (breadcrumb) breadcrumb.href = `/student/course-detail.html?id=${lesson.courseId}`;
 
     const topicBadge = document.getElementById('topicBadge');
-    if (topicBadge) topicBadge.textContent = lesson.topicTitle;
+    if (topicBadge) {
+      topicBadge.textContent = lesson.topicTitle;
+      topicBadge.style.display = 'inline-block';
+      topicBadge.style.background = '#eff6ff';
+      topicBadge.style.color = '#2563eb';
+    }
+
+    const lessonStatusBadge = document.getElementById('lessonStatusBadge');
+    if (lessonStatusBadge) lessonStatusBadge.style.display = 'inline-block';
 
     const lessonTitle = document.getElementById('lessonTitle');
     if (lessonTitle) lessonTitle.textContent = lesson.title;
@@ -646,19 +1128,29 @@ async function loadLessonReader() {
     const lessonBody = document.getElementById('lessonBody');
     if (lessonBody) lessonBody.innerHTML = lesson.content;
 
+    const kpBox = document.querySelector('.key-points-box');
     const kpList = document.getElementById('keyPointsList');
-    if (kpList && lesson.keyPoints) {
+    if (lesson.keyPoints && lesson.keyPoints.trim()) {
       const points = lesson.keyPoints.split(';').map(s => s.trim()).filter(Boolean);
-      kpList.innerHTML = points.map(p => `<li style="margin-bottom:0.4rem;">${p}</li>`).join('');
+      if (points.length > 0) {
+        if (kpList) kpList.innerHTML = points.map(p => `<li style="margin-bottom:0.4rem;">${p}</li>`).join('');
+        if (kpBox) kpBox.style.display = 'block';
+      } else {
+        if (kpBox) kpBox.style.display = 'none';
+      }
+    } else {
+      if (kpBox) kpBox.style.display = 'none';
     }
 
     const prevBtn = document.getElementById('prevLessonBtn');
     const nextBtn = document.getElementById('nextLessonBtn');
     const finishPracticeBtn = document.getElementById('finishTopicPracticeBtn');
+    const bottomActions = document.querySelector('.lesson-bottom-actions');
+    if (bottomActions) bottomActions.style.display = 'flex';
 
     if (prevBtn) {
       if (lesson.previousLessonId) {
-        prevBtn.href = `/student/lesson.html?id=${lesson.previousLessonId}`;
+        prevBtn.href = `/student/lesson.html?id=${lesson.previousLessonId}&courseId=${lesson.courseId}`;
         prevBtn.classList.remove('hidden');
       } else {
         prevBtn.classList.add('hidden');
@@ -667,7 +1159,7 @@ async function loadLessonReader() {
 
     if (nextBtn) {
       if (lesson.nextLessonId) {
-        nextBtn.href = `/student/lesson.html?id=${lesson.nextLessonId}`;
+        nextBtn.href = `/student/lesson.html?id=${lesson.nextLessonId}&courseId=${lesson.courseId}`;
         nextBtn.classList.remove('hidden');
       } else {
         nextBtn.classList.add('hidden');
@@ -683,9 +1175,24 @@ async function loadLessonReader() {
       }
     }
 
+    const topCompleteBtn = document.getElementById('topCompleteBtn');
+    if (topCompleteBtn) topCompleteBtn.style.display = 'inline-block';
+    const bookmarkBtn = document.getElementById('bookmarkLessonBtn');
+    if (bookmarkBtn) bookmarkBtn.style.display = 'inline-block';
+
     updateLessonCompletionUI();
+
+    // Initialize personal notes and bookmark for this lesson
+    if (typeof initLessonNotesAndBookmark === 'function') {
+      initLessonNotesAndBookmark(lesson.id);
+    }
   } catch (err) {
     console.error('Failed to load lesson:', err);
+    showLessonError(
+      'Unable to Load Lesson',
+      `Failed to load lesson content: ${err.message || 'Unknown network error'}. Please check your connection or try again.`,
+      courseId
+    );
   }
 }
 

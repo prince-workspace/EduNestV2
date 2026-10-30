@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practices &amp; Quizzes — EduNest</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .practices-header {
+      background: #ffffff;
+      border: 1px solid #eef2f6;
+      border-radius: 14px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .course-tabs-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+    }
+    .course-tab-btn {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 999px;
+      padding: 0.5rem 1.15rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .course-tab-btn:hover {
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+    .course-tab-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+      box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+    }
+    .topic-practice-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.4rem 1.6rem;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .topic-practice-card:hover {
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+      border-color: #cbd5e1;
+    }
+    .topic-practice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .topic-order-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #2563eb;
+      margin-bottom: 0.25rem;
+    }
+    .topic-practice-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 0.35rem 0;
+    }
+    .topic-practice-desc {
+      font-size: 0.9rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin: 0;
+      max-width: 680px;
+    }
+    .topic-actions-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid #f1f5f9;
+    }
+    .mastery-pill {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+    }
+    .practice-config-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.35rem 1.6rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+    }
+    .practice-config-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr auto;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+    .practice-config-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 0.35rem;
+    }
+    .practice-config-select {
+      width: 100%;
+      padding: 0.62rem 0.85rem;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.88rem;
+      background: #ffffff;
+      color: #0f172a;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .practice-config-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .custom-multiselect {
+      position: relative;
+      width: 100%;
+    }
+    .multiselect-trigger {
+      width: 100%;
+      padding: 0.62rem 0.85rem;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.88rem;
+      background: #ffffff;
+      color: #0f172a;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      user-select: none;
+    }
+    .multiselect-trigger:hover {
+      border-color: #94a3b8;
+    }
+    .multiselect-trigger:focus,
+    .multiselect-trigger.open {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .multiselect-trigger-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+    .multiselect-chevron {
+      flex-shrink: 0;
+      color: #64748b;
+      transition: transform 0.2s ease;
+    }
+    .multiselect-trigger.open .multiselect-chevron {
+      transform: rotate(180deg);
+    }
+    .multiselect-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+      z-index: 100;
+      padding: 0.5rem;
+      display: none;
+    }
+    .multiselect-dropdown.open {
+      display: block;
+    }
+    .topic-check-option {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      color: #1e293b;
+      cursor: pointer;
+      transition: background 0.12s ease;
+      user-select: none;
+    }
+    .topic-check-option:hover {
+      background: #f1f5f9;
+    }
+    .topic-check-option input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    @media (max-width: 768px) {
+      .practice-config-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body data-active-nav="practices">
+  <div class="app-shell">
+    <!-- Left Sidebar -->
+    <aside class="app-sidebar" id="sidebarMount"></aside>
+
+    <!-- Main Area -->
+    <div class="app-main">
+      <header class="app-topbar">
+        <div class="topbar-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="globalSearchInput" placeholder="Search practices, topics..." />
+        </div>
+        <div class="topbar-user">
+          <div class="topbar-status">
+            <span class="topbar-status-dot"></span>
+            <span>Online</span>
+          </div>
+          <a href="/student/profile.html" class="user-avatar-chip" style="text-decoration:none; color:inherit;">
+            <div class="user-avatar-circle" id="topUserInitials">ST</div>
+            <span id="topUserName">Student</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="app-content">
+        <!-- Header Banner -->
+        <div class="practices-header">
+          <div>
+            <span class="card-question">PROBLEM SOLVING &amp; MASTERY DRILLS</span>
+            <h2 style="margin-top: 0.25rem; font-size: 1.45rem;">Concept Practice &amp; Topic Quizzes</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.2rem;">
+              Work through interactive problem-solving exercises with progressive hints and instant explanations, or attempt assessed topic quizzes.
+            </p>
+          </div>
+          <div>
+            <a href="/student/courses.html" class="btn btn-outline btn-sm">Explore Course Syllabus</a>
+          </div>
+        </div>
+
+        <!-- Course Tabs Bar -->
+        <div id="courseTabs" class="course-tabs-bar">
+          <!-- Populated dynamically with student's enrolled courses -->
+        </div>
+
+        <!-- Practice Configuration Section -->
+        <div id="practiceConfigSection" class="practice-config-card">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.1rem;">
+            <div>
+              <span class="card-question" style="color: var(--primary); font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Custom Practice Session</span>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0.2rem 0 0 0;">Practice Configuration</h3>
+            </div>
+            <span style="font-size: 0.8rem; color: #64748b; background: #f1f5f9; padding: 0.25rem 0.65rem; border-radius: 999px; font-weight: 600;">⚡ Untimed &bull; Instant Feedback</span>
+          </div>
+
+          <div class="practice-config-grid">
+            <div style="position: relative;">
+              <label class="practice-config-label">Select Topics (Check Multiple)</label>
+              <div class="custom-multiselect" id="topicMultiselect">
+                <div class="multiselect-trigger" id="multiselectTrigger" onclick="toggleTopicDropdown(event)" tabindex="0" role="button" aria-haspopup="true">
+                  <span class="multiselect-trigger-text" id="multiselectTriggerText">All Topics Selected</span>
+                  <svg class="multiselect-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="multiselect-dropdown" id="multiselectDropdown">
+                  <label class="topic-check-option all-topics-label" style="font-weight: 700; background: #f8fafc; border-radius: 8px; margin-bottom: 0.35rem; padding: 0.55rem 0.75rem;">
+                    <input type="checkbox" id="checkAllTopics" onchange="toggleSelectAllTopics(this.checked)" checked />
+                    <span>All Topics (Comprehensive Practice)</span>
+                  </label>
+                  <div style="height: 1px; background: #e2e8f0; margin: 0.35rem 0;"></div>
+                  <div id="topicCheckboxesList" style="display: flex; flex-direction: column; gap: 0.2rem; max-height: 220px; overflow-y: auto;">
+                    <!-- Topic checkboxes populated dynamically -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label for="practiceCountSelect" class="practice-config-label">Question Count</label>
+              <select id="practiceCountSelect" class="practice-config-select">
+                <option value="5">5 Questions</option>
+                <option value="10" selected>10 Questions</option>
+                <option value="15">15 Questions</option>
+                <option value="20">20 Questions</option>
+              </select>
+            </div>
+
+            <div>
+              <button class="btn btn-primary" onclick="startConfiguredPractice()" style="padding: 0.65rem 1.4rem; font-weight: 600; white-space: nowrap; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                <span>Start Practice</span> &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Topic-Wise Section Header -->
+        <div id="topicsSectionHeader" style="margin-bottom: 0.85rem;">
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin: 0 0 0.2rem 0;">Topic-Wise Practices &amp; Quizzes</h3>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">Or choose a specific curriculum topic below to solve practice drills or take an assessed topic quiz.</p>
+        </div>
+
+        <!-- Topics List Container -->
+        <div id="topicsContainer" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+          <div class="card" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+            Loading practice topics...
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/sidebar.js"></script>
+  <script>
+    let myCourses = [];
+    let selectedCourseId = null;
+
+    async function loadPracticesHub() {
+      if (!requireAuth('STUDENT')) return;
+
+      try {
+        myCourses = await apiFetch('/courses/my');
+
+        if (!myCourses || myCourses.length === 0) {
+          renderZeroCoursesState();
+          return;
+        }
+
+        const savedCourseId = parseInt(localStorage.getItem('edunest_activeCourseId'), 10);
+        const matchSaved = myCourses.find(c => c.id === savedCourseId);
+        selectedCourseId = matchSaved ? matchSaved.id : myCourses[0].id;
+
+        renderCourseTabs();
+        await loadTopicsForCourse(selectedCourseId);
+      } catch (err) {
+        console.error('Failed to load enrolled courses for practice:', err);
+        document.getElementById('topicsContainer').innerHTML = `
+          <div class="card" style="padding: 2rem; text-align: center; color: #ef4444;">
+            Failed to load practice topics: ${err.message || 'Please try again.'}
+          </div>
+        `;
+      }
+    }
+
+    function renderCourseTabs() {
+      const tabsEl = document.getElementById('courseTabs');
+      if (myCourses.length <= 1) {
+        tabsEl.style.display = 'none';
+        return;
+      }
+
+      tabsEl.style.display = 'flex';
+      tabsEl.innerHTML = myCourses.map(c => `
+        <button 
+          class="course-tab-btn ${c.id === selectedCourseId ? 'active' : ''}" 
+          onclick="selectCourse(${c.id})"
+        >
+          ${c.title}
+        </button>
+      `).join('');
+    }
+
+    async function selectCourse(courseId) {
+      if (selectedCourseId === courseId) return;
+      selectedCourseId = courseId;
+      localStorage.setItem('edunest_activeCourseId', courseId);
+      renderCourseTabs();
+      await loadTopicsForCourse(courseId);
+    }
+
+    async function loadTopicsForCourse(courseId) {
+      const container = document.getElementById('topicsContainer');
+      container.innerHTML = `
+        <div class="card" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+          Loading topics for ${myCourses.find(c => c.id === courseId)?.title || 'course'}...
+        </div>
+      `;
+
+      try {
+        const [courseDetail, profileData] = await Promise.all([
+          apiFetch(`/courses/${courseId}`),
+          apiFetch(`/students/me/courses/${courseId}/knowledge-profile`).catch(() => null)
+        ]);
+
+        const topics = courseDetail.topics || [];
+        if (topics.length === 0) {
+          const configSec = document.getElementById('practiceConfigSection');
+          if (configSec) configSec.style.display = 'none';
+          const headerSec = document.getElementById('topicsSectionHeader');
+          if (headerSec) headerSec.style.display = 'none';
+          container.innerHTML = `
+            <div class="card" style="padding: 2.5rem; text-align: center;">
+              <h3 style="color: #0f172a; margin-bottom: 0.5rem;">No topics available yet</h3>
+              <p style="color: #64748b;">This course has no curriculum topics created yet.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const configSec = document.getElementById('practiceConfigSection');
+        if (configSec) configSec.style.display = 'block';
+        const headerSec = document.getElementById('topicsSectionHeader');
+        if (headerSec) headerSec.style.display = 'block';
+
+        populatePracticeTopicDropdown(topics);
+
+        const masteryMap = {};
+        if (profileData && profileData.topics) {
+          profileData.topics.forEach(t => {
+            masteryMap[t.topicId] = t;
+          });
+        }
+
+        container.innerHTML = topics.map(topic => {
+          const mastery = masteryMap[topic.id];
+          const score = mastery ? Math.round(mastery.masteryScore) : null;
+
+          let badgeHtml = '';
+          if (score !== null) {
+            let bg = '#fee2e2', text = '#b91c1c', label = 'Weak';
+            if (score >= 90) { bg = '#f3e8ff'; text = '#7e22ce'; label = 'Mastered'; }
+            else if (score >= 70) { bg = '#d1fae5'; text = '#047857'; label = 'Strong'; }
+            else if (score >= 40) { bg = '#fef3c7'; text = '#b45309'; label = 'Needs Work'; }
+            badgeHtml = `
+              <span class="mastery-pill" style="background:${bg}; color:${text};">
+                ● ${label} (${score}%)
+              </span>
+            `;
+          }
+
+          const topicBreakdownHtml = mastery ? `
+            <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap; font-size:0.75rem; color:#475569; margin-top:0.4rem; background:#f8fafc; border-radius:6px; padding:0.3rem 0.6rem; border:1px solid #eef2f6;">
+              <span>📖 Lessons: <strong>${mastery.completedLessons || 0}/${mastery.totalLessons || '—'}</strong></span>
+              <span style="color:#cbd5e1;">|</span>
+              <span>⚡ Practice: <strong>${mastery.practiceScore != null ? Math.round(mastery.practiceScore) + '%' : 'Not started'}</strong> (${mastery.practiceAttempts || 0} drills)</span>
+              <span style="color:#cbd5e1;">|</span>
+              <span>📝 Quiz: <strong>${mastery.quizScore != null ? Math.round(mastery.quizScore) + '%' : 'Not taken'}</strong> (${mastery.quizAttempts || 0} attempts)</span>
+            </div>
+          ` : '';
+
+          return `
+            <div class="topic-practice-card">
+              <div class="topic-practice-header">
+                <div>
+                  <div class="topic-order-badge">Topic ${topic.orderIndex}</div>
+                  <h3 class="topic-practice-title">${topic.title}</h3>
+                  <p class="topic-practice-desc">
+                    ${topic.description || 'Test your understanding and reinforce key concepts through interactive questions.'}
+                  </p>
+                  ${topicBreakdownHtml}
+                </div>
+                <div>${badgeHtml}</div>
+              </div>
+
+              <div class="topic-actions-row">
+                <a 
+                  href="/student/practice.html?topicId=${topic.id}&courseId=${courseId}" 
+                  class="btn btn-outline btn-sm" 
+                  style="display:flex; align-items:center; gap:0.4rem;"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span>⚡ Practice Drills (Untimed)</span>
+                </a>
+                <a 
+                  href="/student/quiz.html?topicId=${topic.id}&courseId=${courseId}&mode=CHAPTER_QUIZ" 
+                  class="btn btn-primary btn-sm" 
+                  style="display:flex; align-items:center; gap:0.4rem;"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  <span>📝 Take Topic Quiz</span>
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Error loading course topics:', err);
+        container.innerHTML = `
+          <div class="card" style="padding: 2rem; text-align: center; color: #ef4444;">
+            Failed to load topics: ${err.message}
+          </div>
+        `;
+      }
+    }
+
+    function toggleTopicDropdown(e) {
+      if (e) e.stopPropagation();
+      const trigger = document.getElementById('multiselectTrigger');
+      const dropdown = document.getElementById('multiselectDropdown');
+      if (!dropdown) return;
+      const isOpen = dropdown.classList.contains('open');
+      if (isOpen) {
+        dropdown.classList.remove('open');
+        trigger.classList.remove('open');
+      } else {
+        dropdown.classList.add('open');
+        trigger.classList.add('open');
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('topicMultiselect');
+      if (container && !container.contains(e.target)) {
+        const trigger = document.getElementById('multiselectTrigger');
+        const dropdown = document.getElementById('multiselectDropdown');
+        if (dropdown) dropdown.classList.remove('open');
+        if (trigger) trigger.classList.remove('open');
+      }
+    });
+
+    function populatePracticeTopicDropdown(topics) {
+      const listContainer = document.getElementById('topicCheckboxesList');
+      if (!listContainer) return;
+      listContainer.innerHTML = topics.map(t => `
+        <label class="topic-check-option">
+          <input 
+            type="checkbox" 
+            class="topic-checkbox" 
+            value="${t.id}" 
+            data-title="Topic ${t.orderIndex}: ${t.title}"
+            onchange="onTopicCheckChanged()" 
+            checked 
+          />
+          <span>Topic ${t.orderIndex}: ${t.title}</span>
+        </label>
+      `).join('');
+
+      const allCheck = document.getElementById('checkAllTopics');
+      if (allCheck) {
+        allCheck.checked = true;
+        allCheck.indeterminate = false;
+      }
+      updateMultiselectDisplay();
+    }
+
+    function toggleSelectAllTopics(isChecked) {
+      const checkboxes = document.querySelectorAll('.topic-checkbox');
+      checkboxes.forEach(cb => {
+        cb.checked = isChecked;
+      });
+      updateMultiselectDisplay();
+    }
+
+    function onTopicCheckChanged() {
+      updateMultiselectDisplay();
+    }
+
+    function updateMultiselectDisplay() {
+      const checkboxes = Array.from(document.querySelectorAll('.topic-checkbox'));
+      const allCheck = document.getElementById('checkAllTopics');
+      const triggerText = document.getElementById('multiselectTriggerText');
+      if (!triggerText) return;
+
+      const checked = checkboxes.filter(cb => cb.checked);
+
+      if (allCheck) {
+        allCheck.checked = (checkboxes.length > 0 && checked.length === checkboxes.length);
+        allCheck.indeterminate = (checked.length > 0 && checked.length < checkboxes.length);
+      }
+
+      if (checked.length === 0) {
+        triggerText.textContent = 'Select topics...';
+        triggerText.style.color = '#94a3b8';
+      } else if (checkboxes.length > 0 && checked.length === checkboxes.length) {
+        triggerText.textContent = `All Topics Selected (${checkboxes.length})`;
+        triggerText.style.color = '#0f172a';
+      } else if (checked.length === 1) {
+        triggerText.textContent = checked[0].dataset.title || `Topic ${checked[0].value}`;
+        triggerText.style.color = '#0f172a';
+      } else {
+        triggerText.textContent = `${checked.length} Topics Selected`;
+        triggerText.style.color = '#0f172a';
+      }
+    }
+
+    function startConfiguredPractice() {
+      const checkboxes = Array.from(document.querySelectorAll('.topic-checkbox'));
+      const checked = checkboxes.filter(cb => cb.checked);
+      const countSelect = document.getElementById('practiceCountSelect');
+      const count = countSelect ? countSelect.value : 10;
+
+      if (!selectedCourseId) {
+        alert('Please select a course first.');
+        return;
+      }
+
+      if (checked.length === 0) {
+        alert('Please select at least one topic checkbox to start practice.');
+        return;
+      }
+
+      let topicParam = 'ALL';
+      if (checked.length < checkboxes.length) {
+        topicParam = checked.map(cb => cb.value).join(',');
+      }
+
+      window.location.href = `/student/practice.html?topicId=${topicParam}&courseId=${selectedCourseId}&count=${count}`;
+    }
+
+    function renderZeroCoursesState() {
+      document.getElementById('courseTabs').style.display = 'none';
+      const configSec = document.getElementById('practiceConfigSection');
+      if (configSec) configSec.style.display = 'none';
+      const headerSec = document.getElementById('topicsSectionHeader');
+      if (headerSec) headerSec.style.display = 'none';
+
+      document.getElementById('topicsContainer').innerHTML = `
+        <div class="card" style="text-align:center; padding:3.5rem 1.5rem; border-radius:14px; background:#ffffff; border:1px solid #e2e8f0;">
+          <div style="font-size:2.8rem; margin-bottom:0.75rem;">📚</div>
+          <h3 style="margin-bottom:0.5rem; font-size:1.25rem; color:#0f172a;">No courses enrolled yet</h3>
+          <p style="color:#64748b; font-size:0.95rem; margin-bottom:1.5rem; max-width:480px; margin-left:auto; margin-right:auto;">
+            Enroll in a course from our catalog to choose topics and start solving practice drills or topic quizzes.
+          </p>
+          <a href="/student/courses.html" class="btn btn-primary" style="padding:0.6rem 1.4rem;">Browse Course Catalog →</a>
+        </div>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPracticesHub);
+  </script>
+</body>
+</html>

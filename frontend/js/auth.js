@@ -89,7 +89,7 @@ function buildSidebarLinksHtml(role, currentPath) {
     `;
   }
 
-  // Default: STUDENT sidebar links
+  // Default: STUDENT sidebar links (5 core items)
   return `
     <a href="/student/dashboard.html" class="sidebar-link ${isActive('/student/dashboard.html')}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
@@ -99,37 +99,17 @@ function buildSidebarLinksHtml(role, currentPath) {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       <span>My Courses</span>
     </a>
-    <a href="/student/daily-plan.html" class="sidebar-link ${isActive('/student/daily-plan.html')}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <span>Daily Plan</span>
-    </a>
-    <a href="/student/knowledge-profile.html" class="sidebar-link ${isActive('/student/knowledge-profile.html')}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      <span>Knowledge Profile</span>
-    </a>
-    <a href="/student/learning-path.html" class="sidebar-link ${isActive('/student/learning-path.html')}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-      <span>Learning Path</span>
-    </a>
-    <a href="/student/skill-map.html" class="sidebar-link ${isActive('/student/skill-map.html')}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-      <span>Skill Map</span>
+    <a href="/student/practices.html" class="sidebar-link ${isActive('/student/practices.html') || isActive('/student/practice.html') || isActive('/student/quiz.html') ? 'active' : ''}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>Practices</span>
     </a>
     <a href="/student/challenges.html" class="sidebar-link ${isActive('/student/challenges.html') || isActive('/student/challenge-detail.html') ? 'active' : ''}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
       <span>Challenges</span>
     </a>
-    <a href="/student/revision.html" class="sidebar-link ${isActive('/student/revision.html')}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      <span>Revision</span>
-    </a>
     <a href="/student/bookmarks.html" class="sidebar-link ${isActive('/student/bookmarks.html')}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-      <span>Bookmarks</span>
-    </a>
-    <a href="/student/profile.html" class="sidebar-link ${isActive('/student/profile.html')}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span>Profile & Goals</span>
+      <span>Saved</span>
     </a>
   `;
 }
@@ -150,8 +130,8 @@ function initModernAppShell() {
   if (!oldNav) return;
 
   const role = localStorage.getItem('edunest_role') || 'STUDENT';
-  const userName = localStorage.getItem('edunest_name') || 'Aarav Sharma';
-  const initials = userName.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
+  const userName = localStorage.getItem('edunest_name') || 'Student';
+  const initials = userName.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase() || 'ST';
   const homeUrl = role === 'INSTRUCTOR' ? '/instructor/dashboard.html' : role === 'ADMIN' ? '/admin/dashboard.html' : '/student/dashboard.html';
   const profileUrl = role === 'STUDENT' ? '/student/profile.html' : homeUrl;
 
@@ -231,18 +211,16 @@ function wireGlobalSearchInput() {
     if (e.key === 'Enter') {
       const q = input.value.trim().toLowerCase();
       if (!q) return;
-      if (q.includes('skill') || q.includes('map')) {
-        window.location.href = '/student/skill-map.html';
+      if (q.includes('quiz') || q.includes('practice') || q.includes('drill')) {
+        window.location.href = '/student/practices.html';
       } else if (q.includes('challenge') || q.includes('code')) {
         window.location.href = '/student/challenges.html';
-      } else if (q.includes('daily') || q.includes('plan')) {
-        window.location.href = '/student/daily-plan.html';
+      } else if (q.includes('saved') || q.includes('bookmark') || q.includes('note')) {
+        window.location.href = '/student/bookmarks.html';
       } else if (q.includes('profile') || q.includes('goal') || q.includes('setting')) {
         window.location.href = '/student/profile.html';
       } else if (q.includes('revise') || q.includes('revision')) {
         window.location.href = '/student/revision.html';
-      } else if (q.includes('weak') || q.includes('mastery')) {
-        window.location.href = '/student/knowledge-profile.html';
       } else {
         window.location.href = '/student/courses.html';
       }
@@ -295,7 +273,11 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ name, email, password, role, learningGoal })
         });
         saveAuthSession(data);
-        redirectByRole(data.role);
+        if (data.role === 'STUDENT') {
+          window.location.href = '/student/courses.html?onboarding=true';
+        } else {
+          redirectByRole(data.role);
+        }
       } catch (err) {
         showError('errorMsg', err.message);
       }

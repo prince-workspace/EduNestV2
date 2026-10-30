@@ -59,8 +59,13 @@ public class EnrollmentService {
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
         return enrollmentRepository.findByUserId(student.getId()).stream()
-                .map(Enrollment::getCourse)
-                .map(courseService::toCourseResponse)
+                .map(enrollment -> {
+                    CourseResponse cr = courseService.toCourseResponse(enrollment.getCourse());
+                    cr.setCompleted(enrollment.isCompleted());
+                    cr.setCompletedAt(enrollment.getCompletedAt());
+                    cr.setFinalScore(enrollment.getFinalScore());
+                    return cr;
+                })
                 .toList();
     }
 }

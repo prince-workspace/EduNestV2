@@ -40,6 +40,9 @@ public class Question {
     @Column(length = 500)
     private String explanation;
 
+    @Column(length = 500)
+    private String hint;
+
     public Question() {
     }
 
@@ -121,5 +124,13 @@ public class Question {
 
     public void setExplanation(String explanation) {
         this.explanation = explanation;
+    }
+
+    public String getHint() {
+        return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
     }
 }

@@ -5,105 +5,1029 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Profile — EduNest</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Alex+Brush&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================================
+       REFINED COMPACT PROFILE UI STYLES
+       ========================================================= */
+    .profile-header-card {
+      background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+      border: 1px solid #dbeafe;
+      border-radius: 14px;
+      padding: 1.05rem 1.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 2px 8px -2px rgba(37, 99, 235, 0.05);
+    }
+    .profile-header-main {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .profile-avatar {
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    }
+    .profile-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 0.15rem;
+    }
+    .profile-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.2;
+      margin: 0;
+    }
+    .profile-email {
+      font-size: 0.86rem;
+      color: #64748b;
+      margin: 0;
+    }
+    .profile-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #059669;
+      background: #ecfdf5;
+      padding: 0.32rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid #d1fae5;
+    }
+
+    /* Compact 2-Column Grid */
+    .profile-grid-top {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    @media (max-width: 860px) {
+      .profile-grid-top {
+        grid-template-columns: 1fr;
+      }
+      .profile-header-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    .profile-compact-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.15rem 1.35rem;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 165px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+    }
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.65rem;
+      gap: 0.5rem;
+    }
+    .card-title-compact {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 0.15rem 0;
+    }
+    .card-sub-compact {
+      font-size: 0.83rem;
+      color: #64748b;
+      margin: 0;
+    }
+    .btn-action-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #f8fafc;
+      color: #2563eb;
+      border: 1px solid #dbeafe;
+      border-radius: 6px;
+      padding: 0.28rem 0.65rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-action-ghost:hover {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+    }
+
+    /* Goal Display & Inline Edit */
+    .goal-display-box {
+      background: #f8fafc;
+      border-left: 3px solid #2563eb;
+      border-radius: 6px;
+      padding: 0.7rem 0.9rem;
+      margin: 0.25rem 0;
+    }
+    .goal-text {
+      font-size: 0.9rem;
+      color: #1e293b;
+      line-height: 1.45;
+      margin: 0;
+    }
+    .goal-edit-box {
+      margin: 0.25rem 0;
+    }
+    .alert-compact {
+      font-size: 0.8rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      margin-top: 0.4rem;
+    }
+
+    /* Account Settings */
+    .account-settings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.15rem;
+    }
+    .account-settings-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.45rem 0.75rem;
+      background: #f8fafc;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+    .setting-label {
+      color: #64748b;
+      font-weight: 500;
+    }
+    .setting-value {
+      color: #0f172a;
+    }
+    .btn-logout-compact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #ffffff;
+      color: #ef4444;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      padding: 0.26rem 0.65rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-logout-compact:hover {
+      background: #fef2f2;
+      border-color: #fca5a5;
+    }
+
+    /* Certificates Section & Clean Empty State */
+    .cert-section-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.25rem 1.4rem;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+      margin-bottom: 1.5rem;
+    }
+    .cert-section-header {
+      margin-bottom: 1rem;
+    }
+    .cert-empty-compact {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.15rem;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 10px;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .cert-empty-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cert-empty-icon {
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+    .cert-empty-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 0.1rem;
+    }
+    .cert-empty-desc {
+      font-size: 0.81rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    /* Certificate Modal Styles */
+    .cert-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      overflow-y: auto;
+    }
+    .cert-modal-dialog {
+      max-width: 960px;
+      width: 100%;
+      background: transparent;
+      margin: auto;
+      animation: certFadeIn 0.25s ease-out;
+    }
+    @keyframes certFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .cert-modal-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      padding: 0 0.5rem;
+    }
+    .cert-verified-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #ecfdf5;
+      color: #047857;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid #a7f3d0;
+    }
+    .cert-action-btn {
+      background: #ffffff;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s ease;
+    }
+    .cert-action-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .cert-close-btn {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #cbd5e1;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      color: #475569;
+      cursor: pointer;
+      line-height: 1;
+      transition: all 0.15s ease;
+    }
+    .cert-close-btn:hover {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: #ef4444;
+    }
+
+    /* Landscape Certificate Canvas */
+    .cert-landscape-wrapper {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5);
+      border: 4px solid #1e293b;
+    }
+    .cert-outer-border {
+      border: 3px solid #b45309;
+      padding: 8px;
+      background: #fffdfa;
+      position: relative;
+    }
+    .cert-inner-border {
+      border: 1.5px solid #d97706;
+      outline: 1px dashed #f59e0b;
+      outline-offset: -6px;
+      padding: 2.2rem 2.8rem 1.8rem 2.8rem;
+      text-align: center;
+      position: relative;
+      background: radial-gradient(circle at center, #ffffff 40%, #fffdf8 100%);
+    }
+
+    /* Corner Ornaments */
+    .corner-ornament {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      color: #b45309;
+      pointer-events: none;
+    }
+    .corner-ornament.top-left { top: 12px; left: 12px; }
+    .corner-ornament.top-right { top: 12px; right: 12px; transform: rotate(90deg); }
+    .corner-ornament.bottom-left { bottom: 12px; left: 12px; transform: rotate(-90deg); }
+    .corner-ornament.bottom-right { bottom: 12px; right: 12px; transform: rotate(180deg); }
+
+    /* Certificate Typography & Content */
+    .cert-org-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      margin-bottom: 0.35rem;
+    }
+    .cert-logo-icon {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+    .cert-org-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      color: #1e293b;
+      text-transform: uppercase;
+    }
+    .cert-org-sub {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: #78350f;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+    }
+    .cert-gold-rule {
+      height: 2px;
+      width: 140px;
+      margin: 0 auto 1.15rem auto;
+      background: linear-gradient(90deg, transparent, #d97706, transparent);
+    }
+    .cert-title-main {
+      font-family: 'Cinzel', serif;
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #0f172a;
+      text-transform: uppercase;
+      margin: 0 0 0.4rem 0;
+    }
+    .cert-sub-present {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+    }
+    .cert-student-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 0.02em;
+      margin: 0.25rem 0 0.5rem 0;
+      line-height: 1.15;
+    }
+    .cert-desc-text {
+      font-size: 0.88rem;
+      color: #475569;
+      max-width: 650px;
+      margin: 0 auto 0.65rem auto;
+      line-height: 1.5;
+    }
+    .cert-course-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #1d4ed8;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.45rem;
+    }
+    .cert-grade-tag {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #047857;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      padding: 0.25rem 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 1.6rem;
+    }
+
+    /* Footer: Date | Gold Seal | Signatures */
+    .cert-footer-row {
+      display: grid;
+      grid-template-columns: 1fr 140px 1fr;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+      padding-top: 0.75rem;
+    }
+    .cert-footer-block {
+      text-align: center;
+    }
+    .cert-line-val {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #1e293b;
+      margin-bottom: 0.25rem;
+    }
+    .cert-sig-script {
+      font-family: 'Alex Brush', cursive;
+      font-size: 2.1rem;
+      color: #0f172a;
+      line-height: 1;
+      margin-bottom: -0.2rem;
+    }
+    .cert-sign-line {
+      height: 1px;
+      background: #cbd5e1;
+      margin: 0.25rem 1rem 0.35rem 1rem;
+    }
+    .cert-line-desc {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Medallion Seal */
+    .cert-seal-badge {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .cert-seal-circle {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fef3c7 20%, #f59e0b 80%, #b45309 100%);
+      box-shadow: 0 4px 14px rgba(180, 83, 9, 0.35), inset 0 0 0 3px #ffffff, inset 0 0 0 5px #b45309;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #78350f;
+      text-align: center;
+      padding: 4px;
+    }
+    .cert-seal-star {
+      font-size: 0.7rem;
+      color: #78350f;
+    }
+    .cert-seal-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.52rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      color: #451a03;
+    }
+    .cert-seal-cup {
+      font-size: 1.05rem;
+      line-height: 1;
+      margin: 2px 0;
+    }
+    .cert-seal-ribbons {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-top: -6px;
+    }
+    .cert-ribbon-tail {
+      width: 14px;
+      height: 22px;
+      background: #b45309;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%);
+    }
+
+    /* Security Strip */
+    .cert-id-strip {
+      margin-top: 1.35rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.74rem;
+      color: #64748b;
+    }
+    .cert-id-val {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      color: #b45309;
+      letter-spacing: 0.04em;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #certificateModalOverlay, #certificateModalOverlay * {
+        visibility: visible !important;
+      }
+      #certificateModalOverlay {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background: none;
+        padding: 0;
+      }
+      .cert-modal-toolbar {
+        display: none !important;
+      }
+      .cert-landscape-wrapper {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+    }
+  </style>
 </head>
-<body>
-  <nav class="navbar"></nav>
+<body data-active-nav="profile">
+  <div class="app-shell">
+    <!-- Left Sidebar -->
+    <aside class="app-sidebar" id="sidebarMount"></aside>
 
-  <div class="container">
-    <!-- Profile Hero Banner -->
-    <div class="welcome-banner" style="margin-bottom: 1.5rem;">
-      <div class="welcome-banner-left" style="display:flex; align-items:center; gap:1.35rem;">
-        <div class="user-avatar-circle" id="profileBigInitials" style="width:72px; height:72px; font-size:1.75rem; flex-shrink:0;">AS</div>
-        <div>
-          <span class="pill-badge blue" id="profileRoleBadge" style="margin-bottom:0.35rem; display:inline-block;">STUDENT</span>
-          <h1 class="welcome-title" id="profileNameTitle" style="font-size:1.75rem; margin-bottom:0.15rem;">Aarav Sharma</h1>
-          <p class="welcome-subtitle" id="profileEmailText" style="margin-bottom:0;">student@edunest.com</p>
+    <!-- Main Area -->
+    <div class="app-main">
+      <header class="app-topbar">
+        <div class="topbar-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="globalSearchInput" placeholder="Search..." />
         </div>
-      </div>
-    </div>
-
-    <div class="grid-2" style="margin-bottom: 1.5rem;">
-      <!-- Learning Goal Card -->
-      <div class="card">
-        <h3 style="margin-bottom: 0.5rem;">🎯 Personal Learning Goal</h3>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
-          Your learning goal guides your daily study focus and progress milestones.
-        </p>
-        <div id="goalSavedMsg" class="alert alert-success hidden">Learning goal updated successfully!</div>
-        <div class="form-group">
-          <label for="profileGoalInput">Current Learning Goal</label>
-          <input type="text" id="profileGoalInput" class="form-control" placeholder="e.g., Master Java Programming & Object-Oriented Design" />
+        <div class="topbar-user">
+          <div class="topbar-status">
+            <span class="topbar-status-dot"></span>
+            <span>Online</span>
+          </div>
+          <a href="/student/profile.html" class="user-avatar-chip" style="text-decoration:none; color:inherit;">
+            <div class="user-avatar-circle" id="topUserInitials">ST</div>
+            <span id="topUserName">Student</span>
+          </a>
         </div>
-        <button type="button" class="btn btn-primary" onclick="updateProfileGoal()">Save Learning Goal</button>
-      </div>
+      </header>
 
-      <!-- Account Summary & Actions Card -->
-      <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
-        <div>
-          <h3 style="margin-bottom: 0.5rem;">⚙️ Account Overview</h3>
-          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
-            Quick summary of your learning activity and session controls.
-          </p>
-          <div style="display:flex; flex-direction:column; gap:0.65rem; margin-bottom:1.25rem;">
-            <div style="display:flex; justify-content:space-between; padding:0.6rem 0.85rem; background:#f8fafc; border-radius:10px;">
-              <span style="color:#64748b; font-weight:500;">Study Sessions Logged</span>
-              <strong id="profileSessionsCount">0</strong>
+      <main class="app-content">
+        <!-- Compact Profile Header -->
+        <div class="profile-header-card">
+          <div class="profile-header-main">
+            <div class="profile-avatar" id="profileBigInitials">ST</div>
+            <div>
+              <div class="profile-meta-row">
+                <h1 class="profile-title" id="profileNameTitle">Student</h1>
+                <span class="pill-badge blue" id="profileRoleBadge">STUDENT</span>
+              </div>
+              <p class="profile-email" id="profileEmailText">student@edunest.com</p>
             </div>
-            <div style="display:flex; justify-content:space-between; padding:0.6rem 0.85rem; background:#f8fafc; border-radius:10px;">
-              <span style="color:#64748b; font-weight:500;">Total Study Minutes</span>
-              <strong id="profileTotalMinutes">0 mins</strong>
+          </div>
+          <div>
+            <span class="profile-status-pill">
+              <span class="topbar-status-dot"></span> Active Student Account
+            </span>
+          </div>
+        </div>
+
+        <!-- 2-Column Compact Grid: Learning Goal & Account Settings -->
+        <div class="profile-grid-top">
+          <!-- Learning Goal Card -->
+          <div class="profile-compact-card">
+            <div>
+              <div class="card-header-flex">
+                <div>
+                  <h3 class="card-title-compact">🎯 Personal Learning Goal</h3>
+                  <p class="card-sub-compact">Your target milestone for current studies</p>
+                </div>
+                <button type="button" class="btn-action-ghost" id="editGoalBtn" onclick="toggleGoalEdit(true)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+              </div>
+
+              <!-- Display Mode (default) -->
+              <div id="goalDisplayView" class="goal-display-box">
+                <p class="goal-text" id="goalDisplayText">Loading your learning goal...</p>
+              </div>
+
+              <!-- Edit Mode (hidden by default) -->
+              <div id="goalEditView" class="goal-edit-box" style="display:none;">
+                <input type="text" id="profileGoalInput" class="form-control" placeholder="e.g., Master Java Programming & Object-Oriented Design" style="margin-bottom:0.5rem; font-size:0.88rem; padding:0.45rem 0.75rem;" />
+                <div style="display:flex; gap:0.5rem;">
+                  <button type="button" class="btn btn-primary btn-sm" onclick="updateProfileGoal()">Save Goal</button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="toggleGoalEdit(false)">Cancel</button>
+                </div>
+              </div>
+
+              <div id="goalSavedMsg" class="alert-compact alert-success hidden">Learning goal updated successfully!</div>
+            </div>
+          </div>
+
+          <!-- Compact Account Settings Card with Logout -->
+          <div class="profile-compact-card">
+            <div>
+              <div class="card-header-flex">
+                <div>
+                  <h3 class="card-title-compact">⚙️ Account Settings</h3>
+                  <p class="card-sub-compact">Account credentials & session controls</p>
+                </div>
+              </div>
+
+              <div class="account-settings-list">
+                <div class="account-settings-row">
+                  <span class="setting-label">Role Access</span>
+                  <span class="setting-value"><span class="pill-badge blue" style="font-size:0.72rem; padding:0.15rem 0.5rem;">Student</span></span>
+                </div>
+                <div class="account-settings-row">
+                  <span class="setting-label">Authentication</span>
+                  <span class="setting-value" style="color:#059669; font-weight:600; font-size:0.82rem;">✓ Verified Session</span>
+                </div>
+                <div class="account-settings-row">
+                  <span class="setting-label">Security & Session</span>
+                  <button type="button" class="btn-logout-compact" onclick="logout()" title="Sign out of your EduNest account">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Sign Out
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <button type="button" class="btn btn-outline" style="color:#ef4444; border-color:#fecaca;" onclick="logout()">
-          Sign Out of EduNest
-        </button>
-      </div>
-    </div>
 
-    <!-- Recent Study Sessions Card -->
-    <div class="card">
-      <h3 style="margin-bottom: 1rem;">⏱️ Recent Study Sessions</h3>
-      <div id="profileSessionsList">
-        <p style="color:#64748b;">Loading study sessions...</p>
+        <!-- Prominent My Certificates Section -->
+        <div class="cert-section-card">
+          <div class="cert-section-header">
+            <h3 class="card-title-compact" style="display:flex; align-items:center; gap:0.5rem;">
+              <span>🎓 My Certificates</span>
+              <span id="certCountBadge" class="pill-badge blue" style="font-size:0.75rem;">0</span>
+            </h3>
+            <p class="card-sub-compact">
+              Verified credentials earned by completing course lessons and passing comprehensive final assessments.
+            </p>
+          </div>
+          <div id="certificatesContainer">
+            <p style="color:#64748b; font-size:0.86rem;">Loading certificates...</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Professional Landscape Certificate Modal -->
+  <div id="certificateModalOverlay" class="cert-modal-overlay" style="display:none;" onclick="handleOverlayClick(event)">
+    <div class="cert-modal-dialog">
+      <div class="cert-modal-toolbar">
+        <div class="cert-verified-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Official Verified Credential
+        </div>
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <button type="button" class="cert-action-btn" onclick="window.print()" title="Print Certificate">
+            🖨️ Print
+          </button>
+          <button type="button" class="cert-close-btn" onclick="closeCertificateModal()" title="Close certificate">
+            &times;
+          </button>
+        </div>
+      </div>
+
+      <!-- Landscape Certificate Document -->
+      <div class="cert-landscape-wrapper" id="printableCertificate">
+        <div class="cert-outer-border">
+          <div class="cert-inner-border">
+            <!-- Corner Ornaments -->
+            <svg class="corner-ornament top-left" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 36 V12 Q4 4 12 4 H36" />
+              <path d="M10 36 V16 Q10 10 16 10 H36" stroke-width="1.2" opacity="0.7"/>
+              <circle cx="6" cy="6" r="2.5" fill="currentColor"/>
+            </svg>
+            <svg class="corner-ornament top-right" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 36 V12 Q4 4 12 4 H36" />
+              <path d="M10 36 V16 Q10 10 16 10 H36" stroke-width="1.2" opacity="0.7"/>
+              <circle cx="6" cy="6" r="2.5" fill="currentColor"/>
+            </svg>
+            <svg class="corner-ornament bottom-left" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 36 V12 Q4 4 12 4 H36" />
+              <path d="M10 36 V16 Q10 10 16 10 H36" stroke-width="1.2" opacity="0.7"/>
+              <circle cx="6" cy="6" r="2.5" fill="currentColor"/>
+            </svg>
+            <svg class="corner-ornament bottom-right" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 36 V12 Q4 4 12 4 H36" />
+              <path d="M10 36 V16 Q10 10 16 10 H36" stroke-width="1.2" opacity="0.7"/>
+              <circle cx="6" cy="6" r="2.5" fill="currentColor"/>
+            </svg>
+
+            <!-- Header -->
+            <div class="cert-org-header">
+              <span class="cert-logo-icon">🎓</span>
+              <span class="cert-org-name">EDUNEST ACADEMY</span>
+            </div>
+            <div class="cert-org-sub">FACULTY OF COMPUTER SCIENCE &amp; SOFTWARE ENGINEERING</div>
+            <div class="cert-gold-rule"></div>
+
+            <!-- Title -->
+            <h2 class="cert-title-main">CERTIFICATE OF COMPLETION</h2>
+            <div class="cert-sub-present">THIS IS PROUDLY CONFERRED UPON</div>
+
+            <!-- Recipient -->
+            <div class="cert-student-name" id="certStudentName">
+              Student Name
+            </div>
+
+            <!-- Citation -->
+            <div class="cert-desc-text">
+              for successfully fulfilling all curriculum requirements, completing every interactive concept module, and passing the comprehensive final assessment with academic excellence in
+            </div>
+
+            <!-- Course -->
+            <div class="cert-course-title" id="certCourseTitle">
+              Course Title
+            </div>
+
+            <div class="cert-grade-tag" id="certScoreBadge">
+              Final Assessment Score: 88.9% &bull; Distinction Honors
+            </div>
+
+            <!-- Footer: Date | Gold Seal | Signatures -->
+            <div class="cert-footer-row">
+              <!-- Date Column -->
+              <div class="cert-footer-block">
+                <div class="cert-line-val" id="certIssueDate">October 30, 2026</div>
+                <div class="cert-sign-line"></div>
+                <div class="cert-line-desc">DATE OF CONFERRAL</div>
+              </div>
+
+              <!-- Official Seal Medallion Column -->
+              <div class="cert-footer-block">
+                <div class="cert-seal-badge">
+                  <div class="cert-seal-circle">
+                    <span class="cert-seal-star">★ ★ ★</span>
+                    <span class="cert-seal-text">EDUNEST</span>
+                    <span class="cert-seal-cup">🏆</span>
+                    <span class="cert-seal-text">VERIFIED CREDENTIAL</span>
+                    <span class="cert-seal-star">★ ★ ★</span>
+                  </div>
+                  <div class="cert-seal-ribbons">
+                    <div class="cert-ribbon-tail"></div>
+                    <div class="cert-ribbon-tail"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Signature Column -->
+              <div class="cert-footer-block">
+                <div class="cert-sig-script" id="certSignatureScript">Vikram Verma</div>
+                <div class="cert-sign-line"></div>
+                <div class="cert-line-desc" id="certInstructorLabel">PROF. VIKRAM VERMA &bull; LEAD INSTRUCTOR</div>
+              </div>
+            </div>
+
+            <!-- Bottom Security Strip -->
+            <div class="cert-id-strip">
+              <div>
+                <span>UNIQUE CERTIFICATE ID:</span> <span class="cert-id-val" id="certUniqueId">EDU-JAVA-5B1AF63D</span>
+              </div>
+              <div>
+                <span>🛡️ Permanently recorded in the EduNest Registry &bull; Non-transferable</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>
+  <script src="/js/sidebar.js"></script>
   <script>
+    let studentCertificates = [];
+
+    function formatDate(dateStr) {
+      if (!dateStr) return 'October 30, 2026';
+      try {
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return dateStr;
+        return d.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    function toggleGoalEdit(editing) {
+      const displayView = document.getElementById('goalDisplayView');
+      const editView = document.getElementById('goalEditView');
+      const editBtn = document.getElementById('editGoalBtn');
+      if (editing) {
+        displayView.style.display = 'none';
+        editView.style.display = 'block';
+        if (editBtn) editBtn.style.display = 'none';
+        const input = document.getElementById('profileGoalInput');
+        if (input) input.focus();
+      } else {
+        displayView.style.display = 'block';
+        editView.style.display = 'none';
+        if (editBtn) editBtn.style.display = 'inline-flex';
+        const current = localStorage.getItem('edunest_goal') || '';
+        document.getElementById('profileGoalInput').value = current;
+      }
+    }
+
+    async function loadCertificates() {
+      const container = document.getElementById('certificatesContainer');
+      const badge = document.getElementById('certCountBadge');
+      try {
+        const certs = await apiFetch('/certificates/me');
+        studentCertificates = Array.isArray(certs) ? certs : [];
+        if (badge) badge.textContent = studentCertificates.length;
+
+        if (!studentCertificates || studentCertificates.length === 0) {
+          container.innerHTML = `
+            <div class="cert-empty-compact">
+              <div class="cert-empty-left">
+                <div class="cert-empty-icon">📜</div>
+                <div>
+                  <div class="cert-empty-title">No Certificates Earned Yet</div>
+                  <div class="cert-empty-desc">Complete all lessons in a course and score 70%+ on the final assessment to unlock verified certificates.</div>
+                </div>
+              </div>
+              <a href="/student/courses.html" class="btn btn-outline btn-sm" style="white-space:nowrap;">Explore Courses &rarr;</a>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = `
+          <div class="grid-2" style="gap: 1rem;">
+            ${studentCertificates.map(c => {
+              const formattedDate = formatDate(c.issuedAt);
+              return `
+                <div class="card" style="border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.15rem 1.25rem; background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%); display:flex; flex-direction:column; justify-content:space-between; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.65rem;">
+                      <span style="display:inline-flex; align-items:center; gap:0.35rem; background:#ecfdf5; color:#047857; font-size:0.72rem; font-weight:800; padding:0.2rem 0.55rem; border-radius:999px; border:1px solid #a7f3d0;">
+                        ✓ VERIFIED CREDENTIAL
+                      </span>
+                      <span style="font-size:0.74rem; color:#64748b; font-family:'Courier New', monospace; font-weight:700;">
+                        ${c.certificateId}
+                      </span>
+                    </div>
+                    <h4 style="font-size:1.02rem; font-weight:700; color:#0f172a; margin-bottom:0.35rem; line-height:1.35;">
+                      ${c.courseTitle}
+                    </h4>
+                    <div style="font-size:0.82rem; color:#64748b; margin-bottom:0.85rem; line-height:1.5;">
+                      <span>Issued: <strong style="color:#1e293b;">${formattedDate}</strong></span> &bull; 
+                      <span>Score: <strong style="color:#047857;">${c.finalScore}%</strong></span>
+                    </div>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #f1f5f9; padding-top:0.75rem; margin-top:0.25rem; flex-wrap:wrap; gap:0.5rem;">
+                    <span style="font-size:0.76rem; color:#64748b;">Instructor: <strong>${c.instructorName || 'Prof. Vikram Verma'}</strong></span>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="openCertificateModal('${c.certificateId}')" style="display:inline-flex; align-items:center; gap:0.35rem; font-weight:700; padding:0.38rem 0.85rem; box-shadow:0 2px 6px rgba(37,99,235,0.18);">
+                      <span>View Certificate</span> 🎓
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      } catch (err) {
+        console.error('Error loading certificates:', err);
+        container.innerHTML = `<p style="color:#ef4444; font-size:0.86rem;">Failed to load certificates.</p>`;
+      }
+    }
+
+    function openCertificateModal(certificateId) {
+      const cert = studentCertificates.find(c => c.certificateId === certificateId);
+      if (!cert) return;
+
+      document.getElementById('certStudentName').textContent = cert.studentName || 'Student';
+      document.getElementById('certCourseTitle').textContent = cert.courseTitle || 'Curriculum Course';
+      
+      const score = cert.finalScore || 100.0;
+      let honors = 'Pass with Distinction';
+      if (score >= 90) honors = 'High Distinction Honors';
+      else if (score >= 80) honors = 'Distinction Honors';
+      else honors = 'Passing Grade';
+      document.getElementById('certScoreBadge').textContent = `Final Assessment Score: ${score}% • ${honors}`;
+
+      document.getElementById('certIssueDate').textContent = formatDate(cert.issuedAt);
+      document.getElementById('certUniqueId').textContent = cert.certificateId;
+      
+      const instructor = cert.instructorName || 'Prof. Vikram Verma';
+      document.getElementById('certInstructorLabel').textContent = `${instructor.toUpperCase()} • LEAD INSTRUCTOR`;
+      
+      const sigParts = instructor.replace(/^(Prof\.|Dr\.|Mr\.|Ms\.)\s*/i, '').trim();
+      document.getElementById('certSignatureScript').textContent = sigParts || instructor;
+
+      const overlay = document.getElementById('certificateModalOverlay');
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCertificateModal() {
+      const overlay = document.getElementById('certificateModalOverlay');
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target.id === 'certificateModalOverlay') {
+        closeCertificateModal();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCertificateModal();
+      }
+    });
+
     async function loadProfileDashboard() {
       if (!requireAuth('STUDENT')) return;
       try {
         const me = await apiFetch('/auth/me');
-        const name = me.name || 'Aarav Sharma';
-        const initials = name.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
+        const name = me.name || localStorage.getItem('edunest_name') || 'Student';
+        const initials = name.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase() || 'ST';
 
         document.getElementById('profileBigInitials').textContent = initials;
         document.getElementById('profileNameTitle').textContent = name;
-        document.getElementById('profileEmailText').textContent = me.email || '';
+        document.getElementById('profileEmailText').textContent = me.email || localStorage.getItem('edunest_email') || '';
         document.getElementById('profileRoleBadge').textContent = me.role || 'STUDENT';
-        document.getElementById('profileGoalInput').value = me.learningGoal || 'Master Java Programming & Object-Oriented Design';
 
-        const sessions = await apiFetch('/students/me/sessions');
-        const listEl = document.getElementById('profileSessionsList');
-        if (sessions && sessions.length > 0) {
-          const totalMins = sessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
-          document.getElementById('profileSessionsCount').textContent = sessions.length;
-          document.getElementById('profileTotalMinutes').textContent = `${totalMins} mins`;
-          listEl.innerHTML = sessions.map(s => `
-            <div style="padding:0.75rem 0; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
-              <div>
-                <strong>${s.courseTitle}</strong>
-                <div style="font-size:0.84rem; color:#64748b;">${s.activityType} &bull; ${s.sessionDate || ''}</div>
-              </div>
-              <span class="pill-badge blue">${s.durationMinutes} mins</span>
-            </div>
-          `).join('');
-        } else {
-          listEl.innerHTML = `<p style="color:#64748b;">No study sessions logged yet. Log a study session from your Daily Plan!</p>`;
+        const goal = me.learningGoal || localStorage.getItem('edunest_goal') || '';
+        document.getElementById('profileGoalInput').value = goal;
+        
+        const goalDisplay = document.getElementById('goalDisplayText');
+        if (goalDisplay) {
+          if (goal && goal.trim().length > 0) {
+            goalDisplay.textContent = `“${goal}”`;
+            goalDisplay.style.fontStyle = 'italic';
+            goalDisplay.style.color = '#1e293b';
+          } else {
+            goalDisplay.textContent = 'No learning goal set yet. Click Edit to set your milestone.';
+            goalDisplay.style.fontStyle = 'normal';
+            goalDisplay.style.color = '#64748b';
+          }
         }
+
+        // Load certificates
+        loadCertificates();
       } catch (err) {
         console.error(err);
       }
@@ -117,12 +1041,23 @@
           method: 'PUT',
           body: JSON.stringify({ learningGoal: val })
         });
-        localStorage.setItem('edunest_goal', res.learningGoal);
+        const savedGoal = res.learningGoal || val;
+        localStorage.setItem('edunest_goal', savedGoal);
+        
+        const goalDisplay = document.getElementById('goalDisplayText');
+        if (goalDisplay) {
+          goalDisplay.textContent = `“${savedGoal}”`;
+          goalDisplay.style.fontStyle = 'italic';
+          goalDisplay.style.color = '#1e293b';
+        }
+        
+        toggleGoalEdit(false);
+
         const msg = document.getElementById('goalSavedMsg');
         msg.classList.remove('hidden');
         setTimeout(() => msg.classList.add('hidden'), 3000);
       } catch (err) {
-        alert(err.message);
+        alert(err.message || 'Failed to update goal');
       }
     }
 

@@ -3,15 +3,18 @@ package com.edunest.service;
 import com.edunest.dto.request.ChallengeSubmissionRequest;
 import com.edunest.dto.request.CreateChallengeRequest;
 import com.edunest.dto.response.ChallengeDto;
+import com.edunest.dto.response.ChallengeExecutionResponse;
 import com.edunest.dto.response.SubmissionResponse;
 import com.edunest.entity.*;
 import com.edunest.repository.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ChallengeService {
@@ -21,17 +24,23 @@ public class ChallengeService {
     private final TopicRepository topicRepository;
     private final TopicMasteryRepository masteryRepository;
     private final UserRepository userRepository;
+    private final CodeExecutionService codeExecutionService;
+    private final ObjectMapper objectMapper;
 
     public ChallengeService(ChallengeRepository challengeRepository,
                             SubmissionRepository submissionRepository,
                             TopicRepository topicRepository,
                             TopicMasteryRepository masteryRepository,
-                            UserRepository userRepository) {
+                            UserRepository userRepository,
+                            CodeExecutionService codeExecutionService,
+                            ObjectMapper objectMapper) {
         this.challengeRepository = challengeRepository;
         this.submissionRepository = submissionRepository;
         this.topicRepository = topicRepository;
         this.masteryRepository = masteryRepository;
         this.userRepository = userRepository;
+        this.codeExecutionService = codeExecutionService;
+        this.objectMapper = objectMapper;
     }
 
     @Transactional(readOnly = true)
@@ -62,7 +71,36 @@ public class ChallengeService {
     }
 
     @Transactional
-    public SubmissionResponse submitChallenge(Long challengeId, ChallengeSubmissionRequest req, String studentEmail) {
+    public ChallengeExecutionResponse runChallenge(Long challengeId, ChallengeSubmissionRequest req, String studentEmail) {
+        User student = userRepository.findByEmail(studentEmail)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new RuntimeException("Challenge not found"));
+
+        List<CodeExecutionService.TestCase> sampleCases = parseTestCases(challenge.getSampleTestCasesJson());
+        CodeExecutionService.ExecutionResult exec = codeExecutionService.execute(
+                req.getLanguage(), req.getSolutionText(), sampleCases
+        );
+
+        ChallengeExecutionResponse resp = new ChallengeExecutionResponse();
+        resp.setChallengeId(challenge.getId());
+        resp.setChallengeTitle(challenge.getTitle());
+        resp.setLanguage(req.getLanguage());
+        resp.setSubmission(false);
+        resp.setCompiled(exec.isCompiled());
+        resp.setCompilationOutput(exec.getCompilationOutput());
+        resp.setPassed(exec.isPassed());
+        resp.setScore(exec.getScore());
+        resp.setTotalTestCases(exec.getTotalTestCases());
+        resp.setPassedTestCases(exec.getPassedTestCases());
+        resp.setTestCaseResults(exec.getTestCaseResults());
+        resp.setFeedback(exec.getFeedback());
+        resp.setExecutionTimeMs(exec.getTotalExecutionTimeMs());
+        return resp;
+    }
+
+    @Transactional
+    public ChallengeExecutionResponse submitChallenge(Long challengeId, ChallengeSubmissionRequest req, String studentEmail) {
         User student = userRepository.findByEmail(studentEmail)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         Challenge challenge = challengeRepository.findById(challengeId)
@@ -73,71 +111,52 @@ public class ChallengeService {
                 .map(TopicMastery::getMasteryScore)
                 .orElse(0.0);
 
-        if (currentMastery < challenge.getUnlockThreshold()) {
+        if (challenge.getUnlockThreshold() > 0.0 && currentMastery < challenge.getUnlockThreshold()) {
             throw new RuntimeException("Challenge is locked! Reach at least " + challenge.getUnlockThreshold()
                     + "% mastery in '" + topic.getTitle() + "' (Current: " + currentMastery + "%) to unlock.");
         }
 
-        String solution = req.getSolutionText() != null ? req.getSolutionText().trim() : "";
-        String keywordsRaw = challenge.getExpectedKeywords();
+        List<CodeExecutionService.TestCase> allCases = new ArrayList<>();
+        allCases.addAll(parseTestCases(challenge.getSampleTestCasesJson()));
+        allCases.addAll(parseTestCases(challenge.getHiddenTestCasesJson()));
 
-        double score;
-        boolean passed;
-        String feedback;
-
-        if (keywordsRaw != null && !keywordsRaw.isBlank()) {
-            String[] tokens = keywordsRaw.split(";");
-            List<String> matched = new ArrayList<>();
-            List<String> missing = new ArrayList<>();
-
-            for (String token : tokens) {
-                String clean = token.trim();
-                if (!clean.isEmpty()) {
-                    if (solution.contains(clean)) {
-                        matched.add(clean);
-                    } else {
-                        missing.add(clean);
-                    }
-                }
-            }
-
-            int total = matched.size() + missing.size();
-            score = total == 0 ? 100.0 : Math.round((matched.size() * 1000.0) / total) / 10.0;
-            passed = score >= 75.0;
-
-            if (passed) {
-                feedback = "Excellent work! Your solution passed rule-based verification (" + score + "%). Verified constructs: "
-                        + String.join(", ", matched) + ".";
-            } else {
-                feedback = "Partial solution (" + score + "%). Make sure your implementation includes required Java constructs: "
-                        + String.join(", ", missing) + ".";
-            }
+        CodeExecutionService.ExecutionResult exec;
+        if (!allCases.isEmpty()) {
+            exec = codeExecutionService.execute(req.getLanguage(), req.getSolutionText(), allCases);
         } else {
-            passed = solution.length() >= 15;
-            score = passed ? 100.0 : 40.0;
-            feedback = passed
-                    ? "Solution submitted and verified successfully!"
-                    : "Your solution is too brief. Please provide a complete code or concept implementation.";
+            exec = fallbackLegacyVerification(challenge, req.getSolutionText());
         }
+
+        // A challenge is marked completed ONLY if the submitted code compiles successfully and passes all test cases
+        boolean passed = exec.isCompiled() && exec.isPassed();
+        double score = passed ? 100.0 : (exec.isCompiled() ? exec.getScore() : 0.0);
 
         Submission submission = new Submission();
         submission.setChallenge(challenge);
         submission.setUser(student);
-        submission.setSolutionText(solution);
+        submission.setSolutionText(req.getSolutionText() != null ? req.getSolutionText() : "");
         submission.setPassed(passed);
         submission.setScore(score);
-        submission.setFeedback(feedback);
+        submission.setFeedback(exec.getFeedback());
 
         Submission saved = submissionRepository.save(submission);
-        return new SubmissionResponse(
-                saved.getId(),
-                challenge.getId(),
-                challenge.getTitle(),
-                saved.isPassed(),
-                saved.getScore(),
-                saved.getFeedback(),
-                saved.getSubmittedAt()
-        );
+
+        ChallengeExecutionResponse resp = new ChallengeExecutionResponse();
+        resp.setSubmissionId(saved.getId());
+        resp.setChallengeId(challenge.getId());
+        resp.setChallengeTitle(challenge.getTitle());
+        resp.setLanguage(req.getLanguage());
+        resp.setSubmission(true);
+        resp.setCompiled(exec.isCompiled());
+        resp.setCompilationOutput(exec.getCompilationOutput());
+        resp.setPassed(passed);
+        resp.setScore(score);
+        resp.setTotalTestCases(exec.getTotalTestCases());
+        resp.setPassedTestCases(exec.getPassedTestCases());
+        resp.setTestCaseResults(exec.getTestCaseResults());
+        resp.setFeedback(exec.getFeedback());
+        resp.setExecutionTimeMs(exec.getTotalExecutionTimeMs());
+        return resp;
     }
 
     @Transactional(readOnly = true)
@@ -175,34 +194,19 @@ public class ChallengeService {
         c.setUnlockThreshold(req.getUnlockThreshold());
 
         Challenge saved = challengeRepository.save(c);
-        return new ChallengeDto(
-                saved.getId(),
-                topic.getId(),
-                topic.getTitle(),
-                topic.getCourse().getId(),
-                saved.getTitle(),
-                saved.getDescription(),
-                saved.getStarterCode(),
-                saved.getChallengeType(),
-                saved.getDifficulty(),
-                saved.getPoints(),
-                saved.getUnlockThreshold(),
-                0.0,
-                false,
-                false,
-                null,
-                null
-        );
+        return toDto(saved, 0L);
     }
 
     private ChallengeDto toDto(Challenge c, Long userId) {
         Topic topic = c.getTopic();
-        double currentMastery = masteryRepository.findByUserIdAndTopicId(userId, topic.getId())
+        double currentMastery = userId != null ? masteryRepository.findByUserIdAndTopicId(userId, topic.getId())
                 .map(TopicMastery::getMasteryScore)
-                .orElse(0.0);
+                .orElse(0.0) : 0.0;
 
-        boolean unlocked = currentMastery >= c.getUnlockThreshold();
-        List<Submission> subs = submissionRepository.findByUserIdAndChallengeIdOrderBySubmittedAtDesc(userId, c.getId());
+        boolean unlocked = currentMastery >= c.getUnlockThreshold() || c.getUnlockThreshold() <= 0.0;
+        List<Submission> subs = userId != null
+                ? submissionRepository.findByUserIdAndChallengeIdOrderBySubmittedAtDesc(userId, c.getId())
+                : Collections.emptyList();
 
         boolean completed = subs.stream().anyMatch(Submission::isPassed);
         Double bestScore = subs.stream()
@@ -211,7 +215,7 @@ public class ChallengeService {
                 .orElse(null);
         String lastFeedback = subs.isEmpty() ? null : subs.get(0).getFeedback();
 
-        return new ChallengeDto(
+        ChallengeDto dto = new ChallengeDto(
                 c.getId(),
                 topic.getId(),
                 topic.getTitle(),
@@ -229,5 +233,55 @@ public class ChallengeService {
                 bestScore,
                 lastFeedback
         );
+        dto.setStarterCodePython(c.getStarterCodePython());
+        dto.setStarterCodeJs(c.getStarterCodeJs());
+        dto.setInputFormat(c.getInputFormat());
+        dto.setOutputFormat(c.getOutputFormat());
+        dto.setConstraints(c.getConstraints());
+        dto.setSampleTestCasesJson(c.getSampleTestCasesJson());
+        return dto;
+    }
+
+    private List<CodeExecutionService.TestCase> parseTestCases(String json) {
+        if (json == null || json.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        try {
+            return objectMapper.readValue(json, new TypeReference<List<CodeExecutionService.TestCase>>() {});
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
+    private CodeExecutionService.ExecutionResult fallbackLegacyVerification(Challenge challenge, String solutionText) {
+        CodeExecutionService.ExecutionResult res = new CodeExecutionService.ExecutionResult();
+        String solution = solutionText != null ? solutionText.trim() : "";
+        String keywordsRaw = challenge.getExpectedKeywords();
+
+        if (keywordsRaw != null && !keywordsRaw.isBlank()) {
+            String[] tokens = keywordsRaw.split(";");
+            int matched = 0;
+            int total = 0;
+            for (String t : tokens) {
+                String clean = t.trim();
+                if (!clean.isEmpty()) {
+                    total++;
+                    if (solution.contains(clean)) matched++;
+                }
+            }
+            double score = total == 0 ? 100.0 : Math.round((matched * 1000.0) / total) / 10.0;
+            boolean passed = score >= 75.0 && solution.length() >= 20;
+            res.setCompiled(true);
+            res.setPassed(passed);
+            res.setScore(score);
+            res.setFeedback(passed ? "Verified constructs successfully (" + score + "%)." : "Missing required syntax constructs.");
+        } else {
+            boolean passed = solution.length() >= 20;
+            res.setCompiled(true);
+            res.setPassed(passed);
+            res.setScore(passed ? 100.0 : 40.0);
+            res.setFeedback(passed ? "Solution verified successfully!" : "Solution too brief.");
+        }
+        return res;
     }
 }

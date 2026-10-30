@@ -1,5 +1,7 @@
 package com.edunest.dto.response;
 
+import java.time.LocalDateTime;
+
 public class CourseResponse {
     private Long id;
     private String title;
@@ -9,6 +11,9 @@ public class CourseResponse {
     private boolean published;
     private int topicCount;
     private long enrollmentCount;
+    private boolean completed;
+    private LocalDateTime completedAt;
+    private Double finalScore;
 
     public CourseResponse() {
     }
@@ -23,6 +28,9 @@ public class CourseResponse {
         this.published = published;
         this.topicCount = topicCount;
         this.enrollmentCount = enrollmentCount;
+        this.completed = false;
+        this.completedAt = null;
+        this.finalScore = null;
     }
 
     public Long getId() {
@@ -87,5 +95,29 @@ public class CourseResponse {
 
     public void setEnrollmentCount(long enrollmentCount) {
         this.enrollmentCount = enrollmentCount;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public LocalDateTime getCompletedAt() {
+        return completedAt;
+    }
+
+    public void setCompletedAt(LocalDateTime completedAt) {
+        this.completedAt = completedAt;
+    }
+
+    public Double getFinalScore() {
+        return finalScore;
+    }
+
+    public void setFinalScore(Double finalScore) {
+        this.finalScore = finalScore;
     }
 }

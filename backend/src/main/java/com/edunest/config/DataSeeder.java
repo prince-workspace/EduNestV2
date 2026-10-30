@@ -83,6 +83,7 @@ public class DataSeeder implements CommandLineRunner {
             seedJavaCourse(instructor);
         }
         seedAdditionalCoursesAndQuestions(instructor);
+        updateCodingChallenges();
     }
 
     private void seedJavaCourse(User instructor) {
@@ -545,5 +546,470 @@ mastery.put("Inheritance", 28);</code></pre>
         c.setPoints(points);
         c.setUnlockThreshold(90.0);
         challengeRepository.save(c);
+    }
+
+    private void updateCodingChallenges() {
+        List<Course> courses = courseRepository.findAll();
+        if (courses.isEmpty()) return;
+        Course javaCourse = courses.get(0);
+        List<Topic> topics = topicRepository.findByCourseIdOrderByOrderIndexAsc(javaCourse.getId());
+        if (topics.isEmpty()) return;
+
+        // Challenge 1: Tax-Inclusive Price & Cast Calculator
+        if (topics.size() >= 1) {
+            Topic t1 = topics.get(0);
+            Challenge c1 = getOrCreateChallenge(t1, "Tax-Inclusive Price & Cast Calculator");
+            c1.setDescription("In commercial billing systems, transactions must apply dynamic percentage-based sales tax and truncate to integer currency values.\n\n"
+                    + "Given two space-separated integers on standard input:\n"
+                    + "- `subtotal`: The base item cost before tax.\n"
+                    + "- `taxRate`: The percentage sales tax rate (e.g. `18` for 18%).\n\n"
+                    + "Compute and print the final integer price calculated with the formula:\n"
+                    + "`finalPrice = subtotal + (subtotal * taxRate / 100)`");
+            c1.setInputFormat("A single line containing two space-separated integers: subtotal taxRate");
+            c1.setOutputFormat("Print a single integer: the final calculated price.");
+            c1.setConstraints("1 <= subtotal <= 1,000,000\n0 <= taxRate <= 100");
+            c1.setDifficulty("EASY");
+            c1.setPoints(50);
+            c1.setUnlockThreshold(90.0);
+            c1.setExpectedKeywords("final;double;(int)");
+            c1.setSampleTestCasesJson("[{\"input\":\"100 18\",\"expectedOutput\":\"118\",\"explanation\":\"100 + (100 * 18 / 100) = 118\"},{\"input\":\"250 12\",\"expectedOutput\":\"280\",\"explanation\":\"250 + (250 * 12 / 100) = 280\"}]");
+            c1.setHiddenTestCasesJson("[{\"input\":\"50 0\",\"expectedOutput\":\"50\"},{\"input\":\"999 15\",\"expectedOutput\":\"1148\"},{\"input\":\"10000 28\",\"expectedOutput\":\"12800\"}]");
+            c1.setStarterCode("""
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        if (sc.hasNextInt()) {
+            int subtotal = sc.nextInt();
+            int taxRate = sc.nextInt();
+            // TODO: Compute subtotal + (subtotal * taxRate / 100)
+            int total = subtotal + (subtotal * taxRate / 100);
+            System.out.println(total);
+        }
+    }
+}
+""");
+            c1.setStarterCodePython("""
+import sys
+
+def main():
+    data = sys.stdin.read().split()
+    if len(data) >= 2:
+        subtotal = int(data[0])
+        tax_rate = int(data[1])
+        # TODO: Compute subtotal + (subtotal * tax_rate // 100)
+        total = subtotal + (subtotal * tax_rate // 100)
+        print(total)
+
+if __name__ == '__main__':
+    main()
+""");
+            c1.setStarterCodeJs("""
+const fs = require('fs');
+
+function main() {
+    const input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);
+    if (input.length >= 2) {
+        const subtotal = parseInt(input[0], 10);
+        const taxRate = parseInt(input[1], 10);
+        // TODO: Compute subtotal + (subtotal * taxRate / 100)
+        const total = Math.floor(subtotal + (subtotal * taxRate / 100));
+        console.log(total);
+    }
+}
+
+main();
+""");
+            challengeRepository.save(c1);
+        }
+
+        // Challenge 2: Sum of Evens in Range
+        if (topics.size() >= 2) {
+            Topic t2 = topics.get(1);
+            Challenge c2 = getOrCreateChallenge(t2, "Sum of Evens in Range");
+            c2.setDescription("Write a program that takes a positive integer `N` and computes the sum of all positive even integers from `1` up to `N` (inclusive).\n\n"
+                    + "For example, if `N = 6`, the even integers are `2, 4, 6` and their sum is `2 + 4 + 6 = 12`.\n"
+                    + "If `N < 2`, print `0`.");
+            c2.setInputFormat("A single line containing an integer N.");
+            c2.setOutputFormat("Print a single integer: the sum of all even integers <= N.");
+            c2.setConstraints("1 <= N <= 10,000");
+            c2.setDifficulty("EASY");
+            c2.setPoints(50);
+            c2.setUnlockThreshold(90.0);
+            c2.setExpectedKeywords("for;if");
+            c2.setSampleTestCasesJson("[{\"input\":\"6\",\"expectedOutput\":\"12\",\"explanation\":\"2 + 4 + 6 = 12\"},{\"input\":\"10\",\"expectedOutput\":\"30\",\"explanation\":\"2 + 4 + 6 + 8 + 10 = 30\"}]");
+            c2.setHiddenTestCasesJson("[{\"input\":\"1\",\"expectedOutput\":\"0\"},{\"input\":\"20\",\"expectedOutput\":\"110\"},{\"input\":\"100\",\"expectedOutput\":\"2550\"}]");
+            c2.setStarterCode("""
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        if (sc.hasNextInt()) {
+            int n = sc.nextInt();
+            // TODO: Sum of even numbers from 2 to n
+            int sum = 0;
+            for (int i = 2; i <= n; i += 2) {
+                sum += i;
+            }
+            System.out.println(sum);
+        }
+    }
+}
+""");
+            c2.setStarterCodePython("""
+import sys
+
+def main():
+    data = sys.stdin.read().split()
+    if data:
+        n = int(data[0])
+        total = sum(i for i in range(2, n + 1, 2))
+        print(total)
+
+if __name__ == '__main__':
+    main()
+""");
+            c2.setStarterCodeJs("""
+const fs = require('fs');
+
+function main() {
+    const input = fs.readFileSync(0, 'utf-8').trim();
+    if (input) {
+        const n = parseInt(input, 10);
+        let sum = 0;
+        for (let i = 2; i <= n; i += 2) {
+            sum += i;
+        }
+        console.log(sum);
+    }
+}
+
+main();
+""");
+            challengeRepository.save(c2);
+        }
+
+        // Challenge 3: Array Peak Element Finder
+        if (topics.size() >= 3) {
+            Topic t3 = topics.get(2);
+            Challenge c3 = getOrCreateChallenge(t3, "Array Peak Element Finder");
+            c3.setDescription("Given an array of integers, identify and print the maximum value (peak element) present in the array.\n\n"
+                    + "The input begins with an integer `K` denoting the total number of elements, followed by `K` space-separated integers.");
+            c3.setInputFormat("The first integer K represents array length, followed by K space-separated integers.");
+            c3.setOutputFormat("Print the maximum integer value in the array.");
+            c3.setConstraints("1 <= K <= 1,000\n-10,000 <= element <= 10,000");
+            c3.setDifficulty("MEDIUM");
+            c3.setPoints(75);
+            c3.setUnlockThreshold(90.0);
+            c3.setExpectedKeywords("int[][];length;return");
+            c3.setSampleTestCasesJson("[{\"input\":\"5 1 9 3 7 4\",\"expectedOutput\":\"9\",\"explanation\":\"Maximum among [1, 9, 3, 7, 4] is 9.\"},{\"input\":\"4 -5 -2 -10 -1\",\"expectedOutput\":\"-1\",\"explanation\":\"Maximum among [-5, -2, -10, -1] is -1.\"}]");
+            c3.setHiddenTestCasesJson("[{\"input\":\"3 100 200 50\",\"expectedOutput\":\"200\"},{\"input\":\"1 42\",\"expectedOutput\":\"42\"},{\"input\":\"6 8 8 8 8 8 8\",\"expectedOutput\":\"8\"}]");
+            c3.setStarterCode("""
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        if (sc.hasNextInt()) {
+            int k = sc.nextInt();
+            int max = Integer.MIN_VALUE;
+            for (int i = 0; i < k; i++) {
+                int val = sc.nextInt();
+                if (val > max) max = val;
+            }
+            System.out.println(max);
+        }
+    }
+}
+""");
+            c3.setStarterCodePython("""
+import sys
+
+def main():
+    data = sys.stdin.read().split()
+    if data:
+        k = int(data[0])
+        nums = [int(x) for x in data[1:k+1]]
+        print(max(nums))
+
+if __name__ == '__main__':
+    main()
+""");
+            c3.setStarterCodeJs("""
+const fs = require('fs');
+
+function main() {
+    const tokens = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);
+    if (tokens.length > 0) {
+        const k = parseInt(tokens[0], 10);
+        let maxVal = -Infinity;
+        for (let i = 1; i <= k; i++) {
+            const val = parseInt(tokens[i], 10);
+            if (val > maxVal) maxVal = val;
+        }
+        console.log(maxVal);
+    }
+}
+
+main();
+""");
+            challengeRepository.save(c3);
+        }
+
+        // Challenge 4: Bank Account Transaction Simulator
+        if (topics.size() >= 4) {
+            Topic t4 = topics.get(3);
+            Challenge c4 = getOrCreateChallenge(t4, "Bank Account Transaction Simulator");
+            c4.setDescription("Simulate an encapsulated bank account with balance validation.\n\n"
+                    + "Input begins with two integers:\n"
+                    + "- `initialBalance`: The starting balance.\n"
+                    + "- `N`: The number of sequential transactions.\n\n"
+                    + "Followed by `N` integers representing transaction amounts (positive for deposit, negative for withdrawal).\n\n"
+                    + "Process each transaction in sequence. If any withdrawal causes the balance to drop below `0`, print `INVALID`.\n"
+                    + "Otherwise, print the final integer balance.");
+            c4.setInputFormat("initialBalance N followed by N integers.");
+            c4.setOutputFormat("Final balance, or INVALID if balance drops below 0.");
+            c4.setConstraints("0 <= initialBalance <= 100,000\n1 <= N <= 100");
+            c4.setDifficulty("MEDIUM");
+            c4.setPoints(75);
+            c4.setUnlockThreshold(90.0);
+            c4.setExpectedKeywords("private;this.;public");
+            c4.setSampleTestCasesJson("[{\"input\":\"100 2 50 -30\",\"expectedOutput\":\"120\",\"explanation\":\"100 + 50 = 150, 150 - 30 = 120 >= 0\"},{\"input\":\"50 2 20 -100\",\"expectedOutput\":\"INVALID\",\"explanation\":\"50 + 20 = 70, 70 - 100 = -30 < 0 (Invalid)\"}]");
+            c4.setHiddenTestCasesJson("[{\"input\":\"200 1 -50\",\"expectedOutput\":\"150\"},{\"input\":\"100 3 -50 -50 25\",\"expectedOutput\":\"25\"},{\"input\":\"10 1 -11\",\"expectedOutput\":\"INVALID\"}]");
+            c4.setStarterCode("""
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        if (sc.hasNextInt()) {
+            int balance = sc.nextInt();
+            int n = sc.nextInt();
+            boolean valid = true;
+            for (int i = 0; i < n; i++) {
+                int tx = sc.nextInt();
+                balance += tx;
+                if (balance < 0) {
+                    valid = false;
+                    break;
+                }
+            }
+            if (valid) {
+                System.out.println(balance);
+            } else {
+                System.out.println("INVALID");
+            }
+        }
+    }
+}
+""");
+            c4.setStarterCodePython("""
+import sys
+
+def main():
+    data = sys.stdin.read().split()
+    if len(data) >= 2:
+        balance = int(data[0])
+        n = int(data[1])
+        for i in range(2, 2 + n):
+            tx = int(data[i])
+            balance += tx
+            if balance < 0:
+                print("INVALID")
+                return
+        print(balance)
+
+if __name__ == '__main__':
+    main()
+""");
+            c4.setStarterCodeJs("""
+const fs = require('fs');
+
+function main() {
+    const tokens = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);
+    if (tokens.length >= 2) {
+        let balance = parseInt(tokens[0], 10);
+        const n = parseInt(tokens[1], 10);
+        for (let i = 2; i < 2 + n; i++) {
+            balance += parseInt(tokens[i], 10);
+            if (balance < 0) {
+                console.log("INVALID");
+                return;
+            }
+        }
+        console.log(balance);
+    }
+}
+
+main();
+""");
+            challengeRepository.save(c4);
+        }
+
+        // Challenge 5: Shape Area Calculator
+        if (topics.size() >= 5) {
+            Topic t5 = topics.get(4);
+            Challenge c5 = getOrCreateChallenge(t5, "Shape Area Calculator");
+            c5.setDescription("Implement an object-oriented polymorphic shape area calculator.\n\n"
+                    + "Input starts with a shape identifier string, followed by dimensions:\n"
+                    + "- `RECTANGLE width height` -> Print area `width * height`\n"
+                    + "- `SQUARE side` -> Print area `side * side`\n"
+                    + "- `CIRCLE radius` -> Print integer area `3 * radius * radius` (approximating pi=3)");
+            c5.setInputFormat("Shape identifier (RECTANGLE, SQUARE, or CIRCLE) followed by integer dimensions.");
+            c5.setOutputFormat("Print a single integer: the calculated area.");
+            c5.setConstraints("All dimensions are positive integers between 1 and 1,000.");
+            c5.setDifficulty("HARD");
+            c5.setPoints(100);
+            c5.setUnlockThreshold(90.0);
+            c5.setExpectedKeywords("extends;@Override;process");
+            c5.setSampleTestCasesJson("[{\"input\":\"RECTANGLE 4 5\",\"expectedOutput\":\"20\",\"explanation\":\"4 * 5 = 20\"},{\"input\":\"SQUARE 7\",\"expectedOutput\":\"49\",\"explanation\":\"7 * 7 = 49\"}]");
+            c5.setHiddenTestCasesJson("[{\"input\":\"CIRCLE 5\",\"expectedOutput\":\"75\"},{\"input\":\"RECTANGLE 10 25\",\"expectedOutput\":\"250\"},{\"input\":\"SQUARE 12\",\"expectedOutput\":\"144\"}]");
+            c5.setStarterCode("""
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        if (sc.hasNext()) {
+            String shape = sc.next().toUpperCase();
+            if (shape.equals("RECTANGLE")) {
+                int w = sc.nextInt();
+                int h = sc.nextInt();
+                System.out.println(w * h);
+            } else if (shape.equals("SQUARE")) {
+                int s = sc.nextInt();
+                System.out.println(s * s);
+            } else if (shape.equals("CIRCLE")) {
+                int r = sc.nextInt();
+                System.out.println(3 * r * r);
+            }
+        }
+    }
+}
+""");
+            c5.setStarterCodePython("""
+import sys
+
+def main():
+    tokens = sys.stdin.read().split()
+    if tokens:
+        shape = tokens[0].upper()
+        if shape == "RECTANGLE":
+            print(int(tokens[1]) * int(tokens[2]))
+        elif shape == "SQUARE":
+            print(int(tokens[1]) * int(tokens[1]))
+        elif shape == "CIRCLE":
+            r = int(tokens[1])
+            print(3 * r * r)
+
+if __name__ == '__main__':
+    main()
+""");
+            c5.setStarterCodeJs("""
+const fs = require('fs');
+
+function main() {
+    const tokens = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);
+    if (tokens.length > 0) {
+        const shape = tokens[0].toUpperCase();
+        if (shape === 'RECTANGLE') {
+            console.log(parseInt(tokens[1], 10) * parseInt(tokens[2], 10));
+        } else if (shape === 'SQUARE') {
+            const s = parseInt(tokens[1], 10);
+            console.log(s * s);
+        } else if (shape === 'CIRCLE') {
+            const r = parseInt(tokens[1], 10);
+            console.log(3 * r * r);
+        }
+    }
+}
+
+main();
+""");
+            challengeRepository.save(c5);
+        }
+
+        // Challenge 6: Distinct Word Counter
+        if (topics.size() >= 6) {
+            Topic t6 = topics.get(5);
+            Challenge c6 = getOrCreateChallenge(t6, "Distinct Word Counter");
+            c6.setDescription("Given a sequence of words from a document stream, count how many distinct unique words exist in the collection.\n\n"
+                    + "The first input integer `N` denotes the count of words, followed by `N` space-separated words.");
+            c6.setInputFormat("Integer N followed by N space-separated words.");
+            c6.setOutputFormat("Print a single integer: the count of unique words.");
+            c6.setConstraints("1 <= N <= 1,000, words consist of alphanumeric characters.");
+            c6.setDifficulty("HARD");
+            c6.setPoints(100);
+            c6.setUnlockThreshold(90.0);
+            c6.setExpectedKeywords("HashMap;put;try;catch");
+            c6.setSampleTestCasesJson("[{\"input\":\"5 java python java cpp python\",\"expectedOutput\":\"3\",\"explanation\":\"Unique words: java, python, cpp -> 3\"},{\"input\":\"4 hello world hello hello\",\"expectedOutput\":\"2\",\"explanation\":\"Unique words: hello, world -> 2\"}]");
+            c6.setHiddenTestCasesJson("[{\"input\":\"3 apple banana orange\",\"expectedOutput\":\"3\"},{\"input\":\"1 code\",\"expectedOutput\":\"1\"},{\"input\":\"6 a b a c b d\",\"expectedOutput\":\"4\"}]");
+            c6.setStarterCode("""
+import java.util.*;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        if (sc.hasNextInt()) {
+            int n = sc.nextInt();
+            Set<String> set = new HashSet<>();
+            for (int i = 0; i < n; i++) {
+                set.add(sc.next());
+            }
+            System.out.println(set.size());
+        }
+    }
+}
+""");
+            c6.setStarterCodePython("""
+import sys
+
+def main():
+    tokens = sys.stdin.read().split()
+    if tokens:
+        n = int(tokens[0])
+        words = tokens[1:n+1]
+        print(len(set(words)))
+
+if __name__ == '__main__':
+    main()
+""");
+            c6.setStarterCodeJs("""
+const fs = require('fs');
+
+function main() {
+    const tokens = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);
+    if (tokens.length > 0) {
+        const n = parseInt(tokens[0], 10);
+        const set = new Set();
+        for (let i = 1; i <= n && i < tokens.length; i++) {
+            set.add(tokens[i]);
+        }
+        console.log(set.size);
+    }
+}
+
+main();
+""");
+            challengeRepository.save(c6);
+        }
+
+        System.out.println("[EduNest] Seeded and updated 6 Real Coding Challenges with multi-language starter code and test cases.");
+    }
+
+    private Challenge getOrCreateChallenge(Topic topic, String title) {
+        List<Challenge> list = challengeRepository.findByTopicId(topic.getId());
+        if (!list.isEmpty()) {
+            Challenge existing = list.get(0);
+            existing.setTitle(title);
+            return existing;
+        }
+        Challenge c = new Challenge();
+        c.setTopic(topic);
+        c.setTitle(title);
+        c.setChallengeType(ChallengeType.CODING);
+        return c;
     }
 }

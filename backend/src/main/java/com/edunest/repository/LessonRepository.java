@@ -8,4 +8,6 @@ import java.util.List;
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findByTopicIdOrderByOrderIndexAsc(Long topicId);
     List<Lesson> findByTopicCourseIdOrderByTopicOrderIndexAscOrderIndexAsc(Long courseId);
+    long countByTopicId(Long topicId);
+    long countByTopicCourseId(Long courseId);
 }

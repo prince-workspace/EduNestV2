@@ -107,10 +107,22 @@ public class SkillMapChallengeIntegrationTest {
                         .content(objectMapper.writeValueAsString(lockedAttempt)))
                 .andExpect(status().isBadRequest());
 
-        // 5. Submitting a valid Java solution to the unlocked Topic 1 challenge passes rule-based evaluation (100%)
-        ChallengeSubmissionRequest validSub = new ChallengeSubmissionRequest(
-                "public class PriceCalculator { public static void main(String[] args) { final double TAX_RATE = 0.18; int total = (int) (100 * (1 + TAX_RATE)); } }"
-        );
+        // 5. Submitting a valid Java solution to the unlocked Topic 1 challenge passes compiler execution and all test cases (100%)
+        String validJavaSolution = """
+                import java.util.Scanner;
+                public class Solution {
+                    public static void main(String[] args) {
+                        Scanner sc = new Scanner(System.in);
+                        if (sc.hasNextInt()) {
+                            int subtotal = sc.nextInt();
+                            int taxRate = sc.nextInt();
+                            int finalPrice = subtotal + (subtotal * taxRate / 100);
+                            System.out.println(finalPrice);
+                        }
+                    }
+                }
+                """;
+        ChallengeSubmissionRequest validSub = new ChallengeSubmissionRequest(validJavaSolution, "JAVA");
         mockMvc.perform(post("/api/challenges/" + unlockedChallengeId + "/submit")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)

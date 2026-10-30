@@ -9,9 +9,12 @@
 <body style="background: #f8fafc;">
   <div class="quiz-page-container">
     <!-- Breadcrumb -->
-    <div class="quiz-breadcrumb">
-      <span class="quiz-breadcrumb-dot"></span>
-      <span id="quizBreadcrumbText">ASSESSMENT &bull; JAVA PROGRAMMING FUNDAMENTALS</span>
+    <div class="quiz-breadcrumb" style="display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="quiz-breadcrumb-dot"></span>
+        <span id="quizBreadcrumbText">ASSESSMENT &bull; JAVA PROGRAMMING FUNDAMENTALS</span>
+      </div>
+      <a href="/student/practices.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 600;">✕ Exit Quiz</a>
     </div>
 
     <!-- Header: Title + Untimed / Timed Pill -->
@@ -62,7 +65,13 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (!requireAuth('STUDENT')) return;
-      initQuizPage('CHAPTER_QUIZ');
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get('mode') || (params.get('courseId') ? 'FINAL_ASSESSMENT' : 'CHAPTER_QUIZ');
+      if (!params.get('topicId') && !params.get('courseId')) {
+        window.location.href = '/student/courses.html';
+        return;
+      }
+      initQuizPage(mode);
     });
   </script>
 </body>

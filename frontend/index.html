@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EduNest — Personalized Learning & Skill Development Platform</title>
+  <title>EduNest — Personalized Learning &amp; Skill Development Platform</title>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
@@ -11,7 +11,7 @@
     <a href="/index.html" class="brand">
       🎓 <span>EduNest</span>
     </a>
-    <div class="nav-links">
+    <div class="nav-links" id="indexNavLinks">
       <a href="/login.html">Login</a>
       <a href="/register.html" class="btn btn-primary btn-sm">Get Started</a>
     </div>
@@ -25,9 +25,10 @@
       diagnoses your knowledge gaps, recommends what to study next, schedules spaced revision,
       and connects theory to practical challenges.
     </p>
-    <div style="display: flex; gap: 1rem; justify-content: center;">
-      <a href="/register.html" class="btn btn-primary">Start Your Learning Journey</a>
-      <a href="/login.html" class="btn btn-outline">Login to Account</a>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;" id="heroActionBtns">
+      <a href="/login.html" class="btn btn-primary" id="heroStartBtn">Start Learning &rarr;</a>
+      <a href="/login.html" class="btn btn-outline" id="heroContinueBtn" style="display: none;">Continue Learning &rarr;</a>
+      <a href="/login.html" class="btn btn-outline" id="heroLoginBtn">Login to Account</a>
     </div>
 
     <div class="flow-banner">
@@ -67,5 +68,119 @@
       </div>
     </div>
   </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const token = localStorage.getItem('edunest_token');
+      const role = localStorage.getItem('edunest_role');
+      const navLinks = document.getElementById('indexNavLinks');
+      const startBtn = document.getElementById('heroStartBtn');
+      const continueBtn = document.getElementById('heroContinueBtn');
+      const loginBtn = document.getElementById('heroLoginBtn');
+
+      if (token && role === 'STUDENT') {
+        if (navLinks) {
+          navLinks.innerHTML = `
+            <a href="/student/dashboard.html">Dashboard</a>
+            <a href="/student/courses.html">My Courses</a>
+            <a href="#" onclick="logout()" class="btn btn-outline btn-sm">Sign Out</a>
+          `;
+        }
+        if (loginBtn) {
+          loginBtn.style.display = 'none';
+        }
+
+        // Determine active enrolled course
+        let activeCourseId = localStorage.getItem('edunest_activeCourseId');
+        try {
+          const myCourses = await apiFetch('/courses/my').catch(() => []);
+          if (Array.isArray(myCourses) && myCourses.length > 0) {
+            activeCourseId = myCourses[0].id;
+          }
+        } catch (e) {
+          console.warn('Could not fetch enrolled courses:', e);
+        }
+        if (!activeCourseId) activeCourseId = 1;
+        localStorage.setItem('edunest_activeCourseId', activeCourseId);
+
+        // Action 1: "Start Learning" opens the course syllabus page first
+        if (startBtn) {
+          startBtn.textContent = 'Start Learning →';
+          startBtn.href = `/student/course-detail.html?id=${activeCourseId}`;
+        }
+
+        // Action 2: "Continue Learning" opens the next unfinished lesson directly
+        if (continueBtn) {
+          continueBtn.style.display = 'inline-flex';
+          continueBtn.textContent = 'Continue Learning →';
+          continueBtn.href = `/student/lesson.html?courseId=${activeCourseId}`;
+
+          try {
+            const [courseDetail, completedIds] = await Promise.all([
+              apiFetch(`/courses/${activeCourseId}`).catch(() => null),
+              apiFetch(`/lessons/completed?courseId=${activeCourseId}`).catch(() => [])
+            ]);
+
+            if (courseDetail && courseDetail.topics) {
+              const compSet = new Set(Array.isArray(completedIds) ? completedIds : []);
+              let nextLessonId = null;
+              for (const t of courseDetail.topics) {
+                for (const l of (t.lessons || [])) {
+                  if (!compSet.has(l.id)) {
+                    nextLessonId = l.id;
+                    break;
+                  }
+                }
+                if (nextLessonId) break;
+              }
+
+              if (nextLessonId) {
+                continueBtn.textContent = 'Continue Learning →';
+                continueBtn.href = `/student/lesson.html?id=${nextLessonId}&courseId=${activeCourseId}`;
+              } else {
+                // All curriculum lessons completed -> link to syllabus final assessment
+                continueBtn.textContent = 'View Course Progress →';
+                continueBtn.href = `/student/course-detail.html?id=${activeCourseId}`;
+              }
+            }
+          } catch (e) {
+            console.warn('Could not pre-resolve lesson URL on homepage:', e);
+          }
+        }
+      } else if (token && (role === 'INSTRUCTOR' || role === 'ADMIN')) {
+        const dashUrl = role === 'INSTRUCTOR' ? '/instructor/dashboard.html' : '/admin/dashboard.html';
+        if (navLinks) {
+          navLinks.innerHTML = `
+            <a href="${dashUrl}">Dashboard</a>
+            <a href="#" onclick="logout()" class="btn btn-outline btn-sm">Sign Out</a>
+          `;
+        }
+        if (startBtn) {
+          startBtn.textContent = 'Go to Dashboard →';
+          startBtn.href = dashUrl;
+        }
+        if (continueBtn) {
+          continueBtn.style.display = 'none';
+        }
+        if (loginBtn) {
+          loginBtn.style.display = 'none';
+        }
+      } else {
+        // Not logged in: "Start Learning" goes to login / registration flow
+        if (startBtn) {
+          startBtn.href = '/login.html';
+        }
+        if (continueBtn) {
+          continueBtn.style.display = 'none';
+        }
+        if (loginBtn) {
+          loginBtn.style.display = 'inline-flex';
+          loginBtn.href = '/login.html';
+        }
+      }
+    });
+  </script>
 </body>
 </html>

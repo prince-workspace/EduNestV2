@@ -9,17 +9,20 @@
 <body style="background: #f8fafc;">
   <div class="quiz-page-container">
     <!-- Breadcrumb -->
-    <div class="quiz-breadcrumb">
-      <span class="quiz-breadcrumb-dot"></span>
-      <span id="quizBreadcrumbText">PRACTICE &bull; INSTANT CONCEPT FEEDBACK</span>
+    <div class="quiz-breadcrumb" style="display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="quiz-breadcrumb-dot" style="background:#10b981;"></span>
+        <span id="quizBreadcrumbText" style="color:#047857;">PRACTICE &bull; PROBLEM SOLVING WITH HINTS &amp; EXPLANATIONS</span>
+      </div>
+      <a href="/student/practices.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 600;">✕ Exit Practice</a>
     </div>
 
     <!-- Header: Title + Untimed Pill -->
     <div class="quiz-header-row">
       <h1 class="quiz-header-title" id="quizTitle">Concept Practice</h1>
-      <div id="quizTimer" class="quiz-mode-pill">
+      <div id="quizTimer" class="quiz-mode-pill" style="background:#ecfdf5; color:#047857; border-color:#a7f3d0;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span id="quizTimerText">🌱 Practice Mode &bull; Untimed</span>
+        <span id="quizTimerText">🌱 Untimed &bull; Hints &amp; Step-by-Step Solutions</span>
       </div>
     </div>
 
@@ -62,6 +65,11 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (!requireAuth('STUDENT')) return;
+      const params = new URLSearchParams(window.location.search);
+      if (!params.get('topicId')) {
+        window.location.href = '/student/practices.html';
+        return;
+      }
       initQuizPage('PRACTICE');
     });
   </script>

@@ -14,6 +14,10 @@ public class QuizResultResponse {
     private double overallPercentage;
     private List<TopicScoreDto> topicBreakdown;
     private List<AnswerDetail> answerDetails;
+    private Double passingScore;
+    private Boolean passed;
+    private Boolean courseCompleted;
+    private String completionMessage;
 
     public QuizResultResponse() {
     }
@@ -102,6 +106,38 @@ public class QuizResultResponse {
 
     public void setAnswerDetails(List<AnswerDetail> answerDetails) {
         this.answerDetails = answerDetails;
+    }
+
+    public Double getPassingScore() {
+        return passingScore;
+    }
+
+    public void setPassingScore(Double passingScore) {
+        this.passingScore = passingScore;
+    }
+
+    public Boolean getPassed() {
+        return passed;
+    }
+
+    public void setPassed(Boolean passed) {
+        this.passed = passed;
+    }
+
+    public Boolean getCourseCompleted() {
+        return courseCompleted;
+    }
+
+    public void setCourseCompleted(Boolean courseCompleted) {
+        this.courseCompleted = courseCompleted;
+    }
+
+    public String getCompletionMessage() {
+        return completionMessage;
+    }
+
+    public void setCompletionMessage(String completionMessage) {
+        this.completionMessage = completionMessage;
     }
 
     public static class AnswerDetail {

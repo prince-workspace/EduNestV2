@@ -55,10 +55,17 @@ public class SkillMapChallengeController {
         return ResponseEntity.ok(challengeService.getChallengeById(challengeId, authentication.getName()));
     }
 
+    @PostMapping("/challenges/{challengeId}/run")
+    public ResponseEntity<com.edunest.dto.response.ChallengeExecutionResponse> runChallenge(@PathVariable Long challengeId,
+                                                                                              @Valid @RequestBody ChallengeSubmissionRequest req,
+                                                                                              Authentication authentication) {
+        return ResponseEntity.ok(challengeService.runChallenge(challengeId, req, authentication.getName()));
+    }
+
     @PostMapping("/challenges/{challengeId}/submit")
-    public ResponseEntity<SubmissionResponse> submitChallenge(@PathVariable Long challengeId,
-                                                              @Valid @RequestBody ChallengeSubmissionRequest req,
-                                                              Authentication authentication) {
+    public ResponseEntity<com.edunest.dto.response.ChallengeExecutionResponse> submitChallenge(@PathVariable Long challengeId,
+                                                                                                 @Valid @RequestBody ChallengeSubmissionRequest req,
+                                                                                                 Authentication authentication) {
         return ResponseEntity.ok(challengeService.submitChallenge(challengeId, req, authentication.getName()));
     }
 

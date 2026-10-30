@@ -42,6 +42,13 @@ public class QuizController {
         return ResponseEntity.ok(quizService.getChapterQuizQuestions(topicId));
     }
 
+    @GetMapping("/final/{courseId}")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<QuizQuestionsResponse> getFinalAssessment(@PathVariable Long courseId,
+                                                                   Authentication authentication) {
+        return ResponseEntity.ok(quizService.getFinalAssessmentQuestions(courseId, authentication.getName()));
+    }
+
     @PostMapping("/submit")
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<QuizResultResponse> submitAttempt(@Valid @RequestBody QuizSubmissionRequest request,

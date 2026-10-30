@@ -11,13 +11,14 @@ public class QuestionDto {
     private String optionD;
     private String correctOption; // Populated in Practice mode for instant feedback
     private String explanation;
+    private String hint;
 
     public QuestionDto() {
     }
 
     public QuestionDto(Long id, Long topicId, String topicTitle, String questionText,
                        String optionA, String optionB, String optionC, String optionD,
-                       String correctOption, String explanation) {
+                       String correctOption, String explanation, String hint) {
         this.id = id;
         this.topicId = topicId;
         this.topicTitle = topicTitle;
@@ -28,6 +29,7 @@ public class QuestionDto {
         this.optionD = optionD;
         this.correctOption = correctOption;
         this.explanation = explanation;
+        this.hint = hint;
     }
 
     public Long getId() {
@@ -108,5 +110,13 @@ public class QuestionDto {
 
     public void setExplanation(String explanation) {
         this.explanation = explanation;
+    }
+
+    public String getHint() {
+        return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
     }
 }

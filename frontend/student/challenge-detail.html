@@ -3,101 +3,248 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solve Challenge — EduNest</title>
+  <title>Coding Challenge Workspace — EduNest</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .challenge-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .spec-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+    }
+    .spec-section-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 1.25rem;
+      margin-bottom: 0.4rem;
+    }
+    .example-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.88rem;
+    }
+    .example-box pre {
+      margin: 0.35rem 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: #0f172a;
+      background: #ffffff;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      font-size: 0.85rem;
+    }
+    .editor-wrapper {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+    }
+    .editor-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e293b;
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid #334155;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .code-editor-textarea {
+      width: 100%;
+      min-height: 380px;
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      padding: 1.15rem 1.25rem;
+      border: none;
+      outline: none;
+      resize: vertical;
+      box-sizing: border-box;
+      tab-size: 4;
+    }
+    .console-panel {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.25rem;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+    }
+    .testcase-tab {
+      padding: 0.4rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: #f1f5f9;
+      color: #475569;
+      transition: all 0.15s ease;
+    }
+    .testcase-tab.active {
+      background: #eff6ff;
+      color: #2563eb;
+      border-color: #bfdbfe;
+    }
+    .testcase-tab.passed {
+      color: #059669;
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+    }
+    .testcase-tab.failed {
+      color: #dc2626;
+      background: #fef2f2;
+      border-color: #fecdd3;
+    }
+  </style>
 </head>
-<body>
+<body data-active-nav="challenges">
   <div class="app-shell">
     <!-- Left Sidebar -->
-    <aside class="app-sidebar">
-      <a href="/student/dashboard.html" class="sidebar-brand">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <path d="M16 4L2 11L16 18L30 11L16 4Z" fill="#1e3a8a"/>
-          <path d="M7 14.5V22.5C7 22.5 11 26 16 26C21 26 25 22.5 25 22.5V14.5L16 19L7 14.5Z" fill="#2563eb"/>
-          <path d="M28 12.5V21" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
-        </svg>
-        <div class="sidebar-brand-text">Edu<span>Nest</span></div>
-      </a>
-
-      <nav class="sidebar-nav">
-        <a href="/student/dashboard.html" class="sidebar-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="/student/courses.html" class="sidebar-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          <span>My Courses</span>
-        </a>
-        <a href="/student/knowledge-profile.html" class="sidebar-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          <span>Knowledge Profile</span>
-        </a>
-        <a href="/student/challenges.html" class="sidebar-link active">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-          <span>Challenges</span>
-        </a>
-        <a href="/student/revision.html" class="sidebar-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          <span>Revision</span>
-        </a>
-        <a href="/student/bookmarks.html" class="sidebar-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-          <span>Bookmarks</span>
-        </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <a href="javascript:void(0)" onclick="logout()" class="sidebar-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          <span>Logout</span>
-        </a>
-      </div>
-    </aside>
+    <aside class="app-sidebar" id="sidebarMount"></aside>
 
     <!-- Main Area -->
     <div class="app-main">
       <header class="app-topbar">
         <div class="topbar-search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="globalSearchInput" placeholder="Search..." />
+          <input type="text" id="globalSearchInput" placeholder="Search challenges or syntax..." />
         </div>
         <div class="topbar-user">
           <div class="topbar-status">
             <span class="topbar-status-dot"></span>
             <span>Online</span>
           </div>
-          <div class="user-avatar-chip">
-            <div class="user-avatar-circle" id="topUserInitials">AS</div>
-            <span id="topUserName">Aarav Sharma</span>
-          </div>
+          <a href="/student/profile.html" class="user-avatar-chip" style="text-decoration:none; color:inherit;">
+            <div class="user-avatar-circle" id="topUserInitials">ST</div>
+            <span id="topUserName">Student</span>
+          </a>
         </div>
       </header>
 
       <main class="app-content">
-        <div style="margin-bottom:0.85rem;">
-          <a href="/student/challenges.html" style="color:var(--primary); text-decoration:none; font-weight:600; font-size:0.88rem;">
-            &larr; Back to Practical Challenges
+        <!-- Breadcrumb / Back Link -->
+        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="/student/challenges.html" style="color:var(--primary); text-decoration:none; font-weight:600; font-size:0.88rem; display:inline-flex; align-items:center; gap:0.35rem;">
+            &larr; Back to Coding Challenges Hub
           </a>
+          <div id="challengeStatusPill" style="display:flex; align-items:center; gap:0.5rem;"></div>
         </div>
 
-        <div class="card" style="margin-bottom:1.25rem; padding:1.25rem 1.5rem; border-radius:14px; border:1px solid #eef2f6; background:#ffffff;">
-          <div id="challengeMeta" style="font-size:0.82rem; font-weight:700; color:#2563eb; margin-bottom:0.35rem; text-transform:uppercase;">Loading...</div>
-          <h2 id="challengeTitle" style="margin-bottom:0.5rem; font-size:1.4rem; color:#0f172a;">Challenge Workspace</h2>
-          <p id="challengeDescription" style="color:#475569; font-size:0.92rem; line-height:1.55; margin:0;"></p>
-        </div>
+        <!-- 2-Column Problem & Code Workspace -->
+        <div class="challenge-grid">
+          <!-- Column 1: Problem Description, Constraints & Input/Output Examples -->
+          <div class="spec-card">
+            <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.4rem; flex-wrap: wrap;">
+              <span id="chTopicBadge" class="badge" style="background:#eff6ff; color:#2563eb; font-weight:700;">Topic</span>
+              <span id="chDifficultyBadge" class="badge" style="background:#fef3c7; color:#b45309; font-weight:700;">EASY</span>
+              <span id="chPointsBadge" class="badge" style="background:#f1f5f9; color:#475569; font-weight:700;">50 pts</span>
+            </div>
 
-        <div class="card" style="padding:1.25rem 1.5rem; border-radius:14px; border:1px solid #eef2f6; background:#ffffff;">
-          <h3 style="margin-bottom:0.75rem; font-size:1.1rem; color:#0f172a;">Your Java Solution</h3>
-          <div id="submissionResult" style="display:none; margin-bottom:1rem;"></div>
-          <form id="challengeSubmitForm">
-            <div class="form-group" style="margin-bottom:1rem;">
-              <textarea id="solutionText" rows="12" style="width:100%; font-family:monospace; font-size:0.92rem; padding:1rem; background:#0f172a; color:#f8fafc; border-radius:10px; border:1px solid #334155; line-height:1.5;" required placeholder="// Write your solution here..."></textarea>
+            <h2 id="chTitle" style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0 0.85rem 0;">
+              Loading Challenge...
+            </h2>
+
+            <div id="chDescription" style="color: #334155; font-size: 0.94rem; line-height: 1.65; white-space: pre-line;"></div>
+
+            <div class="spec-section-title">Input Format</div>
+            <div id="chInputFormat" style="font-size: 0.88rem; color: #475569; background: #f8fafc; padding: 0.65rem 0.9rem; border-radius: 8px; border: 1px solid #e2e8f0;"></div>
+
+            <div class="spec-section-title">Output Format</div>
+            <div id="chOutputFormat" style="font-size: 0.88rem; color: #475569; background: #f8fafc; padding: 0.65rem 0.9rem; border-radius: 8px; border: 1px solid #e2e8f0;"></div>
+
+            <div class="spec-section-title">Constraints</div>
+            <div id="chConstraints" style="font-size: 0.86rem; color: #475569; font-family: monospace; background: #f8fafc; padding: 0.65rem 0.9rem; border-radius: 8px; border: 1px solid #e2e8f0; white-space: pre-line;"></div>
+
+            <div class="spec-section-title">Sample Examples</div>
+            <div id="chExamplesContainer"></div>
+          </div>
+
+          <!-- Column 2: Interactive Code Editor & Test Console -->
+          <div>
+            <div class="editor-wrapper">
+              <div class="editor-toolbar">
+                <div style="display:flex; align-items:center; gap:0.6rem;">
+                  <label for="languageSelect" style="color:#94a3b8; font-size:0.8rem; font-weight:700; text-transform:uppercase;">Language:</label>
+                  <select id="languageSelect" style="background:#0f172a; color:#f8fafc; border:1px solid #334155; border-radius:6px; padding:0.35rem 0.75rem; font-size:0.85rem; font-weight:600; outline:none; cursor:pointer;" onchange="handleLanguageChange()">
+                    <option value="JAVA">Java (JDK 24)</option>
+                    <option value="PYTHON">Python (3.14)</option>
+                    <option value="JAVASCRIPT">JavaScript (Node.js)</option>
+                  </select>
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                  <button type="button" onclick="resetStarterTemplate()" class="btn btn-outline btn-sm" style="color:#94a3b8; border-color:#334155; font-size:0.78rem; padding:0.25rem 0.6rem;">
+                    ↺ Reset Code
+                  </button>
+                </div>
+              </div>
+
+              <!-- Monospace Code Editor -->
+              <textarea id="codeEditor" class="code-editor-textarea" spellcheck="false" placeholder="// Write your solution here..."></textarea>
             </div>
-            <div style="display:flex; justify-content:flex-end; gap:0.6rem;">
-              <a href="/student/challenges.html" class="btn btn-outline btn-sm">Cancel</a>
-              <button type="submit" class="btn btn-primary btn-sm">Submit &amp; Verify Solution</button>
+
+            <!-- Run & Submit Actions Toolbar -->
+            <div style="margin-top: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+              <span id="editorStatusText" style="font-size:0.84rem; color:#64748b;">Standard I/O Solution Editor</span>
+              <div style="display: flex; gap: 0.6rem; align-items: center;">
+                <button id="runCodeBtn" type="button" class="btn btn-outline" style="border-color:#cbd5e1; font-weight:700; display:inline-flex; align-items:center; gap:0.4rem;" onclick="runCode()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <span>Run Code</span>
+                </button>
+                <button id="submitCodeBtn" type="button" class="btn btn-primary" style="font-weight:700; display:inline-flex; align-items:center; gap:0.4rem; padding:0.6rem 1.4rem;" onclick="submitCode()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span>Submit Solution</span>
+                </button>
+              </div>
             </div>
-          </form>
+
+            <!-- Execution Results / Output Console -->
+            <div id="outputConsolePanel" class="console-panel" style="display:none;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid #f1f5f9; padding-bottom:0.65rem; flex-wrap:wrap; gap:0.5rem;">
+                <div style="display:flex; align-items:center; gap:0.6rem;">
+                  <span id="consoleStatusBadge" class="badge" style="font-weight:700; font-size:0.8rem;">Status</span>
+                  <span id="consoleExecutionTime" style="font-size:0.8rem; color:#64748b;"></span>
+                </div>
+                <div id="consoleScoreBadge" style="font-weight:700; font-size:0.85rem;"></div>
+              </div>
+
+              <!-- Compilation Output or Error Message -->
+              <div id="compilationSection" style="margin-bottom:0.85rem; display:none;">
+                <div style="font-size:0.78rem; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:0.3rem;">Compiler Diagnostics:</div>
+                <pre id="compilationText" style="background:#0f172a; color:#f87171; padding:0.85rem 1rem; border-radius:8px; font-family:monospace; font-size:0.85rem; white-space:pre-wrap; overflow-x:auto; margin:0;"></pre>
+              </div>
+
+              <!-- Test Case Results Tabs -->
+              <div id="testCasesTabsContainer" style="display:flex; gap:0.4rem; margin-bottom:0.85rem; flex-wrap:wrap;"></div>
+
+              <!-- Active Test Case Detail Viewer -->
+              <div id="activeTestCaseDetails" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:1rem; font-size:0.88rem;"></div>
+
+              <!-- Final Feedback Message -->
+              <div id="consoleFeedbackAlert" style="margin-top:0.85rem; padding:0.85rem 1rem; border-radius:10px; font-size:0.9rem; line-height:1.5;"></div>
+            </div>
+          </div>
         </div>
       </main>
     </div>
@@ -105,6 +252,7 @@
 
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>
+  <script src="/js/sidebar.js"></script>
   <script src="/js/skill-map.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {

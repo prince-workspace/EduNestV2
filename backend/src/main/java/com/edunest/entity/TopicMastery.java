@@ -29,11 +29,20 @@ public class TopicMastery {
     @Column(name = "practice_score")
     private Double practiceScore;
 
+    @Column(name = "lesson_score")
+    private Double lessonScore = 0.0;
+
     @Column(name = "quiz_score")
     private Double quizScore;
 
     @Column(name = "revision_score")
     private Double revisionScore;
+
+    @Column(name = "practice_attempts")
+    private Integer practiceAttempts = 0;
+
+    @Column(name = "quiz_attempts")
+    private Integer quizAttempts = 0;
 
     @Column(name = "mastery_score", nullable = false)
     private double masteryScore = 0.0;
@@ -87,6 +96,30 @@ public class TopicMastery {
 
     public void setPracticeScore(Double practiceScore) {
         this.practiceScore = practiceScore;
+    }
+
+    public Double getLessonScore() {
+        return lessonScore != null ? lessonScore : 0.0;
+    }
+
+    public void setLessonScore(Double lessonScore) {
+        this.lessonScore = lessonScore;
+    }
+
+    public Integer getPracticeAttempts() {
+        return practiceAttempts != null ? practiceAttempts : 0;
+    }
+
+    public void setPracticeAttempts(Integer practiceAttempts) {
+        this.practiceAttempts = practiceAttempts;
+    }
+
+    public Integer getQuizAttempts() {
+        return quizAttempts != null ? quizAttempts : 0;
+    }
+
+    public void setQuizAttempts(Integer quizAttempts) {
+        this.quizAttempts = quizAttempts;
     }
 
     public Double getQuizScore() {

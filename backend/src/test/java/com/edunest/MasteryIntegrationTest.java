@@ -119,11 +119,11 @@ public class MasteryIntegrationTest {
                         .content(objectMapper.writeValueAsString(chapterSub)))
                 .andExpect(status().isOk());
 
-        // 6. Verify Inheritance mastery rose from 0% (WEAK) to 66.7% (NEEDS_WORK) via weighted formula (Diag 20% [0] + Quiz 40% [100])
+        // 6. Verify Inheritance mastery rose from 0% (WEAK) to 70.0% (STRONG) via weighted formula (Diag 15% [0] + Quiz 35% [100])
         mockMvc.perform(get("/api/students/me/courses/" + courseId + "/knowledge-profile")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.topics[4].masteryScore").value(66.7))
-                .andExpect(jsonPath("$.topics[4].masteryLevel").value("NEEDS_WORK"));
+                .andExpect(jsonPath("$.topics[4].masteryScore").value(70.0))
+                .andExpect(jsonPath("$.topics[4].masteryLevel").value("STRONG"));
     }
 }

@@ -25,6 +25,27 @@ public class Challenge {
     @Column(columnDefinition = "TEXT")
     private String starterCode;
 
+    @Column(columnDefinition = "TEXT")
+    private String starterCodePython;
+
+    @Column(columnDefinition = "TEXT")
+    private String starterCodeJs;
+
+    @Column(columnDefinition = "TEXT")
+    private String inputFormat;
+
+    @Column(columnDefinition = "TEXT")
+    private String outputFormat;
+
+    @Column(columnDefinition = "TEXT")
+    private String constraints;
+
+    @Column(columnDefinition = "TEXT")
+    private String sampleTestCasesJson;
+
+    @Column(columnDefinition = "TEXT")
+    private String hiddenTestCasesJson;
+
     /**
      * Semicolon-separated list of expected keywords/tokens for rule-based code verification
      * e.g. "final;int" or "extends;@Override"
@@ -89,6 +110,62 @@ public class Challenge {
 
     public void setStarterCode(String starterCode) {
         this.starterCode = starterCode;
+    }
+
+    public String getStarterCodePython() {
+        return starterCodePython;
+    }
+
+    public void setStarterCodePython(String starterCodePython) {
+        this.starterCodePython = starterCodePython;
+    }
+
+    public String getStarterCodeJs() {
+        return starterCodeJs;
+    }
+
+    public void setStarterCodeJs(String starterCodeJs) {
+        this.starterCodeJs = starterCodeJs;
+    }
+
+    public String getInputFormat() {
+        return inputFormat;
+    }
+
+    public void setInputFormat(String inputFormat) {
+        this.inputFormat = inputFormat;
+    }
+
+    public String getOutputFormat() {
+        return outputFormat;
+    }
+
+    public void setOutputFormat(String outputFormat) {
+        this.outputFormat = outputFormat;
+    }
+
+    public String getConstraints() {
+        return constraints;
+    }
+
+    public void setConstraints(String constraints) {
+        this.constraints = constraints;
+    }
+
+    public String getSampleTestCasesJson() {
+        return sampleTestCasesJson;
+    }
+
+    public void setSampleTestCasesJson(String sampleTestCasesJson) {
+        this.sampleTestCasesJson = sampleTestCasesJson;
+    }
+
+    public String getHiddenTestCasesJson() {
+        return hiddenTestCasesJson;
+    }
+
+    public void setHiddenTestCasesJson(String hiddenTestCasesJson) {
+        this.hiddenTestCasesJson = hiddenTestCasesJson;
     }
 
     public String getExpectedKeywords() {
