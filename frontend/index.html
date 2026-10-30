@@ -3,75 +3,479 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EduNest — Personalized Learning &amp; Skill Development Platform</title>
+  <title>EduNest — Master Computer Science &amp; Programming Fundamentals</title>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
+  <!-- Navigation Header -->
   <nav class="navbar">
     <a href="/index.html" class="brand">
       🎓 <span>EduNest</span>
     </a>
     <div class="nav-links" id="indexNavLinks">
-      <a href="/login.html">Login</a>
-      <a href="/register.html" class="btn btn-primary btn-sm">Get Started</a>
+      <a href="/student/courses.html">Courses</a>
+      <a href="/login.html">Sign In</a>
+      <a href="/register.html" class="btn btn-primary btn-sm">Get Started Free</a>
     </div>
   </nav>
 
-  <section class="hero">
-    <span class="hero-badge">Outcomes Over Completion</span>
-    <h1>Master Concepts, Fix Weaknesses &amp; Build Real Skills</h1>
-    <p>
-      EduNest transforms content-based e-learning into an adaptive learning cycle that
-      diagnoses your knowledge gaps, recommends what to study next, schedules spaced revision,
-      and connects theory to practical challenges.
-    </p>
-    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;" id="heroActionBtns">
-      <a href="/login.html" class="btn btn-primary" id="heroStartBtn">Start Learning &rarr;</a>
-      <a href="/login.html" class="btn btn-outline" id="heroContinueBtn" style="display: none;">Continue Learning &rarr;</a>
-      <a href="/login.html" class="btn btn-outline" id="heroLoginBtn">Login to Account</a>
+  <!-- Hero Section -->
+  <section class="landing-hero hero">
+    <div class="landing-hero-badge">
+      <span>🎓</span>
+      <span>A Better Way to Learn Computer Science</span>
     </div>
+    <h1>Master Programming Concepts with Real Hands-On Practice</h1>
+    <p>
+      EduNest combines structured lessons, instant concept drills, and a real-time online judge
+      to take you from core programming syntax to deep mastery and verified course certification.
+    </p>
 
-    <div class="flow-banner">
-      <span class="flow-step">1. Goal</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">2. Diagnostic</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">3. Knowledge Profile</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">4. Personalized Path</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">5. Learn &amp; Practice</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">6. Revise</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">7. Apply (Challenge)</span>
+    <!-- Dynamic Hero Action Buttons -->
+    <div class="landing-hero-actions" id="heroActionBtns">
+      <a href="/login.html" class="btn-hero-primary" id="heroStartBtn">Start Learning Free &rarr;</a>
+      <a href="/login.html" class="btn-hero-primary" id="heroContinueBtn" style="display: none;">Continue Learning &rarr;</a>
+      <a href="/login.html" class="btn-hero-secondary" id="heroLoginBtn">Sign In</a>
     </div>
   </section>
 
-  <div class="container">
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-question">Diagnostic &amp; Knowledge Profile</div>
-        <h3 style="margin: 0.4rem 0;">Know Exactly Where You Stand</h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">
-          Instead of a generic "70% completed" progress bar, EduNest measures your mastery on every
-          single topic (Diagnostic 20% + Practice 20% + Quiz 40% + Revision 20%).
-        </p>
+  <!-- Interactive Product Preview Showcase -->
+  <div class="product-preview-container">
+    <div class="preview-tabs-bar">
+      <button class="preview-tab-btn active" id="tabBtnDashboard" onclick="switchPreviewTab('dashboard')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
+        <span>Student Dashboard</span>
+      </button>
+      <button class="preview-tab-btn" id="tabBtnSyllabus" onclick="switchPreviewTab('syllabus')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span>Course Syllabus</span>
+      </button>
+      <button class="preview-tab-btn" id="tabBtnCode" onclick="switchPreviewTab('code')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span>Coding Practice</span>
+      </button>
+    </div>
+
+    <div class="preview-window">
+      <!-- Browser Top Chrome -->
+      <div class="preview-window-header">
+        <div class="window-dots">
+          <span class="window-dot red"></span>
+          <span class="window-dot yellow"></span>
+          <span class="window-dot green"></span>
+        </div>
+        <div class="window-url-bar" id="previewUrlBar">edunest.com/student/dashboard</div>
+        <div style="width: 50px;"></div>
       </div>
-      <div class="card">
-        <div class="card-question">Adaptive Learning &amp; Revision</div>
-        <h3 style="margin: 0.4rem 0;">Guided Next Steps Every Day</h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">
-          Weak topics automatically trigger targeted lessons, practice sets, and spaced revision
-          tasks, while mastered topics (90%+) unlock real-world coding challenges.
-        </p>
+
+      <div class="preview-window-content">
+        <!-- Pane 1: Student Dashboard -->
+        <div class="preview-pane active" id="paneDashboard">
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em;">WELCOME BACK</span>
+              <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0.15rem 0;">Aarav Sharma</h3>
+              <p style="color: #64748b; font-size: 0.88rem; margin: 0;">Learning Goal: <em>“Master Core Java &amp; Object-Oriented Design”</em></p>
+            </div>
+            <span class="badge" style="background:#ecfdf5; color:#047857; font-weight:700; border:1px solid #a7f3d0; padding:0.35rem 0.75rem; border-radius:999px;">✓ Active Student</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+            <!-- Card 1: Continue Learning -->
+            <div style="background: #ffffff; border: 1.5px solid #dbeafe; border-radius: 14px; padding: 1.35rem; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                  <span style="font-size:0.72rem; font-weight:800; color:#2563eb; text-transform:uppercase; letter-spacing:0.05em;">UP NEXT &bull; LESSON 13 OF 18</span>
+                  <span class="badge" style="background:#eff6ff; color:#2563eb; font-weight:700;">Java Fundamentals</span>
+                </div>
+                <h4 style="font-size:1.15rem; font-weight:700; color:#0f172a; margin-bottom:0.35rem;">Recursion, Base Cases &amp; Call Stack</h4>
+                <p style="font-size:0.86rem; color:#64748b; margin-bottom:1rem; line-height:1.5;">
+                  Understand recursive call stacks and how avoiding unreachable base cases prevents stack overflow errors.
+                </p>
+                <div style="background:#e2e8f0; height:7px; border-radius:999px; overflow:hidden; margin-bottom:0.4rem;">
+                  <div style="background:#2563eb; width:68%; height:100%; border-radius:999px;"></div>
+                </div>
+                <span style="font-size:0.75rem; color:#64748b; font-weight:600;">Lesson Completion: 68% (12 of 18 Finished)</span>
+              </div>
+              <div style="margin-top:1.25rem; display:flex; gap:0.5rem;">
+                <span class="btn btn-primary btn-sm" style="flex:1; text-align:center;">Continue Lesson &rarr;</span>
+                <span class="btn btn-outline btn-sm">Syllabus</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Quick Practice & Mastery -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.35rem; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                  <span style="font-size:0.72rem; font-weight:800; color:#059669; text-transform:uppercase; letter-spacing:0.05em;">CONCEPT PRACTICE</span>
+                  <span class="badge" style="background:#ecfdf5; color:#047857; font-weight:700;">88% Accuracy</span>
+                </div>
+                <h4 style="font-size:1.15rem; font-weight:700; color:#0f172a; margin-bottom:0.35rem;">Polymorphism &amp; Method Overriding</h4>
+                <p style="font-size:0.86rem; color:#64748b; margin-bottom:1rem; line-height:1.5;">
+                  Solve 5 quick concept drills with step-by-step solutions to strengthen your core OOP intuition.
+                </p>
+              </div>
+              <span class="btn btn-outline btn-sm" style="text-align:center; color:#2563eb; border-color:#bfdbfe; font-weight:700;">Start Practice Drill &rarr;</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 2: Course Syllabus -->
+        <div class="preview-pane" id="paneSyllabus">
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <span style="font-size: 0.72rem; font-weight: 800; color: #2563eb; text-transform: uppercase;">FLAGSHIP CURRICULUM</span>
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0.2rem 0;">Java Programming - From Fundamentals to OOP</h3>
+              <p style="color: #64748b; font-size: 0.86rem; margin: 0;">Instructor: Prof. Vikram Verma &bull; 6 Topics &bull; 18 Lessons &bull; Final Assessment</p>
+            </div>
+            <span class="badge" style="background:#ecfdf5; color:#047857; font-weight:700; border:1px solid #a7f3d0; padding:0.35rem 0.75rem; border-radius:999px;">✓ Enrolled</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:0.85rem;">
+            <!-- Module 1 Box -->
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:1.1rem 1.35rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span style="background:#eff6ff; color:#2563eb; font-weight:800; font-size:0.72rem; padding:0.2rem 0.5rem; border-radius:6px;">MODULE 1</span>
+                  <strong style="color:#0f172a; font-size:0.95rem;">Java Fundamentals &amp; Syntax</strong>
+                </div>
+                <span class="badge" style="background:#ecfdf5; color:#047857; font-size:0.72rem; font-weight:700; border:1px solid #a7f3d0;">✓ 3/3 Lessons Completed</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:0.35rem; font-size:0.86rem;">
+                <div style="padding:0.45rem 0.75rem; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                  <span style="color:#166534; font-weight:600;">1. Variables, Data Types &amp; Memory Representation</span>
+                  <span style="color:#16a34a; font-weight:700;">✓ Completed</span>
+                </div>
+                <div style="padding:0.45rem 0.75rem; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                  <span style="color:#166534; font-weight:600;">2. Operators, Arithmetic &amp; Type Casting</span>
+                  <span style="color:#16a34a; font-weight:700;">✓ Completed</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Module 2 Box (Active) -->
+            <div style="background:#ffffff; border:1.5px solid #93c5fd; border-radius:12px; padding:1.1rem 1.35rem; box-shadow:0 4px 12px rgba(37,99,235,0.06);">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span style="background:#eff6ff; color:#2563eb; font-weight:800; font-size:0.72rem; padding:0.2rem 0.5rem; border-radius:6px;">MODULE 2</span>
+                  <strong style="color:#0f172a; font-size:0.95rem;">Control Flow, Loops &amp; Logic</strong>
+                </div>
+                <span class="badge" style="background:#eff6ff; color:#2563eb; font-size:0.72rem; font-weight:700; border:1px solid #bfdbfe;">In Progress (2/3 Done)</span>
+              </div>
+              <div style="padding:0.55rem 0.85rem; background:#eff6ff; border:1.5px solid #2563eb; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <span class="badge" style="background:#2563eb; color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px; margin-right:0.4rem;">★ CURRENT</span>
+                  <strong style="color:#1e3a8a; font-size:0.88rem;">3. Break, Continue &amp; Nested Loop Mechanics</strong>
+                </div>
+                <span class="btn btn-primary btn-sm" style="padding:0.25rem 0.65rem; font-size:0.76rem;">Study Now &rarr;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 3: Coding Practice Interface -->
+        <div class="preview-pane" id="paneCode">
+          <div style="background: #0f172a; border-radius: 12px; overflow: hidden; color: #f8fafc; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; box-shadow: 0 4px 20px rgba(15,23,42,0.15);">
+            <!-- Editor Top Bar -->
+            <div style="background: #1e293b; padding: 0.6rem 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; font-size: 0.82rem;">
+              <div style="display:flex; gap:0.75rem; align-items:center;">
+                <span style="color:#38bdf8; font-weight:700;">Challenge: Distinct Word Counter</span>
+                <span style="background:#334155; color:#94a3b8; padding:0.15rem 0.45rem; border-radius:4px; font-size:0.72rem;">HARD &bull; 100 XP</span>
+              </div>
+              <span style="background:#0f172a; color:#38bdf8; border:1px solid #334155; padding:0.2rem 0.65rem; border-radius:6px; font-weight:700;">Java (OpenJDK 24)</span>
+            </div>
+
+            <!-- Code Editor Lines -->
+            <div style="padding: 1.15rem 1.25rem; font-size: 0.88rem; line-height: 1.6; color: #e2e8f0; min-height: 155px;">
+              <span style="color:#94a3b8;">1</span>  <span style="color:#f472b6;">import</span> java.util.*;<br>
+              <span style="color:#94a3b8;">2</span>  <span style="color:#f472b6;">public class</span> <span style="color:#38bdf8;">Solution</span> {<br>
+              <span style="color:#94a3b8;">3</span>      <span style="color:#f472b6;">public static void</span> <span style="color:#a78bfa;">main</span>(String[] args) {<br>
+              <span style="color:#94a3b8;">4</span>          Scanner sc = <span style="color:#f472b6;">new</span> Scanner(System.in);<br>
+              <span style="color:#94a3b8;">5</span>          Set&lt;String&gt; words = <span style="color:#f472b6;">new</span> HashSet&lt;&gt;();<br>
+              <span style="color:#94a3b8;">6</span>          <span style="color:#f472b6;">while</span> (sc.hasNext()) words.add(sc.next());<br>
+              <span style="color:#94a3b8;">7</span>          System.out.println(words.size());<br>
+              <span style="color:#94a3b8;">8</span>      }<br>
+              <span style="color:#94a3b8;">9</span>  }
+            </div>
+
+            <!-- Action & Output Bar -->
+            <div style="background: #1e293b; padding: 0.75rem 1rem; border-top: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; flex-wrap:wrap; gap:0.5rem;">
+              <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; color:#4ade80;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>All 5 Test Cases Passed (100% Score &bull; 18ms)</span>
+              </div>
+              <div style="display:flex; gap:0.5rem;">
+                <span style="background:#334155; color:#f8fafc; font-size:0.78rem; font-weight:700; padding:0.35rem 0.85rem; border-radius:6px;">Run Code</span>
+                <span style="background:#16a34a; color:#ffffff; font-size:0.78rem; font-weight:700; padding:0.35rem 0.85rem; border-radius:6px;">Submit Solution</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- How EduNest Works Section -->
+  <section class="landing-section" style="background:#ffffff; border-top:1px solid #eef2f6; border-bottom:1px solid #eef2f6;">
+    <div class="landing-section-header">
+      <span class="landing-section-tag">THE LEARNING JOURNEY</span>
+      <h2 class="landing-section-title">How EduNest Works</h2>
+      <p class="landing-section-desc">
+        A clear, four-stage progressive learning process designed to take you from foundational concepts to verified mastery.
+      </p>
+    </div>
+
+    <div class="how-it-works-grid">
+      <!-- Step 1 -->
+      <div class="how-step-card">
+        <div class="step-num-badge">1</div>
+        <h3 class="how-step-title">Browse Curriculums</h3>
+        <p class="how-step-desc">
+          Explore transparent, university-grade syllabi across Java, Python, and Web Development with complete topic breakdowns.
+        </p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="how-step-card">
+        <div class="step-num-badge">2</div>
+        <h3 class="how-step-title">Enroll in Seconds</h3>
+        <p class="how-step-desc">
+          Join courses for free with one click. Get instant access to structured lessons, code starter templates, and exercises.
+        </p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="how-step-card">
+        <div class="step-num-badge">3</div>
+        <h3 class="how-step-title">Learn &amp; Code</h3>
+        <p class="how-step-desc">
+          Study bite-sized lessons, test retention with instant concept practice drills, and solve coding challenges in the online judge.
+        </p>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="how-step-card">
+        <div class="step-num-badge">4</div>
+        <h3 class="how-step-title">Complete &amp; Certify</h3>
+        <p class="how-step-desc">
+          Finish all required lessons, pass the 70% final course assessment, and earn your verified landscape certificate of completion.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platform Features Section -->
+  <section class="landing-section">
+    <div class="landing-section-header">
+      <span class="landing-section-tag">ENGINEERED FOR STUDENTS</span>
+      <h2 class="landing-section-title">Everything You Need to Master Concepts</h2>
+      <p class="landing-section-desc">
+        EduNest focuses on deep comprehension, practical problem solving, and permanent credentials without unnecessary distractions.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <!-- Feature 1 -->
+      <div class="feature-clean-card">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <h3 class="feature-title">Structured Sequential Syllabi</h3>
+        <p class="feature-desc">
+          Organized into modules with estimated study times and key takeaways so you always know where you are and what to study next.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="feature-clean-card">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3 class="feature-title">Instant Concept Practice</h3>
+        <p class="feature-desc">
+          Untimed practice exercises with immediate step-by-step explanations for every option, solidifying your technical intuition.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="feature-clean-card">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h3 class="feature-title">Integrated Online Judge</h3>
+        <p class="feature-desc">
+          Compile and execute real Java, Python, and JavaScript code against hidden test cases with immediate feedback on pass/fail status.
+        </p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="feature-clean-card">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15l-2 5l9-13h-6l2-5l-9 13h6z"/></svg>
+        </div>
+        <h3 class="feature-title">Verified Course Certificates</h3>
+        <p class="feature-desc">
+          Pass the final course assessment with distinction to receive a landscape certificate permanently stored with a unique verification ID.
+        </p>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="feature-clean-card">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3 class="feature-title">Personal Study Archive</h3>
+        <p class="feature-desc">
+          Bookmark challenging lessons with one click and take private study notes that persist securely across all your devices and logins.
+        </p>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="feature-clean-card">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+        <h3 class="feature-title">Distraction-Free Student UX</h3>
+        <p class="feature-desc">
+          Fast, accessible SaaS interface built with an uncluttered blue-and-white design system tailored specifically for learning flow.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Available Courses Section -->
+  <section class="landing-section" style="background:#ffffff; border-top:1px solid #eef2f6;">
+    <div class="landing-section-header">
+      <span class="landing-section-tag">CURATED CURRICULUMS</span>
+      <h2 class="landing-section-title">Available Programming Courses</h2>
+      <p class="landing-section-desc">
+        Explore structured courses with transparent topic breakdowns, interactive code challenges, and final certifications.
+      </p>
+    </div>
+
+    <div class="landing-courses-grid">
+      <!-- Course 1: Java -->
+      <div class="landing-course-card">
+        <div>
+          <span class="landing-course-pill" style="background:#eff6ff; color:#2563eb;">CORE PROGRAMMING</span>
+          <h3 class="landing-course-title">Java Programming - From Fundamentals to OOP</h3>
+          <p class="landing-course-desc">
+            Master variables, memory structures, object-oriented design, inheritance, polymorphism, and algorithms with 6 hands-on coding challenges.
+          </p>
+          <div style="font-size:0.82rem; color:#64748b; margin-bottom:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <span>📚 6 Topics</span> &bull; 
+            <span>⏱ 18 Lessons</span> &bull; 
+            <span>💻 6 Challenges</span>
+          </div>
+        </div>
+        <div class="landing-course-footer">
+          <span style="font-size:0.84rem; font-weight:700; color:#047857;">Free Enrollment</span>
+          <a href="/student/course-detail.html?id=1" class="btn btn-outline btn-sm" style="font-weight:700;">Explore Syllabus &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Course 2: Python -->
+      <div class="landing-course-card">
+        <div>
+          <span class="landing-course-pill" style="background:#f0fdf4; color:#047857;">DATA &amp; AI</span>
+          <h3 class="landing-course-title">Python &amp; Data Science Foundations</h3>
+          <p class="landing-course-desc">
+            Learn clean Python syntax, sequence manipulation, dictionary lookups, list comprehensions, and data analysis fundamentals.
+          </p>
+          <div style="font-size:0.82rem; color:#64748b; margin-bottom:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <span>📚 Syntax &amp; Types</span> &bull; 
+            <span>⏱ Collections</span> &bull; 
+            <span>💻 Python 3</span>
+          </div>
+        </div>
+        <div class="landing-course-footer">
+          <span style="font-size:0.84rem; font-weight:700; color:#047857;">Free Enrollment</span>
+          <a href="/student/course-detail.html?id=2" class="btn btn-outline btn-sm" style="font-weight:700;">Explore Syllabus &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Course 3: Web Dev -->
+      <div class="landing-course-card">
+        <div>
+          <span class="landing-course-pill" style="background:#f8fafc; color:#475569;">WEB DEVELOPMENT</span>
+          <h3 class="landing-course-title">Full-Stack Web Development</h3>
+          <p class="landing-course-desc">
+            Build accessible semantic web pages using modern HTML5, responsive CSS Flexbox/Grid architectures, and modern JavaScript.
+          </p>
+          <div style="font-size:0.82rem; color:#64748b; margin-bottom:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <span>📚 Semantic HTML5</span> &bull; 
+            <span>⏱ Modern CSS</span> &bull; 
+            <span>💻 DOM &amp; APIs</span>
+          </div>
+        </div>
+        <div class="landing-course-footer">
+          <span style="font-size:0.84rem; font-weight:700; color:#047857;">Free Enrollment</span>
+          <a href="/student/course-detail.html?id=3" class="btn btn-outline btn-sm" style="font-weight:700;">Explore Syllabus &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA Banner -->
+  <div style="padding: 0 1.5rem;">
+    <div class="landing-cta-banner">
+      <h2>Start Your Programming Journey Today</h2>
+      <p>
+        Join students building real software engineering foundations with hands-on practice, code compilation, and verified certifications.
+      </p>
+      <div style="display:flex; justify-content:center; gap:0.75rem; flex-wrap:wrap;">
+        <a href="/register.html" class="btn btn-primary" style="background:#ffffff; color:#1e3a8a; font-weight:800; padding:0.85rem 1.85rem; border:none; box-shadow:0 4px 14px rgba(0,0,0,0.12);">Create Free Account &rarr;</a>
+        <a href="/student/courses.html" class="btn btn-outline" style="border-color:#bfdbfe; color:#ffffff; font-weight:700; padding:0.85rem 1.75rem;">Browse Course Catalog</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minimal Footer -->
+  <footer class="landing-footer">
+    <div class="landing-footer-inner">
+      <div>
+        <div style="font-size:1.15rem; font-weight:800; color:#0f172a; margin-bottom:0.25rem;">🎓 EduNest</div>
+        <div style="font-size:0.85rem; color:#64748b;">Computer Science &amp; Programming Learning Platform</div>
+      </div>
+      <div class="landing-footer-links">
+        <a href="/student/courses.html">All Courses</a>
+        <a href="/login.html">Sign In</a>
+        <a href="/register.html">Register</a>
+        <span style="color:#cbd5e1;">&bull;</span>
+        <span style="font-size:0.85rem; color:#94a3b8;">&copy; 2026 EduNest. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>
   <script>
+    // Tab switching for interactive product preview
+    function switchPreviewTab(tabKey) {
+      const tabs = ['dashboard', 'syllabus', 'code'];
+      const urls = {
+        dashboard: 'edunest.com/student/dashboard',
+        syllabus: 'edunest.com/student/course-detail?id=1',
+        code: 'edunest.com/student/challenge-detail?id=6'
+      };
+
+      tabs.forEach(t => {
+        const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+        const pane = document.getElementById('pane' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (btn) btn.classList.remove('active');
+        if (pane) pane.classList.remove('active');
+      });
+
+      const activeBtn = document.getElementById('tabBtn' + tabKey.charAt(0).toUpperCase() + tabKey.slice(1));
+      const activePane = document.getElementById('pane' + tabKey.charAt(0).toUpperCase() + tabKey.slice(1));
+      const urlBar = document.getElementById('previewUrlBar');
+
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activePane) activePane.classList.add('active');
+      if (urlBar && urls[tabKey]) urlBar.textContent = urls[tabKey];
+    }
+
+    // Dynamic Navigation and Hero Action Resolver
     document.addEventListener('DOMContentLoaded', async () => {
       const token = localStorage.getItem('edunest_token');
       const role = localStorage.getItem('edunest_role');
@@ -85,6 +489,7 @@
           navLinks.innerHTML = `
             <a href="/student/dashboard.html">Dashboard</a>
             <a href="/student/courses.html">My Courses</a>
+            <a href="/student/profile.html">Profile</a>
             <a href="#" onclick="logout()" class="btn btn-outline btn-sm">Sign Out</a>
           `;
         }
@@ -107,7 +512,7 @@
 
         // Action 1: "Start Learning" opens the course syllabus page first
         if (startBtn) {
-          startBtn.textContent = 'Start Learning →';
+          startBtn.textContent = 'Explore Course Syllabus →';
           startBtn.href = `/student/course-detail.html?id=${activeCourseId}`;
         }
 
@@ -140,7 +545,6 @@
                 continueBtn.textContent = 'Continue Learning →';
                 continueBtn.href = `/student/lesson.html?id=${nextLessonId}&courseId=${activeCourseId}`;
               } else {
-                // All curriculum lessons completed -> link to syllabus final assessment
                 continueBtn.textContent = 'View Course Progress →';
                 continueBtn.href = `/student/course-detail.html?id=${activeCourseId}`;
               }
@@ -171,6 +575,7 @@
         // Not logged in: "Start Learning" goes to login / registration flow
         if (startBtn) {
           startBtn.href = '/login.html';
+          startBtn.textContent = 'Start Learning Free →';
         }
         if (continueBtn) {
           continueBtn.style.display = 'none';
