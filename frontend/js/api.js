@@ -323,6 +323,7 @@ async function apiFetch(endpoint, options = {}) {
   const token = localStorage.getItem('edunest_token');
   const headers = {
     'Content-Type': 'application/json',
+    'bypass-tunnel-reminder': 'true',
     ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
     ...(options.headers || {})
   };
