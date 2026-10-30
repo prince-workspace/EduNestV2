@@ -1094,6 +1094,81 @@ body {
   margin-bottom: 1rem;
 }
 
+/* Universal Solid Primary & Secondary Buttons */
+.btn-primary-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border: 1px solid #2563eb !important;
+  border-radius: 10px;
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-primary-solid:hover {
+  background-color: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
+}
+
+.btn-primary-solid:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Ensure navbar anchor tags never override button colors */
+.nav-links a.btn-primary-solid,
+.nav-links a.btn-primary-solid:hover,
+.nav-links a.btn-primary-solid:focus,
+.nav-links a.btn-primary-solid:visited {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.btn-secondary-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  font-weight: 600 !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 10px;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-secondary-outline:hover {
+  border-color: #94a3b8 !important;
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.btn-secondary-outline:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.btn-hero {
+  padding: 0.95rem 2.25rem;
+  font-size: 1.05rem;
+  border-radius: 12px;
+}
+
 .btn-hero-primary {
   display: inline-flex;
   align-items: center;
@@ -1101,21 +1176,28 @@ body {
   gap: 0.5rem;
   padding: 0.95rem 2.25rem;
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 700 !important;
   border-radius: 12px;
-  background: #2563eb;
-  color: #ffffff;
-  text-decoration: none;
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid transparent;
+  border: 1px solid #2563eb !important;
+  outline: none;
 }
 
 .btn-hero-primary:hover {
-  background: #1d4ed8;
+  background-color: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
   transform: translateY(-2px);
   box-shadow: 0 8px 22px rgba(37, 99, 235, 0.36);
-  color: #ffffff;
+  color: #ffffff !important;
+}
+
+.btn-hero-primary:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 
 .btn-hero-secondary {
@@ -1125,19 +1207,27 @@ body {
   gap: 0.5rem;
   padding: 0.95rem 1.85rem;
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: 600 !important;
   border-radius: 12px;
-  background: #ffffff;
-  color: #334155;
-  text-decoration: none;
-  border: 1.5px solid #cbd5e1;
+  background: #ffffff !important;
+  color: #334155 !important;
+  text-decoration: none !important;
+  border: 1.5px solid #cbd5e1 !important;
   transition: all 0.2s ease;
+  outline: none;
 }
 
 .btn-hero-secondary:hover {
-  border-color: #94a3b8;
-  background: #f8fafc;
-  color: #0f172a;
+  border-color: #94a3b8 !important;
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.btn-hero-secondary:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 
 /* Product Preview Interactive Frame */
@@ -1344,6 +1434,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.35rem;
+  align-items: stretch;
 }
 
 .feature-clean-card {
@@ -1351,6 +1442,9 @@ body {
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   transition: all 0.2s ease;
 }
 
@@ -1371,6 +1465,7 @@ body {
   justify-content: center;
   margin-bottom: 1.15rem;
   border: 1px solid #dbeafe;
+  flex-shrink: 0;
 }
 
 .feature-title {
@@ -1392,6 +1487,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.35rem;
+  align-items: stretch;
 }
 
 .landing-course-card {
@@ -1402,6 +1498,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
   transition: all 0.2s ease;
 }
 
@@ -1411,17 +1508,46 @@ body {
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
 }
 
+.landing-course-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.85rem;
+}
+
+.difficulty-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.difficulty-badge.beginner {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.difficulty-badge.intermediate {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
 .landing-course-pill {
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 0.25rem 0.65rem;
+  padding: 0.2rem 0.55rem;
   background: #f1f5f9;
   color: #475569;
-  border-radius: 999px;
+  border-radius: 6px;
   display: inline-block;
-  margin-bottom: 0.85rem;
 }
 
 .landing-course-title {
@@ -1448,30 +1574,38 @@ body {
   margin-top: auto;
 }
 
-/* Landing CTA Banner */
+/* Product Preview Grid */
+.preview-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Landing CTA Banner (Refined Light Card - No Heavy Gradient) */
 .landing-cta-banner {
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  background: #ffffff;
+  border: 1.5px solid #dbeafe;
   border-radius: 20px;
   padding: 3.5rem 2rem;
   text-align: center;
-  color: #ffffff;
   margin: 2rem auto 5rem;
-  max-width: 1100px;
-  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.22);
+  max-width: 1060px;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.06);
 }
 
 .landing-cta-banner h2 {
   font-size: 2.25rem;
-  font-weight: 850;
+  font-weight: 800;
   margin-bottom: 0.75rem;
   letter-spacing: -0.025em;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .landing-cta-banner p {
   font-size: 1.1rem;
-  color: #dbeafe;
-  max-width: 600px;
+  color: #475569;
+  max-width: 620px;
   margin: 0 auto 2rem auto;
   line-height: 1.6;
 }
@@ -1513,7 +1647,7 @@ body {
   color: #2563eb;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments across devices */
 @media (max-width: 960px) {
   .how-it-works-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1526,11 +1660,37 @@ body {
     max-width: 540px;
     margin: 0 auto;
   }
+  .preview-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
+  .landing-hero {
+    padding: 3.5rem 1.25rem 2rem;
+  }
   .landing-hero h1 {
-    font-size: 2.35rem;
+    font-size: 2.25rem;
+  }
+  .landing-hero p {
+    font-size: 1.02rem;
+  }
+  .landing-hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .landing-hero-actions .btn-hero-primary,
+  .landing-hero-actions .btn-hero-secondary,
+  .landing-hero-actions .btn-primary-solid {
+    width: 100%;
+    text-align: center;
+  }
+  .preview-tabs-bar {
+    gap: 0.35rem;
+  }
+  .preview-tab-btn {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.82rem;
   }
   .how-it-works-grid {
     grid-template-columns: 1fr;
@@ -1541,8 +1701,22 @@ body {
   .landing-section {
     padding: 3rem 1.25rem;
   }
+  .landing-section-title {
+    font-size: 1.75rem;
+  }
   .preview-window-content {
     padding: 1rem;
+  }
+  .landing-cta-banner {
+    padding: 2.5rem 1.25rem;
+    margin: 1.5rem auto 3.5rem;
+  }
+  .landing-cta-banner h2 {
+    font-size: 1.85rem;
+  }
+  .landing-cta-banner .btn-hero,
+  .landing-cta-banner .btn-secondary-outline {
+    width: 100%;
   }
 }
 
