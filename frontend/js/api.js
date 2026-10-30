@@ -1,6 +1,24 @@
 // Centralized API Wrapper & Offline Demo Engine for EduNest V2
 // Defaults to localhost:8080 in local development, or relative /api in production (with automatic demo fallback on Vercel)
 
+// Check for ?api= query parameter to automatically configure backend in 1 click
+(function() {
+  if (typeof window !== 'undefined' && window.location.search) {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramApi = urlParams.get('api');
+      if (paramApi) {
+        const clean = paramApi.trim().replace(/\/+$/, '');
+        localStorage.setItem('edunest_api_url', clean);
+        const url = new URL(window.location.href);
+        url.searchParams.delete('api');
+        window.history.replaceState({}, document.title, url.toString());
+        console.log('[EduNest] Backend URL automatically configured:', clean);
+      }
+    } catch (e) {}
+  }
+})();
+
 const API_BASE = (function() {
   if (typeof window !== 'undefined' && window.EDUNEST_API_BASE) {
     return window.EDUNEST_API_BASE;
@@ -18,6 +36,24 @@ const API_BASE = (function() {
   }
   return '/api';
 })();
+
+// Floating quick-access badge in bottom-right corner to easily toggle/view backend connection
+if (typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('edunestBackendBadge')) return;
+    const current = localStorage.getItem('edunest_api_url');
+    const badge = document.createElement('div');
+    badge.id = 'edunestBackendBadge';
+    badge.style.cssText = 'position:fixed;bottom:14px;right:14px;z-index:9999;background:#ffffff;border:1.5px solid #bfdbfe;border-radius:999px;padding:0.35rem 0.85rem;box-shadow:0 4px 15px rgba(0,0,0,0.1);display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:600;color:#1e3a8a;cursor:pointer;font-family:system-ui,-apple-system,sans-serif;';
+    badge.title = 'Click to connect or change Backend URL';
+    badge.onclick = promptBackendUrl;
+    
+    const dotColor = current ? '#10b981' : '#f59e0b';
+    const labelText = current ? 'MySQL Connected' : 'Connect MySQL';
+    badge.innerHTML = `<span style="width:8px;height:8px;border-radius:50%;background:${dotColor};display:inline-block;"></span><span>⚙ ${labelText}</span>`;
+    document.body.appendChild(badge);
+  });
+}
 
 // Prompt helper to easily configure a custom backend URL
 function promptBackendUrl() {
