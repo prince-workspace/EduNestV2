@@ -1,5 +1,16 @@
 // Centralized API Wrapper for EduNest V2
-const API_BASE = 'http://localhost:8080/api';
+// Defaults to relative /api in production (or custom remote backend) or localhost:8080 in local development
+const API_BASE = (function() {
+  if (typeof window !== 'undefined' && window.EDUNEST_API_BASE) {
+    return window.EDUNEST_API_BASE;
+  }
+  const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('edunest_api_url') : null;
+  if (stored) return stored;
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    return 'http://localhost:8080/api';
+  }
+  return '/api';
+})();
 
 async function apiFetch(endpoint, options = {}) {
   const token = localStorage.getItem('edunest_token');
