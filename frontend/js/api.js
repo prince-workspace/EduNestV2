@@ -37,24 +37,6 @@ const API_BASE = (function() {
   return '/api';
 })();
 
-// Floating quick-access badge in bottom-right corner to easily toggle/view backend connection
-if (typeof document !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('edunestBackendBadge')) return;
-    const current = localStorage.getItem('edunest_api_url');
-    const badge = document.createElement('div');
-    badge.id = 'edunestBackendBadge';
-    badge.style.cssText = 'position:fixed;bottom:14px;right:14px;z-index:9999;background:#ffffff;border:1.5px solid #bfdbfe;border-radius:999px;padding:0.35rem 0.85rem;box-shadow:0 4px 15px rgba(0,0,0,0.1);display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:600;color:#1e3a8a;cursor:pointer;font-family:system-ui,-apple-system,sans-serif;';
-    badge.title = 'Click to connect or change Backend URL';
-    badge.onclick = promptBackendUrl;
-    
-    const dotColor = current ? '#10b981' : '#f59e0b';
-    const labelText = current ? 'MySQL Connected' : 'Connect MySQL';
-    badge.innerHTML = `<span style="width:8px;height:8px;border-radius:50%;background:${dotColor};display:inline-block;"></span><span>⚙ ${labelText}</span>`;
-    document.body.appendChild(badge);
-  });
-}
-
 // Prompt helper to easily configure a custom backend URL
 function promptBackendUrl() {
   const current = localStorage.getItem('edunest_api_url') || API_BASE;
