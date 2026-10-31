@@ -31,11 +31,10 @@
       to take you from core programming syntax to deep mastery and verified course certification.
     </p>
 
-    <!-- Dynamic Hero Action Buttons -->
-    <div class="landing-hero-actions" id="heroActionBtns">
-      <a href="/register.html" class="btn-primary-solid btn-hero" id="heroStartBtn">Get Started Free &rarr;</a>
-      <a href="/login.html" class="btn-primary-solid btn-hero" id="heroContinueBtn" style="display: none;">Continue Learning &rarr;</a>
-      <a href="/login.html" class="btn-secondary-outline btn-hero" id="heroLoginBtn">Sign In</a>
+    <!-- Hero Action Buttons -->
+    <div class="landing-hero-actions">
+      <a href="/register.html" class="btn-primary-solid btn-hero">Get Started Free &rarr;</a>
+      <a href="/login.html" class="btn-secondary-outline btn-hero">Sign In</a>
     </div>
   </section>
 
@@ -492,118 +491,6 @@
       }
       if (urlBar && urls[tabKey]) urlBar.textContent = urls[tabKey];
     }
-
-    // Dynamic Navigation and Hero Action Resolver
-    document.addEventListener('DOMContentLoaded', async () => {
-      const token = localStorage.getItem('edunest_token');
-      const role = localStorage.getItem('edunest_role');
-      const navLinks = document.getElementById('indexNavLinks');
-      const startBtn = document.getElementById('heroStartBtn');
-      const continueBtn = document.getElementById('heroContinueBtn');
-      const loginBtn = document.getElementById('heroLoginBtn');
-
-      if (token && role === 'STUDENT') {
-        if (navLinks) {
-          navLinks.innerHTML = `
-            <a href="/student/dashboard.html">Dashboard</a>
-            <a href="/student/courses.html">My Courses</a>
-            <a href="/student/profile.html">Profile</a>
-            <a href="#" onclick="logout()" class="btn btn-outline btn-sm">Sign Out</a>
-          `;
-        }
-        if (loginBtn) {
-          loginBtn.style.display = 'none';
-        }
-
-        // Determine active enrolled course
-        let activeCourseId = localStorage.getItem('edunest_activeCourseId');
-        try {
-          const myCourses = await apiFetch('/courses/my').catch(() => []);
-          if (Array.isArray(myCourses) && myCourses.length > 0) {
-            activeCourseId = myCourses[0].id;
-          }
-        } catch (e) {
-          console.warn('Could not fetch enrolled courses:', e);
-        }
-        if (!activeCourseId) activeCourseId = 1;
-        localStorage.setItem('edunest_activeCourseId', activeCourseId);
-
-        // Action 1: "Start Learning" opens the course syllabus page first
-        if (startBtn) {
-          startBtn.textContent = 'Explore Course Syllabus →';
-          startBtn.href = `/student/course-detail.html?id=${activeCourseId}`;
-        }
-
-        // Action 2: "Continue Learning" opens the next unfinished lesson directly
-        if (continueBtn) {
-          continueBtn.style.display = 'inline-flex';
-          continueBtn.textContent = 'Continue Learning →';
-          continueBtn.href = `/student/lesson.html?courseId=${activeCourseId}`;
-
-          try {
-            const [courseDetail, completedIds] = await Promise.all([
-              apiFetch(`/courses/${activeCourseId}`).catch(() => null),
-              apiFetch(`/lessons/completed?courseId=${activeCourseId}`).catch(() => [])
-            ]);
-
-            if (courseDetail && courseDetail.topics) {
-              const compSet = new Set(Array.isArray(completedIds) ? completedIds : []);
-              let nextLessonId = null;
-              for (const t of courseDetail.topics) {
-                for (const l of (t.lessons || [])) {
-                  if (!compSet.has(l.id)) {
-                    nextLessonId = l.id;
-                    break;
-                  }
-                }
-                if (nextLessonId) break;
-              }
-
-              if (nextLessonId) {
-                continueBtn.textContent = 'Continue Learning →';
-                continueBtn.href = `/student/lesson.html?id=${nextLessonId}&courseId=${activeCourseId}`;
-              } else {
-                continueBtn.textContent = 'View Course Progress →';
-                continueBtn.href = `/student/course-detail.html?id=${activeCourseId}`;
-              }
-            }
-          } catch (e) {
-            console.warn('Could not pre-resolve lesson URL on homepage:', e);
-          }
-        }
-      } else if (token && (role === 'INSTRUCTOR' || role === 'ADMIN')) {
-        const dashUrl = role === 'INSTRUCTOR' ? '/instructor/dashboard.html' : '/admin/dashboard.html';
-        if (navLinks) {
-          navLinks.innerHTML = `
-            <a href="${dashUrl}">Dashboard</a>
-            <a href="#" onclick="logout()" class="btn btn-outline btn-sm">Sign Out</a>
-          `;
-        }
-        if (startBtn) {
-          startBtn.textContent = 'Go to Dashboard →';
-          startBtn.href = dashUrl;
-        }
-        if (continueBtn) {
-          continueBtn.style.display = 'none';
-        }
-        if (loginBtn) {
-          loginBtn.style.display = 'none';
-        }
-      } else {
-        // Not logged in: "Get Started Free" goes to registration flow
-        if (startBtn) {
-          startBtn.href = '/register.html';
-          startBtn.textContent = 'Get Started Free →';
-        }
-        if (continueBtn) {
-          continueBtn.style.display = 'none';
-        }
-        if (loginBtn) {
-          loginBtn.style.display = 'inline-flex';
-          loginBtn.href = '/login.html';
-        }
-      }
-    });
   </script>
 </body>
 </html>
