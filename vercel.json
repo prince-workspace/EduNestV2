@@ -1,14 +1,13 @@
 {
   "version": 2,
-  "cleanUrls": true,
-  "trailingSlash": false,
+  "cleanUrls": false,
   "rewrites": [
     {
       "source": "/",
       "destination": "/frontend/index.html"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/(.*)",
       "destination": "/frontend/$1"
     }
   ]
